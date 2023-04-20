@@ -1,0 +1,6 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method mxr576\\\\ddqgComposerAudit\\\\Infrastructure\\\\Ddqg\\\\PackageVersionsFromRemoteComposerJsonRepository\\:\\:findByPackages\\(\\) should return array\\<string, string\\> but returns array\\<int\\|string, mixed\\>\\.$#"
+			count: 1
+			path: src/Infrastructure/Ddqg/PackageVersionsFromRemoteComposerJsonRepository.php

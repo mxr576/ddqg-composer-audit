@@ -1,0 +1,25 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+  level: max
+  tipsOfTheDay: false
+  reportUnmatchedIgnoredErrors: false
+  treatPhpDocTypesAsCertain: false
+  exceptions:
+    check:
+      missingCheckedExceptionInThrows: true
+      tooWideThrowType: true
+    uncheckedExceptionClasses:
+      - 'InvalidArgumentException'
+      - 'LogicException'
+      - 'UnexpectedValueException'
+      - 'PHPUnit\Framework\ExpectationFailedException'
+    checkedExceptionClasses:
+      - 'RuntimeException'
+  paths:
+    - src
+    - tests
+  excludePaths:
+    - */vendor/*
+    - */tests/fixtures/e2e/web/*

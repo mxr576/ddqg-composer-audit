@@ -1,0 +1,33 @@
+name: Run integration tests
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Validate composer.json and composer.lock
+      run: composer -d tests/fixtures/e2e validate
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v3
+      with:
+        path: tests/fixtures/e2e/vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/tests/fixtures/e2e/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      run: composer -d tests/fixtures/e2e install --prefer-dist --no-progress
+
+    - name: Run Audit
+      # TODO This is not yet a test, finalize it.
+      run: composer -d tests/fixtures/e2e audit

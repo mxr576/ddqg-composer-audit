@@ -1,0 +1,4 @@
+vendor
+.php-cs-fixer.cache
+tests/fixtures/e2e/web
+tests/fixtures/e2e/vendor
