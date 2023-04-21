@@ -7,8 +7,9 @@
         "Drupal",
         "QA",
         "dev",
+        "audit",
         "dependency analyses",
-        "composer plugin"
+        "security"
     ],
     "authors": [
         {

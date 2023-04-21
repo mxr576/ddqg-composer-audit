@@ -18,7 +18,7 @@ final class SecurityAdvisoryBuilder
 
     private string|null $type;
 
-    public function __construct(private readonly string $packageName, private readonly ConstraintInterface $affectedVersions)
+    public function __construct(private readonly string $packageName, private readonly string $installedVersion, private readonly ConstraintInterface $affectedVersions)
     {
         // This may not be 100% accurate but good enough.
         [, $module_name] = explode('/', $packageName);
@@ -27,7 +27,7 @@ final class SecurityAdvisoryBuilder
 
     public function becauseInsecure(): self
     {
-        $this->title = 'The installed version is insecure.';
+        $this->title = sprintf('The installed "%s" version is insecure.', $this->installedVersion);
         $this->type = 'insecure';
 
         return $this;
@@ -35,7 +35,7 @@ final class SecurityAdvisoryBuilder
 
     public function becauseUnsupported(): self
     {
-        $this->title = 'The installed version is unsupported.';
+        $this->title = sprintf('The installed "%s" version is unsupported.', $this->installedVersion);
         $this->type = 'unsupported';
 
         return $this;
