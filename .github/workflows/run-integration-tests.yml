@@ -29,5 +29,13 @@ jobs:
       run: composer -d tests/fixtures/e2e install --prefer-dist --no-progress
 
     - name: Run Audit
-      # TODO This is not yet a test, finalize it.
-      run: composer -d tests/fixtures/e2e audit
+      # TODO This is not yet a complete test, finalize it.
+      run: |
+        set +e
+        composer -d tests/fixtures/e2e audit
+        if [[ $? -eq 0 ]]; then
+          printf "The Audit MUST have found issues but it did not.\n"
+          exit 1
+        else
+          exit 0
+        fi
