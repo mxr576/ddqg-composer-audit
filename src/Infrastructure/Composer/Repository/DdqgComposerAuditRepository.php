@@ -67,7 +67,7 @@ final class DdqgComposerAuditRepository extends ArrayRepository implements Advis
                     }
                 }
             } catch (PackageVersionsCouldNotBeFetched $e) {
-                // @todo Inject IO and expose information to the parent process.
+                $this->io->error(sprintf('%s: %s', Plugin::PACKAGE_NAME, $e->getMessage()));
             }
         }
 
