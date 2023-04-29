@@ -2,23 +2,36 @@
 
 declare(strict_types=1);
 
+/**
+ * Copyright (c) 2023 Dezső Biczó
+ *
+ * For the full copyright and license information, please view
+ * the LICENSE.md file that was distributed with this source code.
+ *
+ * @see https://github.com/mxr576/ddqg-composer-audit/LICENSE.md
+ *
+ */
+
 use Ergebnis\License;
 
 $license = License\Type\MIT::markdown(
-  __DIR__ . '/LICENSE.md',
-  License\Range::since(
-    License\Year::fromString('2023'),
-    new \DateTimeZone('UTC')
-  ),
-  License\Holder::fromString('Dezső Biczó'),
-  License\Url::fromString('https://github.com/mxr576/ddqg-composer-audit/LICENSE.md')
+    __DIR__ . '/LICENSE.md',
+    License\Range::since(
+        License\Year::fromString('2023'),
+        new \DateTimeZone('UTC')
+    ),
+    License\Holder::fromString('Dezső Biczó'),
+    License\Url::fromString('https://github.com/mxr576/ddqg-composer-audit/LICENSE.md')
 );
 
 $license->save();
 
 $finder = PhpCsFixer\Finder::create()
   ->files()
-  ->in([__DIR__ . '/src']);
+  ->ignoreDotFiles(false)
+  ->ignoreVCS(true)
+  ->in(__DIR__)
+  ->exclude(['tests/fixtures/e2e/web', 'tests/fixtures/e2e/vendor']);
 
 $config = new PhpCsFixer\Config();
 $config->setRiskyAllowed(true)

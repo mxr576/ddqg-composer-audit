@@ -20,6 +20,7 @@ parameters:
   paths:
     - src
     - tests
+    - .php-cs-fixer.dist.php
   excludePaths:
     - */vendor/*
     - */tests/fixtures/e2e/web/*
