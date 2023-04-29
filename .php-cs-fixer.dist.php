@@ -2,6 +2,20 @@
 
 declare(strict_types=1);
 
+use Ergebnis\License;
+
+$license = License\Type\MIT::markdown(
+  __DIR__ . '/LICENSE.md',
+  License\Range::since(
+    License\Year::fromString('2023'),
+    new \DateTimeZone('UTC')
+  ),
+  License\Holder::fromString('Dezső Biczó'),
+  License\Url::fromString('https://github.com/mxr576/ddqg-composer-audit/LICENSE.md')
+);
+
+$license->save();
+
 $finder = PhpCsFixer\Finder::create()
   ->files()
   ->in([__DIR__ . '/src']);
@@ -25,6 +39,12 @@ $config->setRiskyAllowed(true)
         'single_blank_line_at_eof' => true,
         'self_accessor' => false,
         'void_return' => true,
+        'header_comment' => [
+          'comment_type' => 'PHPDoc',
+          'header' => $license->header(),
+          'location' => 'after_declare_strict',
+          'separate' => 'both',
+        ],
     ])
     ->setFinder($finder);
 

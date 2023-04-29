@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "00842e100adeeae6c329ba71c67002d5",
+    "content-hash": "4f8a52a49dc7ca06486080d91d8686e3",
     "packages": [
         {
             "name": "halaxa/json-machine",
@@ -1373,6 +1373,62 @@
                 "source": "https://github.com/ergebnis/json-schema-validator"
             },
             "time": "2022-12-10T14:50:15+00:00"
+        },
+        {
+            "name": "ergebnis/license",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/ergebnis/license.git",
+                "reference": "7a2c4a89ebf284eab2867cd660f54d50fd049368"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/ergebnis/license/zipball/7a2c4a89ebf284eab2867cd660f54d50fd049368",
+                "reference": "7a2c4a89ebf284eab2867cd660f54d50fd049368",
+                "shasum": ""
+            },
+            "require": {
+                "ext-filter": "*",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "ergebnis/composer-normalize": "^2.28.3",
+                "ergebnis/data-provider": "^1.2.0",
+                "ergebnis/php-cs-fixer-config": "^4.11.0",
+                "fakerphp/faker": "^1.20.0",
+                "infection/infection": "~0.26.6",
+                "phpunit/phpunit": "^9.5.26",
+                "psalm/plugin-phpunit": "~0.18.3",
+                "symfony/filesystem": "^6.0.13",
+                "vimeo/psalm": "^4.29.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Ergebnis\\License\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Andreas Möller",
+                    "email": "am@localheinz.com"
+                }
+            ],
+            "description": "Provides an abstraction of an open-source license.",
+            "homepage": "https://github.com/ergebnis/license",
+            "keywords": [
+                "license"
+            ],
+            "support": {
+                "issues": "https://github.com/ergebnis/license/issues",
+                "source": "https://github.com/ergebnis/license"
+            },
+            "time": "2022-11-28T10:46:05+00:00"
         },
         {
             "name": "friendsofphp/php-cs-fixer",
