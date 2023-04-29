@@ -1,0 +1,51 @@
+name: Run e2e test
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+    branches:
+      - "*.*.x"
+      - "master"
+
+jobs:
+
+  run:
+    name: "Run e2e test"
+
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      matrix:
+        dependencies:
+          - "highest"
+          - "lowest"
+          - "locked"
+        php-version:
+          - "8.1"
+        operating-system:
+          - "ubuntu-latest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v3"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.25.1"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+          ini-values: memory_limit=-1
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@2.2.0"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+
+      - name: "Install e2e dependencies"
+        uses: "ramsey/composer-install@2.2.0"
+        with:
+          working-directory: "tests/fixtures/e2e"
+
+      - name: Test composer audit output
+        run: tests/fixtures/e2e/test.php "$(./vendor/bin/composer -d tests/fixtures/e2e audit --format=json)"
