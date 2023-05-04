@@ -17,7 +17,11 @@ namespace mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider;
 interface ProblematicPackageVersionsProvider
 {
     /**
-     * @phpstan-return array<string,string>
+     * @return array<string,string>
+     *   An associative array where key are package names and values are valid
+     *   version constraints that can be parsed by VersionParser.
+     *
+     * @see \Composer\Semver\VersionParser::parseConstraints()
      *
      * @throws \mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\PackageVersionsCouldNotBeFetched
      */
