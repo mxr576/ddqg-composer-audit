@@ -44,7 +44,7 @@
         "sort-packages": true
     },
     "extra": {
-        "class": "\\mxr576\\ddqgComposerAudit\\Infrastructure\\Composer\\Plugin",
+        "class": "\\mxr576\\ddqgComposerAudit\\Presentation\\Composer\\Plugin",
         "composer-normalize": {
             "indent-size": 4,
             "indent-style": "space"

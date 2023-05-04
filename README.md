@@ -50,4 +50,4 @@ $ composer audit
 ## Known issues
 
 * Composer currently only displays advisories from one repository for a package. If multiple ones provides advisories
-  only the first  one is visible, see more details in https://github.com/composer/composer/issues/11435.
+  only the first one is visible, see more details in https://github.com/composer/composer/issues/11435.

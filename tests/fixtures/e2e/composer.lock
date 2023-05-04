@@ -7588,7 +7588,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../..",
-                "reference": "8403d88709cee3f1cc197eb6b850483a8f021432"
+                "reference": "f018013a6e37f2c3b5b62689e3c90cf3eaf8401c"
             },
             "require": {
                 "composer-plugin-api": "^2.3",
@@ -7606,7 +7606,7 @@
             },
             "type": "composer-plugin",
             "extra": {
-                "class": "\\mxr576\\ddqgComposerAudit\\Infrastructure\\Composer\\Plugin",
+                "class": "\\mxr576\\ddqgComposerAudit\\Presentation\\Composer\\Plugin",
                 "composer-normalize": {
                     "indent-size": 4,
                     "indent-style": "space"

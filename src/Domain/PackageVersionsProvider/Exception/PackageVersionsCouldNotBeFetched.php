@@ -12,7 +12,7 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider;
+namespace mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\Exception;
 
 final class PackageVersionsCouldNotBeFetched extends \RuntimeException
 {

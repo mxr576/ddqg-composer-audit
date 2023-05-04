@@ -12,15 +12,16 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Infrastructure\Composer;
+namespace mxr576\ddqgComposerAudit\Presentation\Composer;
 
 use Composer\Composer;
 use Composer\IO\IOInterface;
 use Composer\Package\Version\VersionParser;
 use Composer\Plugin\PluginInterface;
-use mxr576\ddqgComposerAudit\Infrastructure\Composer\Repository\DdqgComposerAuditRepository;
+use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinderFromProblematicPackageProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\InsecurePackageVersionsFromLatestDdqgBuild;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\UnsupportedPackageVersionsFromLatestDdqgBuild;
+use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\ComposerAuditRepository;
 
 /**
  * @internal
@@ -43,13 +44,21 @@ final class Plugin implements PluginInterface
 
             return;
         }
+
+        $version_parser = new VersionParser();
+        // Composer currently only displays advisories from one repository for
+        // a package. If multiple ones provides advisories only the first one
+        // is visible.
+        // @see https://github.com/composer/composer/issues/11435.
         $composer->getRepositoryManager()->prependRepository(
-            new DdqgComposerAuditRepository(
-                [
-                  new UnsupportedPackageVersionsFromLatestDdqgBuild($composer->getLoop()->getHttpDownloader()),
-                  new InsecurePackageVersionsFromLatestDdqgBuild($composer->getLoop()->getHttpDownloader()),
-                ],
-                new VersionParser(),
+            new ComposerAuditRepository(
+                new SecurityAdvisoryFinderFromProblematicPackageProvider(new UnsupportedPackageVersionsFromLatestDdqgBuild($composer->getLoop()->getHttpDownloader()), $version_parser),
+                $io
+            )
+        );
+        $composer->getRepositoryManager()->prependRepository(
+            new ComposerAuditRepository(
+                new SecurityAdvisoryFinderFromProblematicPackageProvider(new InsecurePackageVersionsFromLatestDdqgBuild($composer->getLoop()->getHttpDownloader()), $version_parser),
                 $io
             )
         );

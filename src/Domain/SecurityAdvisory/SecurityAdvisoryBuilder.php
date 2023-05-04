@@ -12,7 +12,7 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Infrastructure\Composer\Utility;
+namespace mxr576\ddqgComposerAudit\Domain\SecurityAdvisory;
 
 use Composer\Advisory\SecurityAdvisory;
 use Composer\Semver\Constraint\ConstraintInterface;

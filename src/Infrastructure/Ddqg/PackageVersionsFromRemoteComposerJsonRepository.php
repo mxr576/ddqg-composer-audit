@@ -18,7 +18,7 @@ use Composer\Downloader\TransportException;
 use Composer\Util\HttpDownloader;
 use JsonMachine\Items;
 use loophp\collection\Collection;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\PackageVersionsCouldNotBeFetched;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\Exception\PackageVersionsCouldNotBeFetched;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 
 /**
