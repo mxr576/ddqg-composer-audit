@@ -21,6 +21,7 @@ parameters:
     - src
     - tests
     - .php-cs-fixer.dist.php
+    - phparkitect.php
   excludePaths:
     - */vendor/*
     - */tests/fixtures/e2e/web/*

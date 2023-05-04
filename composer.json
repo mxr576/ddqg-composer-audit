@@ -28,6 +28,7 @@
         "ergebnis/composer-normalize": "^2.30",
         "ergebnis/license": "^2.1",
         "friendsofphp/php-cs-fixer": "^3.16",
+        "phparkitect/phparkitect": "~0.3.24",
         "phpstan/phpstan": "^1.10",
         "phpstan/phpstan-deprecation-rules": "^1.0"
     },

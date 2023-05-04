@@ -114,3 +114,6 @@ jobs:
 
       - name: "Check coding style"
         run: "vendor/bin/php-cs-fixer fix"
+
+      - name: "Check architectural rules"
+        run: "vendor/bin/phparkitect check"
