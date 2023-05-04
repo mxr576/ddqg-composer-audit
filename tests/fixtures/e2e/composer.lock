@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b0e648dd5b700c1d0859e9c6a396756a",
+    "content-hash": "1ce3ab19718fe3208fa0bd493bb9edd1",
     "packages": [
         {
             "name": "apigee/apigee-client-php",
@@ -1436,6 +1436,77 @@
             }
         },
         {
+            "name": "drupal/feeds_tamper",
+            "version": "2.0.0-beta3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/feeds_tamper.git",
+                "reference": "8.x-2.0-beta3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/feeds_tamper-8.x-2.0-beta3.zip",
+                "reference": "8.x-2.0-beta3",
+                "shasum": "5e70d15af38b41d913eb4d8ffea99db29024cbc9"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10",
+                "drupal/feeds": "^3.0",
+                "drupal/tamper": "^1.0-alpha3"
+            },
+            "require-dev": {
+                "drupal/feeds": "3.x-dev"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-2.0-beta3",
+                    "datestamp": "1670507596",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Beta releases are not covered by Drupal security advisories."
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "franz",
+                    "homepage": "https://www.drupal.org/user/581844"
+                },
+                {
+                    "name": "Honza Pobořil",
+                    "homepage": "https://www.drupal.org/user/123612"
+                },
+                {
+                    "name": "mausolos",
+                    "homepage": "https://www.drupal.org/user/642118"
+                },
+                {
+                    "name": "MegaChriz",
+                    "homepage": "https://www.drupal.org/user/654114"
+                },
+                {
+                    "name": "twistor",
+                    "homepage": "https://www.drupal.org/user/473738"
+                }
+            ],
+            "description": "Modify feeds data before it gets saved.",
+            "homepage": "http://drupal.org/project/feeds_tamper",
+            "keywords": [
+                "Drupal",
+                "feeds",
+                "tamper"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/feeds_tamper",
+                "issues": "http://drupal.org/project/issues/feeds_tamper"
+            }
+        },
+        {
             "name": "drupal/key",
             "version": "1.17.0",
             "source": {
@@ -1498,6 +1569,67 @@
             "support": {
                 "source": "https://git.drupalcode.org/project/key",
                 "issues": "http://drupal.org/project/key"
+            }
+        },
+        {
+            "name": "drupal/tamper",
+            "version": "1.0.0-alpha3",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/tamper.git",
+                "reference": "8.x-1.0-alpha3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/tamper-8.x-1.0-alpha3.zip",
+                "reference": "8.x-1.0-alpha3",
+                "shasum": "c0fa28949b11137c3d216f85f47f27d1f2ef2b4f"
+            },
+            "require": {
+                "drupal/core": "^8.8 || ^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0-alpha3",
+                    "datestamp": "1670507777",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "ericgsmith",
+                    "homepage": "https://www.drupal.org/user/1649952"
+                },
+                {
+                    "name": "jamesdixon",
+                    "homepage": "https://www.drupal.org/user/762570"
+                },
+                {
+                    "name": "MegaChriz",
+                    "homepage": "https://www.drupal.org/user/654114"
+                },
+                {
+                    "name": "twistor",
+                    "homepage": "https://www.drupal.org/user/473738"
+                }
+            ],
+            "description": "Generic plugin to modify data.",
+            "homepage": "https://www.drupal.org/project/tamper",
+            "keywords": [
+                "Drupal",
+                "tamper"
+            ],
+            "support": {
+                "source": "http://cgit.drupalcode.org/tamper",
+                "issues": "http://drupal.org/project/issues/tamper"
             }
         },
         {
@@ -6869,6 +7001,62 @@
     ],
     "packages-dev": [
         {
+            "name": "cweagans/composer-configurable-plugin",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/cweagans/composer-configurable-plugin.git",
+                "reference": "15433906511a108a1806710e988629fd24b89974"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/cweagans/composer-configurable-plugin/zipball/15433906511a108a1806710e988629fd24b89974",
+                "reference": "15433906511a108a1806710e988629fd24b89974",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.0.0"
+            },
+            "require-dev": {
+                "codeception/codeception": "~4.0",
+                "codeception/module-asserts": "^2.0",
+                "composer/composer": "~2.0",
+                "php-coveralls/php-coveralls": "~2.0",
+                "php-parallel-lint/php-parallel-lint": "^1.0.0",
+                "phpro/grumphp": "^1.8.0",
+                "sebastian/phpcpd": "^6.0",
+                "squizlabs/php_codesniffer": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "cweagans\\Composer\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Cameron Eagans",
+                    "email": "me@cweagans.net"
+                }
+            ],
+            "description": "Provides a lightweight configuration system for Composer plugins.",
+            "support": {
+                "issues": "https://github.com/cweagans/composer-configurable-plugin/issues",
+                "source": "https://github.com/cweagans/composer-configurable-plugin/tree/2.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/cweagans",
+                    "type": "github"
+                }
+            ],
+            "time": "2023-02-12T04:58:58+00:00"
+        },
+        {
             "name": "ergebnis/composer-normalize",
             "version": "2.30.2",
             "source": {
@@ -7588,21 +7776,26 @@
             "dist": {
                 "type": "path",
                 "url": "../../..",
-                "reference": "f018013a6e37f2c3b5b62689e3c90cf3eaf8401c"
+                "reference": "95639dd78009ec4e2e83eea48535c7b41a3dd2ad"
             },
             "require": {
                 "composer-plugin-api": "^2.3",
+                "cweagans/composer-configurable-plugin": "^2.0",
                 "halaxa/json-machine": "^1.1",
                 "loophp/collection": "^7.1",
-                "php": "~8.1.0 || ~8.2.0"
+                "php": "~8.1.0 || ~8.2.0",
+                "psr/event-dispatcher": "^1.0",
+                "webmozart/assert": "^1.11"
             },
             "require-dev": {
                 "composer/composer": "^2.4",
                 "ergebnis/composer-normalize": "^2.30",
                 "ergebnis/license": "^2.1",
                 "friendsofphp/php-cs-fixer": "^3.16",
+                "phparkitect/phparkitect": "~0.3.24",
                 "phpstan/phpstan": "^1.10",
-                "phpstan/phpstan-deprecation-rules": "^1.0"
+                "phpstan/phpstan-deprecation-rules": "^1.0",
+                "phpstan/phpstan-webmozart-assert": "^1.2"
             },
             "type": "composer-plugin",
             "extra": {
@@ -7639,12 +7832,64 @@
                 "symlink": false,
                 "relative": true
             }
+        },
+        {
+            "name": "psr/event-dispatcher",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/event-dispatcher.git",
+                "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/event-dispatcher/zipball/dbefd12671e8a14ec7f180cab83036ed26714bb0",
+                "reference": "dbefd12671e8a14ec7f180cab83036ed26714bb0",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\EventDispatcher\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Standard interfaces for event handling.",
+            "keywords": [
+                "events",
+                "psr",
+                "psr-14"
+            ],
+            "support": {
+                "issues": "https://github.com/php-fig/event-dispatcher/issues",
+                "source": "https://github.com/php-fig/event-dispatcher/tree/1.0.0"
+            },
+            "time": "2019-01-08T18:20:26+00:00"
         }
     ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
         "drupal/feeds": 10,
+        "drupal/feeds_tamper": 10,
+        "drupal/tamper": 15,
         "mxr576/ddqg-composer-audit": 20
     },
     "prefer-stable": true,

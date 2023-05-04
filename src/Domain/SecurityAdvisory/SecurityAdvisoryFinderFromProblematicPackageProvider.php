@@ -15,6 +15,7 @@ declare(strict_types=1);
 namespace mxr576\ddqgComposerAudit\Domain\SecurityAdvisory;
 
 use Composer\Semver\VersionParser;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\Exception\PackageVersionsCouldNotBeFetched;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\InsecurePackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVersionsProvider;
@@ -22,7 +23,7 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVe
 /**
  * @internal
  */
-final class SecurityAdvisoryFinderFromProblematicPackageProvider implements \mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinder
+final class SecurityAdvisoryFinderFromProblematicPackageProvider implements SecurityAdvisoryFinder
 {
     public function __construct(private readonly ProblematicPackageVersionsProvider $provider, private readonly VersionParser $versionParser)
     {
@@ -32,28 +33,33 @@ final class SecurityAdvisoryFinderFromProblematicPackageProvider implements \mxr
     {
         $advisories = [];
         $filter_by_packages = array_keys($packageConstraintMap);
-        foreach ($this->provider->findByPackages(...$filter_by_packages) as $package_name => $version_range) {
-            $package_version_constraint = $this->versionParser->parseConstraints($version_range);
-            if ($package_version_constraint->matches($packageConstraintMap[$package_name])) {
-                // getVersion() only exists on \Composer\Semver\Constraint\Constraint::getVersion().
-                // \Composer\Semver\Constraint\ConstraintInterface::getPrettyString()
-                // returns a version constraint.
-                // Let's try to figure out the installed version from something
-                // that is part of the interface and returns a version
-                // string (even if it uses Composer's internal 4 digit
-                // representation).
-                $installed_version = $this->versionParser->normalize($packageConstraintMap[$package_name]->getLowerBound()->getVersion());
-                $advisory = new SecurityAdvisoryBuilder($package_name, $installed_version, $package_version_constraint);
-                if ($this->provider instanceof UnsupportedPackageVersionsProvider) {
-                    $advisory->becauseUnsupported();
-                } elseif ($this->provider instanceof InsecurePackageVersionsProvider) {
-                    $advisory->becauseInsecure();
-                }
+        try {
+            foreach ($this->provider->findByPackages(...$filter_by_packages) as $package_name => $version_range) {
+                $package_version_constraint = $this->versionParser->parseConstraints($version_range);
+                if ($package_version_constraint->matches($packageConstraintMap[$package_name])) {
+                    // getVersion() only exists on \Composer\Semver\Constraint\Constraint::getVersion().
+                    // \Composer\Semver\Constraint\ConstraintInterface::getPrettyString()
+                    // returns a version constraint.
+                    // Let's try to figure out the installed version from something
+                    // that is part of the interface and returns a version
+                    // string (even if it uses Composer's internal 4 digit
+                    // representation).
+                    $installed_version = $this->versionParser->normalize($packageConstraintMap[$package_name]->getLowerBound()
+                      ->getVersion());
+                    $advisory = new SecurityAdvisoryBuilder($package_name, $installed_version, $package_version_constraint);
+                    if ($this->provider instanceof UnsupportedPackageVersionsProvider) {
+                        $advisory->becauseUnsupported();
+                    } elseif ($this->provider instanceof InsecurePackageVersionsProvider) {
+                        $advisory->becauseInsecure();
+                    }
 
-                $advisories[$package_name] = [
-                  $advisory->build(),
-                ];
+                    $advisories[$package_name] = [
+                      $advisory->build(),
+                    ];
+                }
             }
+        } catch (PackageVersionsCouldNotBeFetched $e) {
+            throw new UnexpectedSecurityAdvisoryFinderException($e->getMessage(), $e->getCode(), $e);
         }
 
         return $advisories;

@@ -17,8 +17,8 @@ namespace mxr576\ddqgComposerAudit\Presentation\Composer\Repository;
 use Composer\IO\IOInterface;
 use Composer\Repository\AdvisoryProviderInterface;
 use Composer\Repository\ArrayRepository;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\Exception\PackageVersionsCouldNotBeFetched;
-use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinder;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageFinder;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Plugin;
 
 /**
@@ -26,7 +26,7 @@ use mxr576\ddqgComposerAudit\Presentation\Composer\Plugin;
  */
 final class ComposerAuditRepository extends ArrayRepository implements AdvisoryProviderInterface
 {
-    public function __construct(private SecurityAdvisoryFinder $securityAdvisoryFinder, private readonly IOInterface $io)
+    public function __construct(private PackageFinder $packageFinder, private readonly IOInterface $io)
     {
         parent::__construct([]);
     }
@@ -39,8 +39,8 @@ final class ComposerAuditRepository extends ArrayRepository implements AdvisoryP
     public function getSecurityAdvisories(array $packageConstraintMap, bool $allowPartialAdvisories = false): array
     {
         try {
-            $advisories = $this->securityAdvisoryFinder->find($packageConstraintMap);
-        } catch (PackageVersionsCouldNotBeFetched $e) {
+            $advisories = ($this->packageFinder)($packageConstraintMap);
+        } catch (UnexpectedPackageFinderException $e) {
             $this->io->error(sprintf('%s: %s', Plugin::PACKAGE_NAME, $e->getMessage()));
 
             return ['namesFound' => [], 'advisories' => []];

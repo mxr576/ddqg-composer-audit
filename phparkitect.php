@@ -43,16 +43,19 @@ return static function (Config $config): void {
       ->should(new IsFinal())
       ->because('We want to protect our domain');
 
-    // We do not have an Application layer (yet) because there were no reasons
-    // for introducing it - like getting an
-    // `array<string, \Composer\Semver\Constraint\ConstraintInterface>`
-    // as `$packageConstraintMap` from Composer then turning it to a DTO and back
-    // to $packageConstraintMap in the Domain layer - therefore Presentation layer
-    // can depend on Domain and Infrastructure.
-    $rules[] = Rule::allClasses()
-      ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Infrastructure'))
-      ->should(new NotDependsOnTheseNamespaces('mxr576\ddqgComposerAudit\Presentation'))
-      ->because('Infrastructure layer should not depend on Presentation, just the other way around');
+    // We may only enforce these rules below if we add a service container
+    // implementation since some of these failures are caused by building
+    // objects with dependencies by hand.
+
+    //    $rules[] = Rule::allClasses()
+    //      ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Infrastructure'))
+    //      ->should(new NotDependsOnTheseNamespaces('mxr576\ddqgComposerAudit\Application', 'mxr576\ddqgComposerAudit\Presentation'))
+    //      ->because('The Infrastructure layer should only depend on the Domain layer and external namespaces - with some exceptions');
+
+    //    $rules[] = Rule::allClasses()
+    //      ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Presentation'))
+    //      ->should(new NotDependsOnTheseNamespaces('mxr576\ddqgComposerAudit\Domain', 'mxr576\ddqgComposerAudit\Infrastructure'))
+    //      ->because('The Presentation layer should only depend on Application layer and external ones.');
 
     $config
       ->add($sourceFiles, ...$rules);

@@ -12,23 +12,20 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Domain\SecurityAdvisory;
+namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
 
-/**
- * @internal
- */
-interface SecurityAdvisoryFinder
+interface PackageFinder
 {
     /**
      * @param array<string, \Composer\Semver\Constraint\ConstraintInterface> $packageConstraintMap
      *   Map of package name to constraint (can be MatchAllConstraint to fetch
      *   all advisories)
      *
-     * @throws \mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\UnexpectedSecurityAdvisoryFinderException
+     * @throws \mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException
      *
      * @return array<string,\Composer\Advisory\SecurityAdvisory[]>
      *   An associative array where key are package names (e.g, foo/bar) and
      *   values are security advisories for the given package.
      */
-    public function find(array $packageConstraintMap): array;
+    public function __invoke(array $packageConstraintMap): array;
 }

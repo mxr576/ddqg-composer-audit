@@ -1,5 +1,6 @@
 includes:
     - phpstan-baseline.neon
+    - %rootDir%/../../phpstan/phpstan-webmozart-assert/extension.neon
 
 parameters:
   level: max

@@ -33,6 +33,8 @@ foreach ($audit_result['advisories']['drupal/feeds'] as $advisory) {
 }
 assert(true === $is_feeds_flagged, 'drupal/feeds is flagged as unsupported by DDQG Composer Audit extension');
 
+assert(!array_key_exists('drupal/tamper', $audit_result['advisories']), 'drupal/tamper is on the ignore list so it was not flagged as unsupported by DDQG Composer Audit extension');
+
 $is_apigee_edge_flagged = false;
 foreach ($audit_result['advisories']['drupal/apigee_edge'] as $advisory) {
     if ('DDQG-insecure-drupal-apigee_edge' === $advisory['advisoryId']) {

@@ -15,7 +15,9 @@
         "drupal/core-composer-scaffold": "^9.4",
         "drupal/core-project-message": "^9.4",
         "drupal/core-recommended": "^9.4",
-        "drupal/feeds": "3.0.0-beta3"
+        "drupal/feeds": "3.0.0-beta3",
+        "drupal/feeds_tamper": "2.0.0-beta3",
+        "drupal/tamper": "1.0-alpha3"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.30",
@@ -55,6 +57,11 @@
         "composer-normalize": {
             "indent-size": 4,
             "indent-style": "space"
+        },
+        "ddqg-composer-audit": {
+            "ignore-unsupported-versions": {
+                "drupal/tamper": "1.0.0-alpha3"
+            }
         },
         "drupal-core-project-message": {
             "include-keys": [
