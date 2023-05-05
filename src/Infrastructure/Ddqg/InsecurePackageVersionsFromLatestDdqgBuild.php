@@ -22,7 +22,7 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\InsecurePackageVersi
  */
 final class InsecurePackageVersionsFromLatestDdqgBuild extends PackageVersionsFromRemoteComposerJsonRepository implements InsecurePackageVersionsProvider
 {
-    private const LATEST_RELEASE_URL = 'https://raw.githubusercontent.com/mxr576/ddqg/no-no-insecure-versions/composer.json';
+    private const LATEST_RELEASE_URL = 'https://raw.githubusercontent.com/mxr576/ddqg/no-insecure-versions/composer.json';
 
     public function __construct(HttpDownloader $httpDownloader)
     {

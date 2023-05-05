@@ -22,7 +22,7 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVe
  */
 final class UnsupportedPackageVersionsFromLatestDdqgBuild extends PackageVersionsFromRemoteComposerJsonRepository implements UnsupportedPackageVersionsProvider
 {
-    private const LATEST_RELEASE_URL = 'https://raw.githubusercontent.com/mxr576/ddqg/no-no-unsupported-versions/composer.json';
+    private const LATEST_RELEASE_URL = 'https://raw.githubusercontent.com/mxr576/ddqg/no-unsupported-versions/composer.json';
 
     public function __construct(HttpDownloader $httpDownloader)
     {
