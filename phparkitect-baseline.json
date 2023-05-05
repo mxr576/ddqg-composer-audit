@@ -1,0 +1,15 @@
+{
+    "violations": [
+        {
+            "fqcn": "mxr576\\ddqgComposerAudit\\Infrastructure\\Composer\\UnsupportedPackageFinderConfigurationUsingCweagansConfigurablePlugin",
+            "line": 26,
+            "error": "depends on mxr576\\ddqgComposerAudit\\Application\\PackageFinder\\UnsupportedPackageFinderConfigurationProvider, but should not depend on these namespaces: mxr576\\ddqgComposerAudit\\Application, mxr576\\ddqgComposerAudit\\Presentation, mxr576\\ddqgComposerAudit\\Supportive because The Infrastructure layer should only depend on the Domain layer and on external namespaces. It is better if it does not depend on anything from Application. (See exceptions in baseline.)"
+        },
+        {
+            "fqcn": "mxr576\\ddqgComposerAudit\\Infrastructure\\Composer\\UnsupportedPackageFinderConfigurationUsingCweagansConfigurablePlugin",
+            "line": 81,
+            "error": "depends on mxr576\\ddqgComposerAudit\\Application\\PackageFinder\\Type\\UnsupportedPackageIgnoreRule, but should not depend on these namespaces: mxr576\\ddqgComposerAudit\\Application, mxr576\\ddqgComposerAudit\\Presentation, mxr576\\ddqgComposerAudit\\Supportive because The Infrastructure layer should only depend on the Domain layer and on external namespaces. It is better if it does not depend on anything from Application. (See exceptions in baseline.)"
+        }
+    ],
+    "stopOnFailure": false
+}

@@ -41,21 +41,30 @@ return static function (Config $config): void {
     $rules[] = Rule::allClasses()
       ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Domain'))
       ->should(new IsFinal())
-      ->because('We want to protect our domain');
+      ->because('We want to protect our Domain');
 
-    // We may only enforce these rules below if we add a service container
-    // implementation since some of these failures are caused by building
-    // objects with dependencies by hand.
+    $rules[] = Rule::allClasses()
+      ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Infrastructure'))
+      ->should(new NotDependsOnTheseNamespaces('mxr576\ddqgComposerAudit\Application', 'mxr576\ddqgComposerAudit\Presentation', 'mxr576\ddqgComposerAudit\Supportive'))
+      ->because('The Infrastructure layer should only depend on the Domain layer and on external namespaces. It is better if it does not depend on anything from Application. (See exceptions in baseline.)');
 
-    //    $rules[] = Rule::allClasses()
-    //      ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Infrastructure'))
-    //      ->should(new NotDependsOnTheseNamespaces('mxr576\ddqgComposerAudit\Application', 'mxr576\ddqgComposerAudit\Presentation'))
-    //      ->because('The Infrastructure layer should only depend on the Domain layer and external namespaces - with some exceptions');
+    $rules[] = Rule::allClasses()
+      ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Presentation'))
+      ->should(new NotDependsOnTheseNamespaces('mxr576\ddqgComposerAudit\Domain', 'mxr576\ddqgComposerAudit\Infrastructure'))
+      ->because('The Presentation layer should only depend on the Application layer, stuff in Supportive and external namespaces.');
 
-    //    $rules[] = Rule::allClasses()
-    //      ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Presentation'))
-    //      ->should(new NotDependsOnTheseNamespaces('mxr576\ddqgComposerAudit\Domain', 'mxr576\ddqgComposerAudit\Infrastructure'))
-    //      ->because('The Presentation layer should only depend on Application layer and external ones.');
+    $rules[] = Rule::allClasses()
+      // Miscellaneous stuff that cannot go to any of these layers without breaking
+      // the "outer layers can only depend on elements from the same layer or
+      // inner layers" rule.
+      ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Supportive'))
+      ->should(new IsFinal())
+      ->because('They are not part of the public API.');
+
+    $rules[] = Rule::allClasses()
+      ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Supportive'))
+      ->should(new \Arkitect\Expression\ForClasses\ContainDocBlockLike('@internal'))
+      ->because('They are not part of the public API.');
 
     $config
       ->add($sourceFiles, ...$rules);

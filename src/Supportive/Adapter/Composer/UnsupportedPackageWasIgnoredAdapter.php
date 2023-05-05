@@ -12,7 +12,7 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Infrastructure\Composer;
+namespace mxr576\ddqgComposerAudit\Supportive\Adapter\Composer;
 
 use Composer\Advisory\SecurityAdvisory;
 use Composer\EventDispatcher\Event;
