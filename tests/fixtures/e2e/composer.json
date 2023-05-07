@@ -59,6 +59,7 @@
             "indent-style": "space"
         },
         "ddqg-composer-audit": {
+            "check-d10-compatibility": true,
             "ignore-unsupported-versions": {
                 "drupal/tamper": "1.0.0-alpha3"
             }

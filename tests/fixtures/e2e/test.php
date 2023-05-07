@@ -35,14 +35,22 @@ assert(true === $is_feeds_flagged, 'drupal/feeds is flagged as unsupported by DD
 
 assert(!array_key_exists('drupal/tamper', $audit_result['advisories']), 'drupal/tamper is on the ignore list so it was not flagged as unsupported by DDQG Composer Audit extension');
 
-$is_apigee_edge_flagged = false;
+$is_apigee_edge_flagged_as_insecure = false;
+$is_apigee_edge_flagged_as_non_d10_compatible = false;
 foreach ($audit_result['advisories']['drupal/apigee_edge'] as $advisory) {
     if ('DDQG-insecure-drupal-apigee_edge' === $advisory['advisoryId']) {
-        $is_apigee_edge_flagged = true;
+        $is_apigee_edge_flagged_as_insecure = true;
+    }
+    if ('DDQG-non-D10-compatible-drupal-apigee_edge' === $advisory['advisoryId']) {
+        $is_apigee_edge_flagged_as_non_d10_compatible = true;
+    }
+
+    if ($is_apigee_edge_flagged_as_insecure && $is_apigee_edge_flagged_as_non_d10_compatible) {
         break;
     }
 }
-assert($is_apigee_edge_flagged, 'drupal/apigee_edge is flagged as insecure by DDQG Composer Audit extension');
+assert($is_apigee_edge_flagged_as_insecure, 'drupal/apigee_edge is flagged as insecure by DDQG Composer Audit extension');
+assert($is_apigee_edge_flagged_as_non_d10_compatible, 'The installed version of drupal/apigee_edge is flagged by DDQG Composer Audit extension because it does not support Drupal 10');
 
 $is_drupal_core_flagged = false;
 foreach ($audit_result['advisories']['drupal/core'] as $advisory) {

@@ -18,12 +18,12 @@ use Composer\Package\RootPackageInterface;
 use Composer\Semver\VersionParser;
 use cweagans\Composer\ConfigurablePlugin;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Type\UnsupportedPackageIgnoreRule;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\UnsupportedPackageFinderConfigurationProvider;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\UnsupportedPackageFinderConfigurationProvider as UnsupportedPackageFinderConfigurationProviderContract;
 
 /**
  * @internal
  */
-final class UnsupportedPackageFinderConfigurationUsingCweagansConfigurablePlugin implements UnsupportedPackageFinderConfigurationProvider
+final class UnsupportedPackageFinderConfigurationProvider implements UnsupportedPackageFinderConfigurationProviderContract
 {
     private bool $isConfigured = false;
 

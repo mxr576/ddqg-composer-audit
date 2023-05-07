@@ -51,29 +51,37 @@ final class SecurityAdvisoryBuilder
         return $this;
     }
 
-    public function build(): SecurityAdvisory
-    {
-        $id_parts = ['DDQG'];
-        if (null !== $this->type) {
-            $id_parts[] = $this->type;
-        }
-        $id_parts[] = str_replace('/', '-', $this->packageName);
-        $id = implode('-', $id_parts);
+  public function becauseNotCompatibleWithDrupal10(): self
+  {
+      $this->title = sprintf('The installed "%s" version is not compatible with Drupal 10.', $this->installedVersion);
+      $this->type = 'non-D10-compatible';
 
-        return new SecurityAdvisory(
-            $this->packageName,
-            $id,
-            $this->affectedVersions,
-            $this->title . ' (Reported by Drupal Dependency Quality Gate.)',
+      return $this;
+  }
+
+  public function build(): SecurityAdvisory
+  {
+      $id_parts = ['DDQG'];
+      if (null !== $this->type) {
+          $id_parts[] = $this->type;
+      }
+      $id_parts[] = str_replace('/', '-', $this->packageName);
+      $id = implode('-', $id_parts);
+
+      return new SecurityAdvisory(
+          $this->packageName,
+          $id,
+          $this->affectedVersions,
+          $this->title . ' (Reported by Drupal Dependency Quality Gate.)',
+          [
             [
-              [
-                'name' => 'ddqg',
-                'remoteId' => $id,
-              ],
+              'name' => 'ddqg',
+              'remoteId' => $id,
             ],
-            new \DateTimeImmutable(),
-            $id,
-            'https://www.drupal.org/project/' . $this->drupalProjectId,
-        );
-    }
+          ],
+          new \DateTimeImmutable(),
+          $id,
+          'https://www.drupal.org/project/' . $this->drupalProjectId,
+      );
+  }
 }

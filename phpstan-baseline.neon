@@ -4,3 +4,8 @@ parameters:
 			message: "#^Method mxr576\\\\ddqgComposerAudit\\\\Infrastructure\\\\Ddqg\\\\PackageVersionsFromRemoteComposerJsonRepository\\:\\:findByPackages\\(\\) should return array\\<string, string\\> but returns array\\<int\\|string, mixed\\>\\.$#"
 			count: 1
 			path: src/Infrastructure/Ddqg/PackageVersionsFromRemoteComposerJsonRepository.php
+
+		-
+			message: "#^Method mxr576\\\\ddqgComposerAudit\\\\Presentation\\\\Composer\\\\Plugin\\:\\:activate\\(\\) throws checked exception RuntimeException but it's missing from the PHPDoc @throws tag\\.$#"
+			count: 1
+			path: src/Presentation/Composer/Plugin.php

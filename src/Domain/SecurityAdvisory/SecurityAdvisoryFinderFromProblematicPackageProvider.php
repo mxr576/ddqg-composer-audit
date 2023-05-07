@@ -17,6 +17,7 @@ namespace mxr576\ddqgComposerAudit\Domain\SecurityAdvisory;
 use Composer\Semver\VersionParser;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\Exception\PackageVersionsCouldNotBeFetched;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\InsecurePackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\NonDrupal10CompatiblePackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVersionsProvider;
 
@@ -51,6 +52,8 @@ final class SecurityAdvisoryFinderFromProblematicPackageProvider implements Secu
                         $advisory->becauseUnsupported();
                     } elseif ($this->provider instanceof InsecurePackageVersionsProvider) {
                         $advisory->becauseInsecure();
+                    } elseif ($this->provider instanceof NonDrupal10CompatiblePackageVersionsProvider) {
+                        $advisory->becauseNotCompatibleWithDrupal10();
                     }
 
                     $advisories[$package_name] = [

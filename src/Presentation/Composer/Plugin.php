@@ -24,6 +24,7 @@ use Composer\Plugin\PluginInterface;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\ComposerAuditRepository;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\UnsupportedPackageWasIgnoredAdapter;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindInsecurePackagesFactoryFromComposerRuntimeDependencies;
+use mxr576\ddqgComposerAudit\Supportive\Factory\FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependencies;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindUnsupportedPackagesFactoryFromComposerRuntimeDependencies;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
@@ -75,6 +76,14 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         $composer->getRepositoryManager()->prependRepository(
             new ComposerAuditRepository(
                 (new FindInsecurePackagesFactoryFromComposerRuntimeDependencies($composer->getLoop()->getHttpDownloader(), $version_parser))->create(),
+                $io
+            )
+        );
+        $composer->getRepositoryManager()->prependRepository(
+            new ComposerAuditRepository(
+                // @todo How to pass no-dev option like it is passed in
+                //   \Composer\Command\AuditCommand::getPackages()?
+                (new FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependencies($composer->getPackage(), $composer->getLocker()->getLockedRepository(), $version_parser))->create(),
                 $io
             )
         );

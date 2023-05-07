@@ -30,9 +30,9 @@ final class FindInsecurePackagesFactoryFromComposerRuntimeDependencies
     ) {
     }
 
-      public function create(): FindInsecurePackages
-      {
-          return new FindInsecurePackages(
-              new InsecurePackageVersionsFromLatestDdqgBuild($this->httpDownloader), $this->versionParser);
-      }
+    public function create(): FindInsecurePackages
+    {
+        return new FindInsecurePackages(
+            new InsecurePackageVersionsFromLatestDdqgBuild($this->httpDownloader), $this->versionParser);
+    }
 }

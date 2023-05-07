@@ -19,7 +19,7 @@ use Composer\Package\RootPackageInterface;
 use Composer\Semver\VersionParser;
 use Composer\Util\HttpDownloader;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindUnsupportedPackages;
-use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageFinderConfigurationUsingCweagansConfigurablePlugin;
+use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageFinderConfigurationProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\UnsupportedPackageVersionsFromLatestDdqgBuild;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\Psr14EventDispatcherAdapterForComposer;
 
@@ -42,7 +42,7 @@ final class FindUnsupportedPackagesFactoryFromComposerRuntimeDependencies
             new UnsupportedPackageVersionsFromLatestDdqgBuild($this->httpDownloader),
             $this->versionParser,
             new Psr14EventDispatcherAdapterForComposer($this->eventDispatcher),
-            new UnsupportedPackageFinderConfigurationUsingCweagansConfigurablePlugin($this->project, $this->versionParser)
+            new UnsupportedPackageFinderConfigurationProvider($this->project, $this->versionParser)
         );
     }
 }
