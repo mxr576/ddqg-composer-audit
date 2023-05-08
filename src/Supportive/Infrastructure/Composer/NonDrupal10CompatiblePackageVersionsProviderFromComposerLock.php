@@ -33,6 +33,15 @@ final class NonDrupal10CompatiblePackageVersionsProviderFromComposerLock impleme
       'drupal-custom-profile',
     ];
 
+    private const DRUPAL_CORE_PACKAGE_CANDIDATES_IN_ORDER = [
+      'drupal/core',
+      'drupal/core-recommended',
+    ];
+
+    private const DRUPAL_CORE_DEV_PACKAGE_CANDIDATES_IN_ORDER = [
+      'drupal/core-dev',
+    ];
+
     public function __construct(private readonly LockArrayRepository $lockRepository, private readonly VersionParser $versionParser)
     {
     }
@@ -52,14 +61,26 @@ final class NonDrupal10CompatiblePackageVersionsProviderFromComposerLock impleme
                   continue;
               }
 
-              if (array_key_exists('drupal/core', $package->getRequires())) {
-                  $drupal_core_dep = $package->getRequires()['drupal/core'];
-              } elseif (array_key_exists('drupal/core-recommended', $package->getRequires())) {
-                  $drupal_core_dep = $package->getRequires()['drupal/core-recommended'];
-              } elseif (array_key_exists('drupal/core-dev', $package->getDevRequires())) {
-                  $drupal_core_dep = $package->getRequires()['drupal/core-dev'];
-              } else {
+              $drupal_core_dep = null;
+              foreach (self::DRUPAL_CORE_PACKAGE_CANDIDATES_IN_ORDER as $drupal_core_pkg_name) {
+                  if (array_key_exists($drupal_core_pkg_name, $package->getRequires())) {
+                      $drupal_core_dep = $package->getRequires()[$drupal_core_pkg_name];
+                      break;
+                  }
+              }
+              if (null === $drupal_core_dep) {
+                  foreach (self::DRUPAL_CORE_DEV_PACKAGE_CANDIDATES_IN_ORDER as $drupal_core_pkg_name) {
+                      if (array_key_exists($drupal_core_pkg_name, $package->getDevRequires())) {
+                          $drupal_core_dep = $package->getDevRequires()[$drupal_core_pkg_name];
+                          break;
+                      }
+                  }
+              }
+
+              if (null === $drupal_core_dep) {
                   // @todo Consider logging this event.
+                  //   For that, we may need a PSR3 compliant logger wrapper
+                  //   around Composer IO.
                   continue;
               }
 
