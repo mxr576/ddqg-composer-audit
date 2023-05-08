@@ -26,6 +26,7 @@ use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\UnsupportedPackageWasIg
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindInsecurePackagesFactoryFromComposerRuntimeDependencies;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependencies;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindUnsupportedPackagesFactoryFromComposerRuntimeDependencies;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
@@ -58,6 +59,20 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             return;
         }
 
+        $with_dev_dependencies = false;
+        // This is not great, not terrible... the only benefit of this is
+        // probably reducing the amount of objects build by the
+        // LockerRepository.
+        // @see \Composer\Package\Locker::getLockedRepository()
+        if ($io instanceof ConsoleIO) {
+            $ro_io = new \ReflectionObject($io);
+            if ($ro_io->hasProperty('input')) {
+                $ro_io->getProperty('input')->setAccessible(true);
+                assert($ro_io->getProperty('input')->getValue($io) instanceof InputInterface);
+                $with_dev_dependencies = str_contains((string) $ro_io->getProperty('input')->getValue($io), '--no-dev');
+            }
+        }
+
         $version_parser = new VersionParser();
         // Composer currently only displays advisories from one repository for
         // a package. If multiple ones provides advisories only the first one
@@ -81,9 +96,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         );
         $composer->getRepositoryManager()->prependRepository(
             new ComposerAuditRepository(
-                // @todo How to pass no-dev option like it is passed in
-                //   \Composer\Command\AuditCommand::getPackages()?
-                (new FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependencies($composer->getPackage(), $composer->getLocker()->getLockedRepository(), $version_parser))->create(),
+                (new FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependencies($composer->getPackage(), $composer->getLocker()->getLockedRepository($with_dev_dependencies), $version_parser))->create(),
                 $io
             )
         );

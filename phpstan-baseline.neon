@@ -6,6 +6,11 @@ parameters:
 			path: src/Infrastructure/Ddqg/PackageVersionsFromRemoteComposerJsonRepository.php
 
 		-
+			message: "#^Cannot cast Symfony\\\\Component\\\\Console\\\\Input\\\\InputInterface to string\\.$#"
+			count: 1
+			path: src/Presentation/Composer/Plugin.php
+
+		-
 			message: "#^Method mxr576\\\\ddqgComposerAudit\\\\Presentation\\\\Composer\\\\Plugin\\:\\:activate\\(\\) throws checked exception RuntimeException but it's missing from the PHPDoc @throws tag\\.$#"
 			count: 1
 			path: src/Presentation/Composer/Plugin.php
