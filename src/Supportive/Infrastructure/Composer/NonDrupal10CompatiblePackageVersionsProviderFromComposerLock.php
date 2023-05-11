@@ -85,7 +85,7 @@ final class NonDrupal10CompatiblePackageVersionsProviderFromComposerLock impleme
               }
 
               if (!$d10_compatible_constraint->matches($drupal_core_dep->getConstraint())) {
-                  $result[$package->getName()] = $package->getVersion();
+                  $result[$package->getName()] = $package->getPrettyVersion();
               }
           }
 
