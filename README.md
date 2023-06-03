@@ -111,6 +111,12 @@ or by setting the `DDQG_COMPOSER_AUDIT_CHECK_D10_COMPATIBILITY=true` environment
 
 **This is a seasonal feature that will be removed after Drupal 9 EOL.**
 
+## Integrations
+
+* "Unofficial" [build definition](https://gist.github.com/mxr576/5f87063eb2e1e2b125257878018f048d) for a Docker
+  image that installs the latest version from this Composer plugin and the [composer audit-changes](https://packagist.org/packages/mxr576/composer-audit-changes)
+  command
+
 ## Known issues
 
 * Composer currently only displays advisories from one repository for a package. If multiple ones provide advisories,
