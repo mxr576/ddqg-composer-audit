@@ -21,7 +21,7 @@
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.30",
-        "mxr576/ddqg-composer-audit": "dev-master"
+        "mxr576/ddqg-composer-audit": "^1.99@dev"
     },
     "conflict": {
         "drupal/drupal": "*"
