@@ -53,8 +53,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         // installation of this package on projects where composer/composer also
         // installed as a project dependency (but a global version used instead).
         // @see https://github.com/mxr576/ddqg-composer-audit/issues/1
-        if (version_compare($composer::VERSION, '2.4.0', '<')) {
-            $io->warning(sprintf('%s is disabled because audit command is only available since Composer 2.4.0. Your version is: %s.', self::PACKAGE_NAME, $composer::VERSION));
+        if (version_compare(Composer::getVersion(), '2.4.0', '<')) {
+            $io->warning(sprintf('%s is disabled because audit command is only available since Composer 2.4.0. Your version is: %s.', self::PACKAGE_NAME, Composer::getVersion()));
 
             return;
         }
