@@ -57,7 +57,7 @@ $ composer audit
 +-------------------+----------------------------------------------------------------------------------+
 +-------------------+----------------------------------------------------------------------------------+
 | Package           | drupal/feeds                                                                     |
-| CVE               | DDQG-unsupported-drupal-feeds                                                    |
+| CVE               | DDQG-unsupported-drupal-feeds-3.0.0.0-beta3                                      |
 | Title             | The installed "3.0.0.0-beta3" version is unsupported. (Reported by Drupal Depend |
 |                   | ency Quality Gate.)                                                              |
 | URL               | https://www.drupal.org/project/feeds                                             |
