@@ -17,6 +17,13 @@ with collected technical debt.
 $ composer require --dev mxr576/ddqg-composer-audit
 ```
 
+### Composer version support
+
+The minimum required version is Composer 2.4.0 because the `composer audit` command was introduced in that version.
+The recommended version is Composer 2.6.0 because it introduced essential improvements for the audit feature like
+[the support for multiple repositories to provide advisories for the same package](https://github.com/composer/composer/issues/11435)
+or [the advisory ignore feature](https://getcomposer.org/doc/06-config.md#ignore).
+
 ## Example output
 
 ```
@@ -69,6 +76,9 @@ comes with minimal opt-out options.
 
 ### Silence warning about an unsupported package version
 
+> [!WARNING]
+> For Composer < 2.6.0 only. This feature will be removed when the minimum required Composer version gets bumped to >=2.6.0.
+
 In a project's root composer.json, under the `extra` property, add a definition like this:
 
 ```json
@@ -116,8 +126,3 @@ or by setting the `DDQG_COMPOSER_AUDIT_CHECK_D10_COMPATIBILITY=true` environment
 * "Unofficial" [build definition](https://gist.github.com/mxr576/5f87063eb2e1e2b125257878018f048d) for a Docker
   image that installs the latest version from this Composer plugin and the [composer audit-changes](https://packagist.org/packages/mxr576/composer-audit-changes)
   command
-
-## Known issues
-
-* Composer currently only displays advisories from one repository for a package. If multiple ones provide advisories,
-  only the first one is visible; see more details at https://github.com/composer/composer/issues/11435.
