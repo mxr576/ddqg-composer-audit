@@ -11,6 +11,10 @@
  *
  */
 
+require_once $_composer_autoload_path ?? __DIR__ . '/vendor/autoload.php';
+
+use Webmozart\Assert\Assert;
+
 $audit_output = $argv[1] ?? (stream_get_contents(STDIN) ?: null);
 if (null === $audit_output) {
     throw new \LogicException('Missing "composer audit" command output.');
@@ -26,14 +30,13 @@ try {
 
 $is_feeds_flagged = false;
 foreach ($audit_result['advisories']['drupal/feeds'] as $advisory) {
-    if ('DDQG-unsupported-drupal-feeds' === $advisory['advisoryId']) {
+    if ('DDQG-unsupported-drupal-feeds-3.0.0.0-beta3' === $advisory['advisoryId']) {
         $is_feeds_flagged = true;
         break;
     }
 }
-assert(true === $is_feeds_flagged, 'drupal/feeds is flagged as unsupported by DDQG Composer Audit extension');
-
-assert(!array_key_exists('drupal/tamper', $audit_result['advisories']), 'drupal/tamper is on the ignore list so it was not flagged as unsupported by DDQG Composer Audit extension');
+Assert::true($is_feeds_flagged, 'drupal/feeds is flagged as unsupported by DDQG Composer Audit extension');
+Assert::true(!array_key_exists('drupal/tamper', $audit_result['advisories']), 'drupal/tamper is on the ignore list so it was not flagged as unsupported by DDQG Composer Audit extension');
 
 $is_apigee_edge_flagged_as_insecure = false;
 $is_apigee_edge_flagged_as_non_d10_compatible = false;
@@ -49,8 +52,9 @@ foreach ($audit_result['advisories']['drupal/apigee_edge'] as $advisory) {
         break;
     }
 }
-assert($is_apigee_edge_flagged_as_insecure, 'drupal/apigee_edge is flagged as insecure by DDQG Composer Audit extension');
-assert($is_apigee_edge_flagged_as_non_d10_compatible, 'The installed version of drupal/apigee_edge is flagged by DDQG Composer Audit extension because it does not support Drupal 10');
+Assert::true($is_apigee_edge_flagged_as_non_d10_compatible, 'The installed version of drupal/apigee_edge is flagged by DDQG Composer Audit extension because it does not support Drupal 10');
+// @TODO Requires Composer 2.6.0 and its multi-repo security advisory support.
+// Assert::true($is_apigee_edge_flagged_as_insecure, 'drupal/apigee_edge is flagged as insecure by DDQG Composer Audit extension');
 
 $is_drupal_core_flagged = false;
 foreach ($audit_result['advisories']['drupal/core'] as $advisory) {
@@ -59,4 +63,4 @@ foreach ($audit_result['advisories']['drupal/core'] as $advisory) {
         break;
     }
 }
-assert(true === $is_drupal_core_flagged, 'drupal/core is flagged as insecure by DDQG Composer Audit extension');
+Assert::true($is_drupal_core_flagged, 'drupal/core is flagged as insecure by DDQG Composer Audit extension');

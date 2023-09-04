@@ -21,7 +21,9 @@ use Composer\Util\HttpDownloader;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindUnsupportedPackages;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageFinderConfigurationProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\UnsupportedPackageVersionsFromLatestDdqgBuild;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\UnsupportedPackageVersionsFromSnapshotForTesting;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\Psr14EventDispatcherAdapterForComposer;
+use mxr576\ddqgComposerAudit\Supportive\Util\Environment;
 
 /**
  * @internal
@@ -39,7 +41,8 @@ final class FindUnsupportedPackagesFactoryFromComposerRuntimeDependencies
     public function create(): FindUnsupportedPackages
     {
         return new FindUnsupportedPackages(
-            new UnsupportedPackageVersionsFromLatestDdqgBuild($this->httpDownloader),
+            // @todo Find a better place for this logic.
+            Environment::isTestEnvironment() ? new UnsupportedPackageVersionsFromSnapshotForTesting() : new UnsupportedPackageVersionsFromLatestDdqgBuild($this->httpDownloader),
             $this->versionParser,
             new Psr14EventDispatcherAdapterForComposer($this->eventDispatcher),
             new UnsupportedPackageFinderConfigurationProvider($this->project, $this->versionParser)

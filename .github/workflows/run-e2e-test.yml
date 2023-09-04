@@ -48,4 +48,4 @@ jobs:
           working-directory: "tests/fixtures/e2e"
 
       - name: Test composer audit output
-        run: tests/fixtures/e2e/test.php "$(./vendor/bin/composer -d tests/fixtures/e2e audit --format=json)"
+        run: tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 ./vendor/bin/composer -d tests/fixtures/e2e audit --format=json)"

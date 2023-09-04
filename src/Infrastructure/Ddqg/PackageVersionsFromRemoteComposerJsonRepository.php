@@ -16,9 +16,7 @@ namespace mxr576\ddqgComposerAudit\Infrastructure\Ddqg;
 
 use Composer\Downloader\TransportException;
 use Composer\Util\HttpDownloader;
-use JsonMachine\Items;
-use JsonMachine\JsonDecoder\ExtJsonDecoder;
-use loophp\collection\Collection;
+use JsonMachine\StringChunks;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\Exception\PackageVersionsCouldNotBeFetched;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 
@@ -47,25 +45,6 @@ abstract class PackageVersionsFromRemoteComposerJsonRepository implements Proble
 
         assert(null !== $composer_json);
 
-        // Extra assert()-s are needed to make PHPStan happy.
-        // @see https://github.com/phpstan/phpstan/issues/5927
-        return Collection::fromIterable(Items::fromString($composer_json, ['decoder' => new ExtJsonDecoder(true)]))
-          ->filter(static function (mixed $v, mixed $k): bool {
-              assert(is_string($k));
-
-              return 'conflict' === $k;
-          })
-          ->map(
-              static function ($value) use ($package_names): array {
-                  assert(is_array($value));
-
-                  return Collection::fromIterable($value)
-                    ->filter(static fn ($value, $key): bool => in_array($key,
-                        $package_names, true))
-                    ->all(false);
-              }
-          )
-          ->limit(1)
-          ->current(0, []);
+        return PackageVersionConstraintsFromDdqgComposerJson::extract(new StringChunks($composer_json), $package_names);
     }
 }

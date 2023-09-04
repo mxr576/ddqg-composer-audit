@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9b8a830a2e8a57c5c12de8b9d6cfe70b",
+    "content-hash": "474007f22341346bc90fef35a6dc53fe",
     "packages": [
         {
             "name": "apigee/apigee-client-php",
@@ -779,10 +779,6 @@
             ],
             "authors": [
                 {
-                    "name": "Arlina",
-                    "homepage": "https://www.drupal.org/user/1055344"
-                },
-                {
                     "name": "chrisnovak",
                     "homepage": "https://www.drupal.org/user/880416"
                 },
@@ -793,22 +789,6 @@
                 {
                     "name": "gitesh.koli",
                     "homepage": "https://www.drupal.org/user/673858"
-                },
-                {
-                    "name": "jennbbennett",
-                    "homepage": "https://www.drupal.org/user/3605278"
-                },
-                {
-                    "name": "phdhiren",
-                    "homepage": "https://www.drupal.org/user/181989"
-                },
-                {
-                    "name": "raakesh",
-                    "homepage": "https://www.drupal.org/user/831108"
-                },
-                {
-                    "name": "shadcn",
-                    "homepage": "https://www.drupal.org/user/571032"
                 },
                 {
                     "name": "shishirsuvarna",
@@ -1595,7 +1575,7 @@
                     "datestamp": "1670507777",
                     "security-coverage": {
                         "status": "not-covered",
-                        "message": "Project has not opted into security advisory coverage!"
+                        "message": "Alpha releases are not covered by Drupal security advisories."
                     }
                 }
             },
@@ -3207,6 +3187,7 @@
                 "issues": "https://github.com/php-http/message-factory/issues",
                 "source": "https://github.com/php-http/message-factory/tree/1.1.0"
             },
+            "abandoned": "psr/http-factory",
             "time": "2023-04-14T14:16:17+00:00"
         },
         {
@@ -7776,7 +7757,7 @@
             "dist": {
                 "type": "path",
                 "url": "../../..",
-                "reference": "158f6c99735dbbb88608a6fafd4d9240c51adfb1"
+                "reference": "9cb09b2b512228ee5ebe294e8b4af955539574e3"
             },
             "require": {
                 "composer-plugin-api": "^2.3",
