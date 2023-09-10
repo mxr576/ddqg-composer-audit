@@ -27,7 +27,6 @@ use mxr576\ddqgComposerAudit\Supportive\Factory\FindInsecurePackagesFactoryFromC
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependencies;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindUnsupportedPackagesFactoryFromComposerRuntimeDependencies;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * @internal
@@ -137,13 +136,12 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     private function displayConsoleMessages(IOInterface $io, string ...$messages): void
     {
-        if ($io instanceof ConsoleIO) {
-            $output = new ConsoleOutput();
-            // By pushing this to STDERR we guarantee that the output on
-            // STDOUT (e.g, in JSON) do not get malformed when it is captured.
-            foreach ($messages as $message) {
-                $output->getErrorOutput()->writeln(sprintf('[<href=https://packagist.org/packages/mxr576/ddqg-composer-audit>%s</a>] ', self::PACKAGE_NAME) . $message);
-            }
+        // By pushing this to STDERR we guarantee that the output on
+        // STDOUT (e.g, in JSON) do not get malformed when it is captured.
+        foreach ($messages as $message) {
+            // writeError() always writes to STDERR or nowhere.
+            // https://github.com/composer/composer/blob/2.6.2/src/Composer/IO/ConsoleIO.php#L172-L177
+            $io->writeError(sprintf('[<href=https://packagist.org/packages/mxr576/ddqg-composer-audit>%s</a>] ', self::PACKAGE_NAME) . $message);
         }
     }
 }
