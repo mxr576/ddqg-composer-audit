@@ -90,10 +90,10 @@ final class SecurityAdvisoryBuilder
           $this->packageName,
           $id,
           $this->affectedVersions,
-          $this->title . ' (Reported by Drupal Dependency Quality Gate.)',
+          $this->title . ' (Reported by <href=https://packagist.org/packages/mxr576/ddqg>Drupal Dependency Quality Gate</>.)',
           [
             [
-              'name' => 'ddqg',
+              'name' => 'DDQG',
               'remoteId' => $id,
             ],
           ],
