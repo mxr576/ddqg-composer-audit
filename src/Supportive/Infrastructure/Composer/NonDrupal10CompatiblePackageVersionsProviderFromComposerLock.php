@@ -46,49 +46,46 @@ final class NonDrupal10CompatiblePackageVersionsProviderFromComposerLock impleme
     {
     }
 
-    /**
-       * {@inheritDoc}
-       */
-      public function findByPackages(string ...$package_names): array
-      {
-          $result = [];
-          $d10_compatible_constraint = new Constraint('>=', $this->versionParser->normalize('10.0.0'));
-          foreach ($this->lockRepository->getPackages() as $package) {
-              if (!in_array($package->getName(), $package_names, true)) {
-                  continue;
-              }
-              if (!in_array($package->getType(), self::DRUPAL_PACKAGE_TYPES, true)) {
-                  continue;
-              }
+    public function findByPackages(string ...$package_names): array
+    {
+        $result = [];
+        $d10_compatible_constraint = new Constraint('>=', $this->versionParser->normalize('10.0.0'));
+        foreach ($this->lockRepository->getPackages() as $package) {
+            if (!in_array($package->getName(), $package_names, true)) {
+                continue;
+            }
+            if (!in_array($package->getType(), self::DRUPAL_PACKAGE_TYPES, true)) {
+                continue;
+            }
 
-              $drupal_core_dep = null;
-              foreach (self::DRUPAL_CORE_PACKAGE_CANDIDATES_IN_ORDER as $drupal_core_pkg_name) {
-                  if (array_key_exists($drupal_core_pkg_name, $package->getRequires())) {
-                      $drupal_core_dep = $package->getRequires()[$drupal_core_pkg_name];
-                      break;
-                  }
-              }
-              if (null === $drupal_core_dep) {
-                  foreach (self::DRUPAL_CORE_DEV_PACKAGE_CANDIDATES_IN_ORDER as $drupal_core_pkg_name) {
-                      if (array_key_exists($drupal_core_pkg_name, $package->getDevRequires())) {
-                          $drupal_core_dep = $package->getDevRequires()[$drupal_core_pkg_name];
-                          break;
-                      }
-                  }
-              }
+            $drupal_core_dep = null;
+            foreach (self::DRUPAL_CORE_PACKAGE_CANDIDATES_IN_ORDER as $drupal_core_pkg_name) {
+                if (array_key_exists($drupal_core_pkg_name, $package->getRequires())) {
+                    $drupal_core_dep = $package->getRequires()[$drupal_core_pkg_name];
+                    break;
+                }
+            }
+            if (null === $drupal_core_dep) {
+                foreach (self::DRUPAL_CORE_DEV_PACKAGE_CANDIDATES_IN_ORDER as $drupal_core_pkg_name) {
+                    if (array_key_exists($drupal_core_pkg_name, $package->getDevRequires())) {
+                        $drupal_core_dep = $package->getDevRequires()[$drupal_core_pkg_name];
+                        break;
+                    }
+                }
+            }
 
-              if (null === $drupal_core_dep) {
-                  // @todo Consider logging this event.
-                  //   For that, we may need a PSR3 compliant logger wrapper
-                  //   around Composer IO.
-                  continue;
-              }
+            if (null === $drupal_core_dep) {
+                // @todo Consider logging this event.
+                //   For that, we may need a PSR3 compliant logger wrapper
+                //   around Composer IO.
+                continue;
+            }
 
-              if (!$d10_compatible_constraint->matches($drupal_core_dep->getConstraint())) {
-                  $result[$package->getName()] = $package->getPrettyVersion();
-              }
-          }
+            if (!$d10_compatible_constraint->matches($drupal_core_dep->getConstraint())) {
+                $result[$package->getName()] = $package->getPrettyVersion();
+            }
+        }
 
-          return $result;
-      }
+        return $result;
+    }
 }

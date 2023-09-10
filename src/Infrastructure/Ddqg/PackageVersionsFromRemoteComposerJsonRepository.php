@@ -29,9 +29,6 @@ abstract class PackageVersionsFromRemoteComposerJsonRepository implements Proble
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     final public function findByPackages(string ...$package_names): array
     {
         // Streaming the response would be good, but using native Composer tools

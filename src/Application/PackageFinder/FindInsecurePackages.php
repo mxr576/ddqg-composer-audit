@@ -38,9 +38,6 @@ final class FindInsecurePackages implements PackageFinder
         $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($insecurePackageVersionsProvider, $versionParser);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function __invoke(array $packageConstraintMap): array
     {
         // We have no additional use case for this feature, yet.

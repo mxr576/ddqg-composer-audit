@@ -48,9 +48,6 @@ final class FindUnsupportedPackages implements PackageFinder
             $versionParser);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function __invoke(array $packageConstraintMap): array
     {
         try {

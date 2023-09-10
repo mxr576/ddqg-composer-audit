@@ -29,9 +29,6 @@ final class Psr14EventDispatcherAdapterForComposer implements EventDispatcherInt
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function dispatch(object $event): object
     {
         if ($event instanceof UnsupportedPackageWasIgnored) {

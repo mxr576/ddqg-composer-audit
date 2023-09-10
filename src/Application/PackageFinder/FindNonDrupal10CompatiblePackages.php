@@ -39,9 +39,6 @@ final class FindNonDrupal10CompatiblePackages implements PackageFinder
         $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($nonDrupal10CompatiblePackageVersionsProvider, $versionParser);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function __invoke(array $packageConstraintMap): array
     {
         if (!$this->configurationProvider->isEnabled()) {

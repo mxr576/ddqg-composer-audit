@@ -29,39 +29,36 @@ final class NonDrupal10CompatiblePackageFinderConfigurationProvider implements N
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
-      public function isEnabled(): bool
-      {
-          // Public methods from ConfigurablePlugin MUST NOT be exposed as
-          // public APIs of this implementation.
-          // We should only build this object once, but if we do in the
-          // constructor then it is hard to explain PHPStan what are the
-          // available public methods on an anonymous class.
-          $configReaderJail = new class() {
-              use ConfigurablePlugin;
+    public function isEnabled(): bool
+    {
+        // Public methods from ConfigurablePlugin MUST NOT be exposed as
+        // public APIs of this implementation.
+        // We should only build this object once, but if we do in the
+        // constructor then it is hard to explain PHPStan what are the
+        // available public methods on an anonymous class.
+        $configReaderJail = new class() {
+            use ConfigurablePlugin;
 
-              public const CONFIG_KEY_CHECK_D10_COMPATIBILITY = 'check-d10-compatibility';
+            public const CONFIG_KEY_CHECK_D10_COMPATIBILITY = 'check-d10-compatibility';
 
-              public function __construct()
-              {
-                  $this->configuration = [
-                    self::CONFIG_KEY_CHECK_D10_COMPATIBILITY => [
-                      'type' => 'bool',
-                      'default' => false,
-                    ],
-                  ];
-              }
-          };
+            public function __construct()
+            {
+                $this->configuration = [
+                  self::CONFIG_KEY_CHECK_D10_COMPATIBILITY => [
+                    'type' => 'bool',
+                    'default' => false,
+                  ],
+                ];
+            }
+        };
 
-          if (!$this->isConfigured) {
-              $configReaderJail->configure($this->rootPackage->getExtra(), 'ddqg-composer-audit');
-          }
+        if (!$this->isConfigured) {
+            $configReaderJail->configure($this->rootPackage->getExtra(), 'ddqg-composer-audit');
+        }
 
-          $result = $configReaderJail->getConfig($configReaderJail::CONFIG_KEY_CHECK_D10_COMPATIBILITY);
-          assert(is_bool($result));
+        $result = $configReaderJail->getConfig($configReaderJail::CONFIG_KEY_CHECK_D10_COMPATIBILITY);
+        assert(is_bool($result));
 
-          return $result;
-      }
+        return $result;
+    }
 }

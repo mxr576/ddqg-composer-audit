@@ -24,7 +24,7 @@ final class UnsupportedPackageIgnoreRule
     {
     }
 
-    public static function ignorePackageVersion(string $packageName, string $version, ?VersionParser $parser = null): self
+    public static function ignorePackageVersion(string $packageName, string $version, VersionParser $parser = null): self
     {
         $parser = $parser ?? new VersionParser();
 

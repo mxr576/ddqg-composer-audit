@@ -22,9 +22,6 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVe
  */
 final class UnsupportedPackageVersionsFromSnapshotForTesting implements UnsupportedPackageVersionsProvider
 {
-    /**
-     * {@inheritDoc}
-     */
     public function findByPackages(string ...$package_names): array
     {
         return PackageVersionConstraintsFromDdqgComposerJson::extract(new FileChunks(__DIR__ . '/fixtures/unsupported-composer-2023-04.29.json'), $package_names);

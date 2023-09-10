@@ -60,46 +60,46 @@ final class SecurityAdvisoryBuilder
         return $this;
     }
 
-  public function becauseNotCompatibleWithDrupal10(): self
-  {
-      $this->title = sprintf('The installed "%s" version is not compatible with Drupal 10.', $this->installedVersion);
-      $this->type = self::TYPE_NON_D10_COMPATIBLE;
+    public function becauseNotCompatibleWithDrupal10(): self
+    {
+        $this->title = sprintf('The installed "%s" version is not compatible with Drupal 10.', $this->installedVersion);
+        $this->type = self::TYPE_NON_D10_COMPATIBLE;
 
-      return $this;
-  }
+        return $this;
+    }
 
-  public function build(): SecurityAdvisory
-  {
-      $id_parts = ['DDQG'];
-      if (null !== $this->type) {
-          $id_parts[] = $this->type;
-      }
-      $id_parts[] = str_replace('/', '-', $this->packageName);
-      // Composer 2.6.0 supports ignoring security advisories. We would like to
-      // push projects to depend on stable components, so let's make
-      // ignoring unsupported packages with that feature as painful as it is
-      // with the currently available built-in ignore feature for unsupported
-      // packages.
-      // @see https://github.com/mxr576/ddqg-composer-audit/tree/db594420c127acc0375ff90dd7382c697f2e0375#silence-warning-about-an-unsupported-package-version
-      if (self::TYPE_UNSUPPORTED === $this->type) {
-          $id_parts[] = $this->installedVersion;
-      }
-      $id = implode('-', $id_parts);
+    public function build(): SecurityAdvisory
+    {
+        $id_parts = ['DDQG'];
+        if (null !== $this->type) {
+            $id_parts[] = $this->type;
+        }
+        $id_parts[] = str_replace('/', '-', $this->packageName);
+        // Composer 2.6.0 supports ignoring security advisories. We would like to
+        // push projects to depend on stable components, so let's make
+        // ignoring unsupported packages with that feature as painful as it is
+        // with the currently available built-in ignore feature for unsupported
+        // packages.
+        // @see https://github.com/mxr576/ddqg-composer-audit/tree/db594420c127acc0375ff90dd7382c697f2e0375#silence-warning-about-an-unsupported-package-version
+        if (self::TYPE_UNSUPPORTED === $this->type) {
+            $id_parts[] = $this->installedVersion;
+        }
+        $id = implode('-', $id_parts);
 
-      return new SecurityAdvisory(
-          $this->packageName,
-          $id,
-          $this->affectedVersions,
-          $this->title . ' (Reported by <href=https://packagist.org/packages/mxr576/ddqg>Drupal Dependency Quality Gate</>.)',
-          [
+        return new SecurityAdvisory(
+            $this->packageName,
+            $id,
+            $this->affectedVersions,
+            $this->title . ' (Reported by <href=https://packagist.org/packages/mxr576/ddqg>Drupal Dependency Quality Gate</>.)',
             [
-              'name' => 'DDQG',
-              'remoteId' => $id,
+              [
+                'name' => 'DDQG',
+                'remoteId' => $id,
+              ],
             ],
-          ],
-          new \DateTimeImmutable(),
-          $id,
-          'https://www.drupal.org/project/' . $this->drupalProjectId,
-      );
-  }
+            new \DateTimeImmutable(),
+            $id,
+            'https://www.drupal.org/project/' . $this->drupalProjectId,
+        );
+    }
 }

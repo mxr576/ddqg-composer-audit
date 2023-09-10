@@ -42,9 +42,6 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         $this->io = new NullIO();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function activate(Composer $composer, IOInterface $io): void
     {
         $this->io = $io;
@@ -108,16 +105,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function deactivate(Composer $composer, IOInterface $io): void
     {
     }
 
-    /**
-     * {@inheritDoc}
-     */
     public function uninstall(Composer $composer, IOInterface $io): void
     {
     }
