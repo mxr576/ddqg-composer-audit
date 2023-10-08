@@ -126,3 +126,11 @@ or by setting the `DDQG_COMPOSER_AUDIT_CHECK_D10_COMPATIBILITY=true` environment
 * "Unofficial" [build definition](https://gist.github.com/mxr576/5f87063eb2e1e2b125257878018f048d) for a Docker
   image that installs the latest version from this Composer plugin and the [composer audit-changes](https://packagist.org/packages/mxr576/composer-audit-changes)
   command
+
+## FAQ
+
+### Drupal Packagist already provides package advisories, so why should I care about this plugin?
+
+This feature is only available on Drupal Packagist since 21 September 2023. Security advisory data via
+Drupal Packagist only contains information based on published security advisories; it does not contain
+releases flagged as ["insecure"](https://www.drupal.org/taxonomy/term/188131), but this Composer plugin does.
