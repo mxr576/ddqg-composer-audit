@@ -22,7 +22,7 @@ use Composer\Semver\Constraint\ConstraintInterface;
  */
 final class SecurityAdvisoryBuilder
 {
-    private const TYPE_NON_D10_COMPATIBLE = 'non-D10-compatible';
+    private const TYPE_NON_D10_COMPATIBLE = 'D10-incompatible';
 
     private const TYPE_UNSUPPORTED = 'unsupported';
 

@@ -44,7 +44,7 @@ foreach ($audit_result['advisories']['drupal/apigee_edge'] as $advisory) {
     if ('DDQG-insecure-drupal-apigee_edge' === $advisory['advisoryId']) {
         $is_apigee_edge_flagged_as_insecure = true;
     }
-    if ('DDQG-non-D10-compatible-drupal-apigee_edge' === $advisory['advisoryId']) {
+    if ('DDQG-D10-incompatible-drupal-apigee_edge' === $advisory['advisoryId']) {
         $is_apigee_edge_flagged_as_non_d10_compatible = true;
     }
 
