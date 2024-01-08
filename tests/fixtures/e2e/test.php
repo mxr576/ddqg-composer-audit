@@ -17,7 +17,7 @@ use Webmozart\Assert\Assert;
 
 $audit_output = $argv[1] ?? (stream_get_contents(STDIN) ?: null);
 if (null === $audit_output) {
-    throw new \LogicException('Missing "composer audit" command output.');
+    throw new LogicException('Missing "composer audit" command output.');
 }
 
 fwrite(STDERR, $audit_output);
@@ -25,7 +25,7 @@ fwrite(STDERR, $audit_output);
 try {
     $audit_result = json_decode($audit_output, true, flags: JSON_THROW_ON_ERROR);
 } catch (JsonException $e) {
-    throw new \LogicException(sprintf('Malformed JSON input: "%s". %s', base64_encode(gzdeflate($audit_output, 9)), $e->getMessage()), 0, $e);
+    throw new LogicException(sprintf('Malformed JSON input: "%s". %s', base64_encode(gzdeflate($audit_output, 9)), $e->getMessage()), 0, $e);
 }
 
 $is_feeds_flagged = false;

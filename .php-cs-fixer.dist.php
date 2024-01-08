@@ -18,7 +18,7 @@ $license = License\Type\MIT::markdown(
     __DIR__ . '/LICENSE.md',
     License\Range::since(
         License\Year::fromString('2023'),
-        new \DateTimeZone('UTC')
+        new DateTimeZone('UTC')
     ),
     License\Holder::fromString('Dezső Biczó'),
     License\Url::fromString('https://github.com/mxr576/ddqg-composer-audit/LICENSE.md')

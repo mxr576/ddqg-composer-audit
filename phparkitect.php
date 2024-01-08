@@ -63,7 +63,7 @@ return static function (Config $config): void {
 
     $rules[] = Rule::allClasses()
       ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Supportive'))
-      ->should(new \Arkitect\Expression\ForClasses\ContainDocBlockLike('@internal'))
+      ->should(new Arkitect\Expression\ForClasses\ContainDocBlockLike('@internal'))
       ->because('They are not part of the public API.');
 
     $config

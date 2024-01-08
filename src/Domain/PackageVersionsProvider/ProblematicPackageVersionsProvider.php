@@ -17,7 +17,7 @@ namespace mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider;
 interface ProblematicPackageVersionsProvider
 {
     /**
-     * @throws \mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\Exception\PackageVersionsCouldNotBeFetched
+     * @throws Exception\PackageVersionsCouldNotBeFetched
      *
      * @return array<string,string>
      *   An associative array where key are package names and values are valid

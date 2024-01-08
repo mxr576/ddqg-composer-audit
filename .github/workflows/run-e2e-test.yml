@@ -48,4 +48,5 @@ jobs:
           working-directory: "tests/fixtures/e2e"
 
       - name: Test composer audit output
-        run: tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 ./vendor/bin/composer -d tests/fixtures/e2e audit --format=json)"
+        # See https://github.com/symfony/symfony/issues/53460 why --no-ansi was added.
+        run: tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --format=json)"

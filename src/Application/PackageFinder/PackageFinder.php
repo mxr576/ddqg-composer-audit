@@ -21,7 +21,7 @@ interface PackageFinder
      *   Map of package name to constraint (can be MatchAllConstraint to fetch
      *   all advisories)
      *
-     * @throws \mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException
+     * @throws Exception\UnexpectedPackageFinderException
      *
      * @return array<string,\Composer\Advisory\SecurityAdvisory[]>
      *   An associative array where key are package names (e.g, foo/bar) and
