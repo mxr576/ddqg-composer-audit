@@ -24,6 +24,6 @@ final class UnsupportedPackageVersionsFromSnapshotForTesting implements Unsuppor
 {
     public function findByPackages(string ...$package_names): array
     {
-        return PackageVersionConstraintsFromDdqgComposerJson::extract(new FileChunks(__DIR__ . '/fixtures/unsupported-composer-2023-04.29.json'), $package_names);
+        return PackageVersionConstraintsFromDdqgComposerJson::extract(new FileChunks(__DIR__ . '/fixtures/unsupported-composer-2023-04-29.json'), $package_names);
     }
 }
