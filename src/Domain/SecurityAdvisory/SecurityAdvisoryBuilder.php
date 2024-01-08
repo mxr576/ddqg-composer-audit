@@ -26,6 +26,8 @@ final class SecurityAdvisoryBuilder
 
     private const TYPE_UNSUPPORTED = 'unsupported';
 
+    private const TYPE_DEPRECATED = 'deprecated';
+
     private const TYPE_INSECURE = 'insecure';
 
     private readonly string $drupalProjectId;
@@ -60,6 +62,14 @@ final class SecurityAdvisoryBuilder
         return $this;
     }
 
+    public function becauseDeprecated(): self
+    {
+        $this->title = sprintf('The installed "%s" version is deprecated.', $this->installedVersion);
+        $this->type = self::TYPE_DEPRECATED;
+
+        return $this;
+    }
+
     public function becauseNotCompatibleWithDrupal10(): self
     {
         $this->title = sprintf('The installed "%s" version is not compatible with Drupal 10.', $this->installedVersion);
@@ -75,13 +85,13 @@ final class SecurityAdvisoryBuilder
             $id_parts[] = $this->type;
         }
         $id_parts[] = str_replace('/', '-', $this->packageName);
-        // Composer 2.6.0 supports ignoring security advisories. We would like to
+        // Composer >=2.6.0 supports ignoring security advisories. We would like to
         // push projects to depend on stable components, so let's make
-        // ignoring unsupported packages with that feature as painful as it is
-        // with the currently available built-in ignore feature for unsupported
-        // packages.
+        // ignoring unsupported/deprecated packages with that feature as
+        // painful as it is possible with the currently available built-in
+        // ignore features for unsupported/deprecated packages.
         // @see https://github.com/mxr576/ddqg-composer-audit/tree/db594420c127acc0375ff90dd7382c697f2e0375#silence-warning-about-an-unsupported-package-version
-        if (self::TYPE_UNSUPPORTED === $this->type) {
+        if (in_array($this->type, [self::TYPE_UNSUPPORTED, self::TYPE_DEPRECATED], true)) {
             $id_parts[] = $this->installedVersion;
         }
         $id = implode('-', $id_parts);

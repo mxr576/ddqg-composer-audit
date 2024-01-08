@@ -22,7 +22,9 @@ use Composer\IO\NullIO;
 use Composer\Package\Version\VersionParser;
 use Composer\Plugin\PluginInterface;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\ComposerAuditRepository;
+use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\DeprecatedPackageWasIgnoredAdapter;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\UnsupportedPackageWasIgnoredAdapter;
+use mxr576\ddqgComposerAudit\Supportive\Factory\FindDeprecatedPackagesFactoryFromComposerRuntimeDependencies;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindInsecurePackagesFactoryFromComposerRuntimeDependencies;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependencies;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindUnsupportedPackagesFactoryFromComposerRuntimeDependencies;
@@ -93,6 +95,16 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         );
         $composer->getRepositoryManager()->prependRepository(
             new ComposerAuditRepository(
+                (new FindDeprecatedPackagesFactoryFromComposerRuntimeDependencies(
+                    $composer->getPackage(),
+                    $composer->getLoop()->getHttpDownloader(),
+                    $composer->getEventDispatcher(),
+                    $version_parser,
+                ))->create(), $io
+            )
+        );
+        $composer->getRepositoryManager()->prependRepository(
+            new ComposerAuditRepository(
                 (new FindInsecurePackagesFactoryFromComposerRuntimeDependencies($composer->getLoop()->getHttpDownloader(), $version_parser))->create(),
                 $io
             )
@@ -113,15 +125,21 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
     }
 
-    public function warnAboutIgnoredPackage(UnsupportedPackageWasIgnoredAdapter $event): void
+    public function warnAboutIgnoredUnsupportedPackage(UnsupportedPackageWasIgnoredAdapter $event): void
     {
         $this->displayConsoleMessages($this->io, sprintf('<comment>An advisory about the unsupported "%s" package was ignored by configuration.</comment>', $event->packageName));
+    }
+
+    public function warnAboutIgnoredDeprecatedPackage(DeprecatedPackageWasIgnoredAdapter $event): void
+    {
+        $this->displayConsoleMessages($this->io, sprintf('<comment>An advisory about the deprecated "%s" package was ignored by configuration.</comment>', $event->packageName));
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-          UnsupportedPackageWasIgnoredAdapter::class => 'warnAboutIgnoredPackage',
+          UnsupportedPackageWasIgnoredAdapter::class => 'warnAboutIgnoredUnsupportedPackage',
+          DeprecatedPackageWasIgnoredAdapter::class => 'warnAboutIgnoredDeprecatedPackage',
         ];
     }
 

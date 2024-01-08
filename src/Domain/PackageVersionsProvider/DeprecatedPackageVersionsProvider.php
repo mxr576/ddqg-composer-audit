@@ -12,12 +12,8 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
+namespace mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider;
 
-interface UnsupportedPackageFinderConfigurationProvider
+interface DeprecatedPackageVersionsProvider extends ProblematicPackageVersionsProvider
 {
-    /**
-     * @return \mxr576\ddqgComposerAudit\Application\PackageFinder\Type\PackageIgnoreRule[]
-     */
-    public function getUnsupportedPackageIgnoreRules(): array;
 }

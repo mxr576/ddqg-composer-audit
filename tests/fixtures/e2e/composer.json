@@ -11,13 +11,16 @@
     "require": {
         "composer/installers": "^1.9",
         "drupal/apigee_edge": "2.0.7",
+        "drupal/config_ignore": "2.4.0",
         "drupal/core": "9.4.0",
         "drupal/core-composer-scaffold": "^9.4",
         "drupal/core-project-message": "^9.4",
         "drupal/core-recommended": "^9.4",
         "drupal/feeds": "3.0.0-beta3",
         "drupal/feeds_tamper": "2.0.0-beta3",
-        "drupal/tamper": "1.0-alpha3"
+        "drupal/swiftmailer": "2.4.0",
+        "drupal/tamper": "1.0-alpha3",
+        "drupal/variationcache": "1.2.0"
     },
     "require-dev": {
         "ergebnis/composer-normalize": "^2.30",
@@ -61,6 +64,9 @@
         },
         "ddqg-composer-audit": {
             "check-d10-compatibility": true,
+            "ignore-deprecated-versions": {
+                "drupal/swiftmailer": "2.4.0"
+            },
             "ignore-unsupported-versions": {
                 "drupal/tamper": "1.0.0-alpha3"
             }

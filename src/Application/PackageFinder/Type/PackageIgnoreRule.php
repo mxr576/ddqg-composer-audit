@@ -18,7 +18,10 @@ use Composer\Semver\Constraint\Constraint;
 use Composer\Semver\Constraint\ConstraintInterface;
 use Composer\Semver\VersionParser;
 
-final class UnsupportedPackageIgnoreRule
+/**
+ * @internal
+ */
+final class PackageIgnoreRule
 {
     public function __construct(public readonly string $packageName, public readonly ConstraintInterface $rule)
     {

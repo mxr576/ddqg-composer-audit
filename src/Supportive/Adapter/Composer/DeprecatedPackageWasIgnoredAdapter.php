@@ -16,14 +16,14 @@ namespace mxr576\ddqgComposerAudit\Supportive\Adapter\Composer;
 
 use Composer\Advisory\SecurityAdvisory;
 use Composer\EventDispatcher\Event;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\UnsupportedPackageWasIgnored;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\DeprecatedPackageWasIgnored;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Type\PackageIgnoreRule;
 use Webmozart\Assert\Assert;
 
 /**
  * @internal
  */
-final class UnsupportedPackageWasIgnoredAdapter extends Event
+final class DeprecatedPackageWasIgnoredAdapter extends Event
 {
     /**
      * Constructs a new object.
@@ -39,7 +39,7 @@ final class UnsupportedPackageWasIgnoredAdapter extends Event
         parent::__construct(self::class);
     }
 
-    public static function createFromWrapped(UnsupportedPackageWasIgnored $event): self
+    public static function createFromWrapped(DeprecatedPackageWasIgnored $event): self
     {
         return new self($event->packageName, $event->ignoreRule, $event->advisories);
     }

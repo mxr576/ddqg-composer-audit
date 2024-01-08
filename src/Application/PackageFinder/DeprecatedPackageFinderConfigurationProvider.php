@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
 
-interface UnsupportedPackageFinderConfigurationProvider
+interface DeprecatedPackageFinderConfigurationProvider
 {
     /**
      * @return \mxr576\ddqgComposerAudit\Application\PackageFinder\Type\PackageIgnoreRule[]
      */
-    public function getUnsupportedPackageIgnoreRules(): array;
+    public function getDeprecatedPackageIgnoreRules(): array;
 }

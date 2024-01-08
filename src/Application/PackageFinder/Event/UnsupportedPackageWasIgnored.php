@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace mxr576\ddqgComposerAudit\Application\PackageFinder\Event;
 
 use Composer\Advisory\SecurityAdvisory;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Type\UnsupportedPackageIgnoreRule;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Type\PackageIgnoreRule;
 use Webmozart\Assert\Assert;
 
 final class UnsupportedPackageWasIgnored
@@ -27,7 +27,7 @@ final class UnsupportedPackageWasIgnored
      */
     public function __construct(
         public readonly string $packageName,
-        public readonly UnsupportedPackageIgnoreRule $ignoreRule,
+        public readonly PackageIgnoreRule $ignoreRule,
         public readonly array $advisories,
     ) {
         Assert::allIsInstanceOf($this->advisories, SecurityAdvisory::class);

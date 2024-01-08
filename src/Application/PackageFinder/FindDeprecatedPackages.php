@@ -15,21 +15,21 @@ declare(strict_types=1);
 namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
 
 use Composer\Semver\VersionParser;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\UnsupportedPackageWasIgnored;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\DeprecatedPackageWasIgnored;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Type\PackageIgnoreRule;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\DeprecatedPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinder;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinderFromProblematicPackageProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\UnexpectedSecurityAdvisoryFinderException;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
- * Implements a use-case related to unsupported package discovery.
+ * Implements a use-case related to deprecated package discovery.
  *
  * @internal
  */
-final class FindUnsupportedPackages implements PackageFinder
+final class FindDeprecatedPackages implements PackageFinder
 {
     /**
      * @var array<string,array<\Composer\Semver\Constraint\ConstraintInterface>>
@@ -39,13 +39,12 @@ final class FindUnsupportedPackages implements PackageFinder
     private readonly SecurityAdvisoryFinder $securityAdvisoryFinder;
 
     public function __construct(
-        UnsupportedPackageVersionsProvider $unsupportedPackageVersionsProvider,
+        DeprecatedPackageVersionsProvider $unsupportedPackageVersionsProvider,
         VersionParser $versionParser,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly UnsupportedPackageFinderConfigurationProvider $configurationProvider
+        private readonly DeprecatedPackageFinderConfigurationProvider $configurationProvider
     ) {
-        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($unsupportedPackageVersionsProvider,
-            $versionParser);
+        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($unsupportedPackageVersionsProvider, $versionParser);
     }
 
     public function __invoke(array $packageConstraintMap): array
@@ -58,7 +57,7 @@ final class FindUnsupportedPackages implements PackageFinder
 
         if ([] !== $result) {
             if (null === $this->optimizedIgnoreRules) {
-                $this->optimizedIgnoreRules = array_reduce($this->configurationProvider->getUnsupportedPackageIgnoreRules(),
+                $this->optimizedIgnoreRules = array_reduce($this->configurationProvider->getDeprecatedPackageIgnoreRules(),
                     static function (array $carry, PackageIgnoreRule $item) {
                         $carry[$item->packageName][] = $item->rule;
 
@@ -70,7 +69,7 @@ final class FindUnsupportedPackages implements PackageFinder
                     foreach ($this->optimizedIgnoreRules[$package_name] as $constraint) {
                         if ($constraint->matches($packageConstraintMap[$package_name])) {
                             $this->eventDispatcher->dispatch(
-                                new UnsupportedPackageWasIgnored(
+                                new DeprecatedPackageWasIgnored(
                                     $package_name,
                                     new PackageIgnoreRule($package_name, $constraint),
                                     $result[$package_name])

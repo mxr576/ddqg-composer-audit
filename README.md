@@ -30,7 +30,7 @@ or [the advisory ignore feature](https://getcomposer.org/doc/06-config.md#ignore
 $ composer audit
 +-------------------+----------------------------------------------------------------------------------+
 | Package           | drupal/apigee_edge                                                               |
-| CVE               | DDQG-non-D10-compatible-drupal-apigee_edge                                       |
+| CVE               | DDQG-D10-incompatible-drupal-apigee_edge                                         |
 | Title             | The installed "2.0.7.0" version is not compatible with Drupal 10. (Reported by D |
 |                   | rupal Dependency Quality Gate.)                                                  |
 | URL               | https://www.drupal.org/project/apigee_edge                                       |
@@ -66,6 +66,15 @@ $ composer audit
 |                   | eta1|3.0.0-beta2|3.0.0-beta3|3.x-dev                                             |
 | Reported at       | 2023-05-07T13:49:57+00:00                                                        |
 +-------------------+----------------------------------------------------------------------------------+
++-------------------+----------------------------------------------------------------------------------+
+| Package           | drupal/variationcache                                                            |
+| CVE               | DDQG-deprecated-drupal-variationcache-1.2.0.0                                    |
+| Title             | The installed "1.2.0.0" version is deprecated. (Reported by Drupal Dependency Qu |
+|                   | ality Gate.)                                                                     |
+| URL               | https://www.drupal.org/project/variationcache                                    |
+| Affected versions | *                                                                                |
+| Reported at       | 2024-01-08T12:15:20+00:00                                                        |
++-------------------+----------------------------------------------------------------------------------+
 ```
 
 ## Configuration
@@ -74,7 +83,7 @@ Quality Assurance can feel painful, but it is an important part of professional 
 project is to bring attention about dependency quality problems on a project. For all these reasons, it deliberately
 comes with minimal opt-out options.
 
-### Silence warning about an unsupported package version
+### Silence warning about a deprecated- or unsupported package version in use
 
 > [!WARNING]
 > For Composer < 2.6.0 only. This feature will be removed when the minimum required Composer version gets bumped to >=2.6.0.
@@ -83,6 +92,10 @@ In a project's root composer.json, under the `extra` property, add a definition 
 
 ```json
         "ddqg-composer-audit": {
+            "ignore-deprecated-versions": {
+                "vendor/package": "an_explicit_version_string",
+                "drupal/swiftmailer": "2.4.0"
+            }
             "ignore-unsupported-versions": {
                 "vendor/package": "an_explicit_version_string",
                 "drupal/tamper": "1.0.0-alpha3"
@@ -90,15 +103,16 @@ In a project's root composer.json, under the `extra` property, add a definition 
         }
 ```
 
-The other option is defining a comma separate list of ignore rules in the
-`DDQG_COMPOSER_AUDIT_IGNORE_UNSUPPORTED_VERSIONS` environment
-variable, e.g,
+The other option is defining a comma separate list of ignore rules in
+`DDQG_COMPOSER_AUDIT_IGNORE_DEPRECATED_VERSIONS` and `DDQG_COMPOSER_AUDIT_IGNORE_UNSUPPORTED_VERSIONS` environment
+variables respectfully, e.g,
+`DDQG_COMPOSER_AUDIT_IGNORE_DEPRECATED_VERSIONS=drupal/swiftmailer:2.4.0,vendor/package:1.x-dev` or
 `DDQG_COMPOSER_AUDIT_IGNORE_UNSUPPORTED_VERSIONS=drupal/tamper:1.0.0-alpha3,vendor/package:1.x-dev`
 
-The environment variable has a higher precedence; if it is defined, the definition in a project's root composer.json is
+An environment variable has a higher precedence than a configuration in composer.json; if it is defined, the definition in a project's root composer.json is
 ignored completely.
 
-Notice: A warning is still displayed about the ignored unsupported package on STDERR.
+Notice: A warning is still displayed about the ignored deprecated- or unsupported package on STDERR.
 
 **Not supporting version ranges in the definition was a conscious decision because (again) the goal is making
 dependency quality problems constantly visible and not sweeping them under the carpet.**
