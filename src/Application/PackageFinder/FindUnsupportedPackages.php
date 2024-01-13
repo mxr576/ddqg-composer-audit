@@ -44,8 +44,7 @@ final class FindUnsupportedPackages implements PackageFinder
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly UnsupportedPackageFinderConfigurationProvider $configurationProvider
     ) {
-        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($unsupportedPackageVersionsProvider,
-            $versionParser);
+        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($unsupportedPackageVersionsProvider, $versionParser);
     }
 
     public function __invoke(array $packageConstraintMap): array
@@ -58,12 +57,14 @@ final class FindUnsupportedPackages implements PackageFinder
 
         if ([] !== $result) {
             if (null === $this->optimizedIgnoreRules) {
-                $this->optimizedIgnoreRules = array_reduce($this->configurationProvider->getUnsupportedPackageIgnoreRules(),
-                    static function (array $carry, PackageIgnoreRule $item) {
+                /** @var \ArrayObject<string,array<\Composer\Semver\Constraint\ConstraintInterface>> $tmp */
+                $tmp = array_reduce($this->configurationProvider->getUnsupportedPackageIgnoreRules(),
+                    static function (\ArrayObject $carry, PackageIgnoreRule $item) {
                         $carry[$item->packageName][] = $item->rule;
 
                         return $carry;
-                    }, []);
+                    }, new \ArrayObject());
+                $this->optimizedIgnoreRules = $tmp->getArrayCopy();
             }
             foreach (array_keys($result) as $package_name) {
                 if (array_key_exists($package_name, $this->optimizedIgnoreRules)) {

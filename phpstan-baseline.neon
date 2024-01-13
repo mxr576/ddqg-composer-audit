@@ -1,6 +1,16 @@
 parameters:
 	ignoreErrors:
 		-
+			message: "#^Cannot access an offset on mixed\\.$#"
+			count: 1
+			path: src/Application/PackageFinder/FindDeprecatedPackages.php
+
+		-
+			message: "#^Cannot access an offset on mixed\\.$#"
+			count: 1
+			path: src/Application/PackageFinder/FindUnsupportedPackages.php
+
+		-
 			message: "#^Method mxr576\\\\ddqgComposerAudit\\\\Infrastructure\\\\Ddqg\\\\PackageVersionConstraintsFromDdqgComposerJson\\:\\:extract\\(\\) should return array\\<string, string\\> but returns array\\<int\\|string, mixed\\>\\.$#"
 			count: 1
 			path: src/Infrastructure/Ddqg/PackageVersionConstraintsFromDdqgComposerJson.php

@@ -57,12 +57,14 @@ final class FindDeprecatedPackages implements PackageFinder
 
         if ([] !== $result) {
             if (null === $this->optimizedIgnoreRules) {
-                $this->optimizedIgnoreRules = array_reduce($this->configurationProvider->getDeprecatedPackageIgnoreRules(),
-                    static function (array $carry, PackageIgnoreRule $item) {
+                /** @var \ArrayObject<string,array<\Composer\Semver\Constraint\ConstraintInterface>> $tmp */
+                $tmp = array_reduce($this->configurationProvider->getDeprecatedPackageIgnoreRules(),
+                    static function (\ArrayObject $carry, PackageIgnoreRule $item) {
                         $carry[$item->packageName][] = $item->rule;
 
                         return $carry;
-                    }, []);
+                    }, new \ArrayObject());
+                $this->optimizedIgnoreRules = $tmp->getArrayCopy();
             }
             foreach (array_keys($result) as $package_name) {
                 if (array_key_exists($package_name, $this->optimizedIgnoreRules)) {
