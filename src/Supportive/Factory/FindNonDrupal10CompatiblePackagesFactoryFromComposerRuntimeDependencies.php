@@ -15,9 +15,9 @@ declare(strict_types=1);
 namespace mxr576\ddqgComposerAudit\Supportive\Factory;
 
 use Composer\Package\RootPackageInterface;
-use Composer\Repository\LockArrayRepository;
 use Composer\Semver\VersionParser;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindNonDrupal10CompatiblePackages;
+use mxr576\ddqgComposerAudit\Infrastructure\Composer\InstalledPackagesReadOnlyRepository;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\NonDrupal10CompatiblePackageFinderConfigurationProvider;
 use mxr576\ddqgComposerAudit\Supportive\Infrastructure\Composer\NonDrupal10CompatiblePackageVersionsProviderFromComposerLock;
 
@@ -28,7 +28,7 @@ final class FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependenc
 {
     public function __construct(
         private readonly RootPackageInterface $rootPackage,
-        private readonly LockArrayRepository $lockRepository,
+        private readonly InstalledPackagesReadOnlyRepository $installedPackageFinder,
         private readonly VersionParser $versionParser,
     ) {
     }
@@ -36,7 +36,7 @@ final class FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependenc
     public function create(): FindNonDrupal10CompatiblePackages
     {
         return new FindNonDrupal10CompatiblePackages(
-            new NonDrupal10CompatiblePackageVersionsProviderFromComposerLock($this->lockRepository, $this->versionParser),
+            new NonDrupal10CompatiblePackageVersionsProviderFromComposerLock($this->installedPackageFinder, $this->versionParser),
             $this->versionParser,
             new NonDrupal10CompatiblePackageFinderConfigurationProvider($this->rootPackage)
         );

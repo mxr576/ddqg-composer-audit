@@ -21,6 +21,8 @@ use Composer\IO\IOInterface;
 use Composer\IO\NullIO;
 use Composer\Package\Version\VersionParser;
 use Composer\Plugin\PluginInterface;
+use Composer\Repository\InstalledRepository;
+use mxr576\ddqgComposerAudit\Infrastructure\Composer\InstalledPackagesReadOnlyRepository;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\ComposerAuditRepository;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\DeprecatedPackageWasIgnoredAdapter;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\UnsupportedPackageWasIgnoredAdapter;
@@ -65,6 +67,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         }
 
         $with_dev_dependencies = false;
+        $locked_dependencies = false;
         // This is not great, not terrible... the only benefit of this is
         // probably reducing the amount of objects build by the
         // LockerRepository.
@@ -75,7 +78,16 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 $ro_io->getProperty('input')->setAccessible(true);
                 assert($ro_io->getProperty('input')->getValue($io) instanceof InputInterface);
                 $with_dev_dependencies = str_contains((string) $ro_io->getProperty('input')->getValue($io), '--no-dev');
+                $locked_dependencies = str_contains((string) $ro_io->getProperty('input')->getValue($io), '--locked');
             }
+        }
+
+        // @todo Fix layering rules.
+        if ($locked_dependencies) {
+            $installed_packages_repository = InstalledPackagesReadOnlyRepository::fromLocker($composer->getLocker(), $with_dev_dependencies);
+        } else {
+            $composer_installed_repository = new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()]);
+            $installed_packages_repository = $with_dev_dependencies ? InstalledPackagesReadOnlyRepository::fromInstalledPackages($composer_installed_repository) : InstalledPackagesReadOnlyRepository::fromInstalledRequiredPackages($composer_installed_repository, $composer->getPackage());
         }
 
         $version_parser = new VersionParser();
@@ -111,7 +123,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         );
         $composer->getRepositoryManager()->prependRepository(
             new ComposerAuditRepository(
-                (new FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependencies($composer->getPackage(), $composer->getLocker()->getLockedRepository($with_dev_dependencies), $version_parser))->create(),
+                (new FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependencies($composer->getPackage(), $installed_packages_repository, $version_parser))->create(),
                 $io
             )
         );

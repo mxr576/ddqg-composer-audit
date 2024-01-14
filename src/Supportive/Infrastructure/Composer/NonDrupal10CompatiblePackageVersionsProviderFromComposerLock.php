@@ -14,10 +14,10 @@ declare(strict_types=1);
 
 namespace mxr576\ddqgComposerAudit\Supportive\Infrastructure\Composer;
 
-use Composer\Repository\LockArrayRepository;
 use Composer\Semver\Constraint\Constraint;
 use Composer\Semver\VersionParser;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\NonDrupal10CompatiblePackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Infrastructure\Composer\InstalledPackagesReadOnlyRepository;
 
 /**
  * @internal
@@ -42,7 +42,7 @@ final class NonDrupal10CompatiblePackageVersionsProviderFromComposerLock impleme
       'drupal/core-dev',
     ];
 
-    public function __construct(private readonly LockArrayRepository $lockRepository, private readonly VersionParser $versionParser)
+    public function __construct(private readonly InstalledPackagesReadOnlyRepository $installedPackagesRepository, private readonly VersionParser $versionParser)
     {
     }
 
@@ -50,7 +50,8 @@ final class NonDrupal10CompatiblePackageVersionsProviderFromComposerLock impleme
     {
         $result = [];
         $d10_compatible_constraint = new Constraint('>=', $this->versionParser->normalize('10.0.0'));
-        foreach ($this->lockRepository->getPackages() as $package) {
+
+        foreach ($this->installedPackagesRepository->getPackages() as $package) {
             if (!in_array($package->getName(), $package_names, true)) {
                 continue;
             }
