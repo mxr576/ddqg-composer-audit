@@ -24,21 +24,6 @@
             "fqcn": "mxr576\\ddqgComposerAudit\\Infrastructure\\Composer\\UnsupportedPackageFinderConfigurationProvider",
             "line": 78,
             "error": "depends on mxr576\\ddqgComposerAudit\\Application\\PackageFinder\\Type\\PackageIgnoreRule, but should not depend on these namespaces: mxr576\\ddqgComposerAudit\\Application, mxr576\\ddqgComposerAudit\\Presentation, mxr576\\ddqgComposerAudit\\Supportive because The Infrastructure layer should only depend on the Domain layer and on external namespaces. It is better if it does not depend on anything from Application. (See exceptions in baseline.)"
-        },
-        {
-            "fqcn": "mxr576\\ddqgComposerAudit\\Presentation\\Composer\\Plugin",
-            "line": 86,
-            "error": "depends on mxr576\\ddqgComposerAudit\\Infrastructure\\Composer\\InstalledPackagesReadOnlyRepository, but should not depend on these namespaces: mxr576\\ddqgComposerAudit\\Domain, mxr576\\ddqgComposerAudit\\Infrastructure because The Presentation layer should only depend on the Application layer, stuff in Supportive and external namespaces."
-        },
-        {
-            "fqcn": "mxr576\\ddqgComposerAudit\\Presentation\\Composer\\Plugin",
-            "line": 89,
-            "error": "depends on mxr576\\ddqgComposerAudit\\Infrastructure\\Composer\\InstalledPackagesReadOnlyRepository, but should not depend on these namespaces: mxr576\\ddqgComposerAudit\\Domain, mxr576\\ddqgComposerAudit\\Infrastructure because The Presentation layer should only depend on the Application layer, stuff in Supportive and external namespaces."
-        },
-        {
-            "fqcn": "mxr576\\ddqgComposerAudit\\Presentation\\Composer\\Plugin",
-            "line": 89,
-            "error": "depends on mxr576\\ddqgComposerAudit\\Infrastructure\\Composer\\InstalledPackagesReadOnlyRepository, but should not depend on these namespaces: mxr576\\ddqgComposerAudit\\Domain, mxr576\\ddqgComposerAudit\\Infrastructure because The Presentation layer should only depend on the Application layer, stuff in Supportive and external namespaces."
         }
     ],
     "stopOnFailure": false

@@ -22,13 +22,12 @@ use Composer\IO\NullIO;
 use Composer\Package\Version\VersionParser;
 use Composer\Plugin\PluginInterface;
 use Composer\Repository\InstalledRepository;
-use mxr576\ddqgComposerAudit\Infrastructure\Composer\InstalledPackagesReadOnlyRepository;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\ComposerAuditRepository;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\DeprecatedPackageWasIgnoredAdapter;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\UnsupportedPackageWasIgnoredAdapter;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindDeprecatedPackagesFactoryFromComposerRuntimeDependencies;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindInsecurePackagesFactoryFromComposerRuntimeDependencies;
-use mxr576\ddqgComposerAudit\Supportive\Factory\FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependencies;
+use mxr576\ddqgComposerAudit\Supportive\Factory\FindNonDrupal10CompatiblePackagesFactory;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindUnsupportedPackagesFactoryFromComposerRuntimeDependencies;
 use Symfony\Component\Console\Input\InputInterface;
 
@@ -82,15 +81,15 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             }
         }
 
-        // @todo Fix layering rules.
+        $version_parser = new VersionParser();
+
+        $d10_factory = new FindNonDrupal10CompatiblePackagesFactory($composer->getPackage(), $version_parser);
         if ($locked_dependencies) {
-            $installed_packages_repository = InstalledPackagesReadOnlyRepository::fromLocker($composer->getLocker(), $with_dev_dependencies);
+            $d10_non_compatible_finder = $with_dev_dependencies ? $d10_factory->inLockedDependencies($composer->getLocker()) : $d10_factory->inLockedRequiredDependencies($composer->getLocker());
         } else {
-            $composer_installed_repository = new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()]);
-            $installed_packages_repository = $with_dev_dependencies ? InstalledPackagesReadOnlyRepository::fromInstalledPackages($composer_installed_repository) : InstalledPackagesReadOnlyRepository::fromInstalledRequiredPackages($composer_installed_repository, $composer->getPackage());
+            $d10_non_compatible_finder = $with_dev_dependencies ? $d10_factory->inInstalledDependencies(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()])) : $d10_factory->inInstalledRequiredDependencies(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()]));
         }
 
-        $version_parser = new VersionParser();
         // Composer currently only displays advisories from one repository for
         // a package. If multiple ones provides advisories only the first one
         // is visible.
@@ -123,7 +122,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         );
         $composer->getRepositoryManager()->prependRepository(
             new ComposerAuditRepository(
-                (new FindNonDrupal10CompatiblePackagesFactoryFromComposerRuntimeDependencies($composer->getPackage(), $installed_packages_repository, $version_parser))->create(),
+                $d10_non_compatible_finder,
                 $io
             )
         );
