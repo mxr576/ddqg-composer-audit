@@ -22,11 +22,10 @@ use Composer\IO\NullIO;
 use Composer\Package\Version\VersionParser;
 use Composer\Plugin\PluginInterface;
 use Composer\Repository\InstalledRepository;
-use mxr576\ddqgComposerAudit\Infrastructure\Composer\InstalledPackagesReadOnlyRepository;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\ComposerAuditRepository;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\DeprecatedPackageWasIgnoredAdapter;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\UnsupportedPackageWasIgnoredAdapter;
-use mxr576\ddqgComposerAudit\Supportive\Factory\FindDeprecatedPackagesFactoryFromComposerRuntimeDependencies;
+use mxr576\ddqgComposerAudit\Supportive\Factory\FindDeprecatedPackagesFactory;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindInsecurePackagesFactoryFromComposerRuntimeDependencies;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindNonDrupal10CompatiblePackagesFactory;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindUnsupportedPackagesFactoryFromComposerRuntimeDependencies;
@@ -66,8 +65,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             );
         }
 
-        $with_dev_dependencies = false;
-        $locked_dependencies = false;
+        $with_dev_dependencies_included = false;
+        $from_locked_dependencies = false;
         // This is not great, not terrible... the only benefit of this is
         // probably reducing the amount of objects build by the
         // LockerRepository.
@@ -77,18 +76,18 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
             if ($ro_io->hasProperty('input')) {
                 $ro_io->getProperty('input')->setAccessible(true);
                 assert($ro_io->getProperty('input')->getValue($io) instanceof InputInterface);
-                $with_dev_dependencies = str_contains((string) $ro_io->getProperty('input')->getValue($io), '--no-dev');
-                $locked_dependencies = str_contains((string) $ro_io->getProperty('input')->getValue($io), '--locked');
+                $with_dev_dependencies_included = str_contains((string) $ro_io->getProperty('input')->getValue($io), '--no-dev');
+                $from_locked_dependencies = str_contains((string) $ro_io->getProperty('input')->getValue($io), '--locked');
             }
         }
 
         $version_parser = new VersionParser();
 
         $d10_factory = new FindNonDrupal10CompatiblePackagesFactory($composer->getPackage(), $version_parser);
-        if ($locked_dependencies) {
-            $d10_non_compatible_finder = $with_dev_dependencies ? $d10_factory->inLockedDependencies($composer->getLocker()) : $d10_factory->inLockedRequiredDependencies($composer->getLocker());
+        if ($from_locked_dependencies) {
+            $d10_non_compatible_finder = $with_dev_dependencies_included ? $d10_factory->inLockedDependencies($composer->getLocker()) : $d10_factory->inLockedRequiredDependencies($composer->getLocker());
         } else {
-            $d10_non_compatible_finder = $with_dev_dependencies ? $d10_factory->inInstalledDependencies(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()])) : $d10_factory->inInstalledRequiredDependencies(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()]));
+            $d10_non_compatible_finder = $with_dev_dependencies_included ? $d10_factory->inInstalledDependencies(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()])) : $d10_factory->inInstalledRequiredDependencies(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()]));
         }
 
         // Composer currently only displays advisories from one repository for
@@ -105,17 +104,20 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 ))->create(), $io
             )
         );
+
+        $deprecated_packages_factory_finder = new FindDeprecatedPackagesFactory(
+            $composer->getPackage(),
+            $composer->getLoop()->getHttpDownloader(),
+            $composer->getEventDispatcher(),
+            $version_parser);
+        if ($from_locked_dependencies) {
+            $deprecated_packages_factory = $with_dev_dependencies_included ? $deprecated_packages_factory_finder->inLockedDependencies($composer->getLocker()) : $deprecated_packages_factory_finder->inLockedRequiredDependencies($composer->getLocker());
+        } else {
+            $deprecated_packages_factory = $with_dev_dependencies_included ? $deprecated_packages_factory_finder->inInstalledDependencies(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()])) : $deprecated_packages_factory_finder->inInstalledRequiredDependencies(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()]));
+        }
+
         $composer->getRepositoryManager()->prependRepository(
-            new ComposerAuditRepository(
-                (new FindDeprecatedPackagesFactoryFromComposerRuntimeDependencies(
-                    $composer->getPackage(),
-                    $composer->getLoop()->getHttpDownloader(),
-                    $composer->getEventDispatcher(),
-                    $version_parser,
-                    // @todo Fix baselined layering rule issues.
-                    $locked_dependencies ? InstalledPackagesReadOnlyRepository::fromLocker($composer->getLocker(), $with_dev_dependencies) : ($with_dev_dependencies ? InstalledPackagesReadOnlyRepository::fromInstalledPackages(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()])) : InstalledPackagesReadOnlyRepository::fromInstalledRequiredPackages(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()]), $composer->getPackage()))
-                ))->create(), $io
-            )
+            new ComposerAuditRepository($deprecated_packages_factory, $io)
         );
         $composer->getRepositoryManager()->prependRepository(
             new ComposerAuditRepository(
