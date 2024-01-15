@@ -17,7 +17,7 @@ namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
 interface DeprecatedPackageFinderConfigurationProvider
 {
     /**
-     * @return \mxr576\ddqgComposerAudit\Application\PackageFinder\Type\PackageIgnoreRule[]
+     * @return \mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\PackageIgnoreRule[]
      */
     public function getDeprecatedPackageIgnoreRules(): array;
 }

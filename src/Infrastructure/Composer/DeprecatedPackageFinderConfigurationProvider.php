@@ -18,7 +18,7 @@ use Composer\Package\RootPackageInterface;
 use Composer\Semver\VersionParser;
 use cweagans\Composer\ConfigurablePlugin;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\DeprecatedPackageFinderConfigurationProvider as DeprecatedPackageFinderConfigurationProviderContract;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Type\PackageIgnoreRule;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\IgnorePackageByVersionConstraintMatch;
 
 /**
  * @internal
@@ -75,7 +75,7 @@ final class DeprecatedPackageFinderConfigurationProvider implements DeprecatedPa
             // It is a deliberate decision that version ranges are not
             // allowed here. The goal MUST NOT BE silencing a report for the
             // eternity rather making steps to getting rid of the problem.
-            $result[] = PackageIgnoreRule::ignorePackageVersion($package, $version, $this->versionParser);
+            $result[] = IgnorePackageByVersionConstraintMatch::fromUserInput($package, $version, $this->versionParser);
         }
 
         return $result;

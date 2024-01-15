@@ -15,7 +15,7 @@ declare(strict_types=1);
 namespace mxr576\ddqgComposerAudit\Application\PackageFinder\Event;
 
 use Composer\Advisory\SecurityAdvisory;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Type\PackageIgnoreRule;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\PackageIgnoreRule;
 use Webmozart\Assert\Assert;
 
 final class DeprecatedPackageWasIgnored

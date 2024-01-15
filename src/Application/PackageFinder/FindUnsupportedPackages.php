@@ -17,7 +17,7 @@ namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
 use Composer\Semver\VersionParser;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\UnsupportedPackageWasIgnored;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Type\PackageIgnoreRule;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\PackageIgnoreRule;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinder;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinderFromProblematicPackageProvider;
@@ -32,7 +32,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 final class FindUnsupportedPackages implements PackageFinder
 {
     /**
-     * @var array<string,array<\Composer\Semver\Constraint\ConstraintInterface>>
+     * @var array<string,array<\mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\PackageIgnoreRule>>
      */
     private ?array $optimizedIgnoreRules = null;
 
@@ -57,10 +57,10 @@ final class FindUnsupportedPackages implements PackageFinder
 
         if ([] !== $result) {
             if (null === $this->optimizedIgnoreRules) {
-                /** @var \ArrayObject<string,array<\Composer\Semver\Constraint\ConstraintInterface>> $tmp */
+                /** @var \ArrayObject<string,array<\mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\PackageIgnoreRule>> $tmp */
                 $tmp = array_reduce($this->configurationProvider->getUnsupportedPackageIgnoreRules(),
                     static function (\ArrayObject $carry, PackageIgnoreRule $item) {
-                        $carry[$item->packageName][] = $item->rule;
+                        $carry[$item->getPackageName()][] = $item;
 
                         return $carry;
                     }, new \ArrayObject());
@@ -68,12 +68,12 @@ final class FindUnsupportedPackages implements PackageFinder
             }
             foreach (array_keys($result) as $package_name) {
                 if (array_key_exists($package_name, $this->optimizedIgnoreRules)) {
-                    foreach ($this->optimizedIgnoreRules[$package_name] as $constraint) {
-                        if ($constraint->matches($packageConstraintMap[$package_name])) {
+                    foreach ($this->optimizedIgnoreRules[$package_name] as $rule) {
+                        if ($rule->evaluate($package_name, $packageConstraintMap[$package_name])) {
                             $this->eventDispatcher->dispatch(
                                 new UnsupportedPackageWasIgnored(
                                     $package_name,
-                                    new PackageIgnoreRule($package_name, $constraint),
+                                    $rule,
                                     $result[$package_name])
                             );
                             unset($result[$package_name]);

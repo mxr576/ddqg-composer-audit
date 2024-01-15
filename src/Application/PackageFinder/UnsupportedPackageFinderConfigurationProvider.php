@@ -17,7 +17,7 @@ namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
 interface UnsupportedPackageFinderConfigurationProvider
 {
     /**
-     * @return \mxr576\ddqgComposerAudit\Application\PackageFinder\Type\PackageIgnoreRule[]
+     * @return \mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\PackageIgnoreRule[]
      */
     public function getUnsupportedPackageIgnoreRules(): array;
 }
