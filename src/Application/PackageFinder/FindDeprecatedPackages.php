@@ -21,7 +21,7 @@ use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPacka
 use mxr576\ddqgComposerAudit\Domain\InstalledPackages\InstalledPackagesReadOnlyRepository;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\CompositePackageIgnoreRuleProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\IgnorePackageByInstalledVersionOfOtherPackage;
-use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule;
+use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleOptimizer;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\DeprecatedPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinder;
@@ -36,6 +36,8 @@ use Psr\EventDispatcher\EventDispatcherInterface;
  */
 final class FindDeprecatedPackages implements PackageFinder
 {
+    use PackageIgnoreRuleOptimizer;
+
     /**
      * @var array<string,array<\mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule>>
      */
@@ -83,17 +85,7 @@ final class FindDeprecatedPackages implements PackageFinder
 
         if ([] !== $result) {
             if (null === $this->optimizedIgnoreRules) {
-                $rules = $this->packageIgnoreRuleProvider->getIgnoreRules();
-                /** @var \mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule[] $rules */
-                $rules = $rules instanceof \Traversable ? iterator_to_array($rules, false) : $rules;
-                /** @var \ArrayObject<string,array<\mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule>> $tmp */
-                $tmp = array_reduce($rules,
-                    static function (\ArrayObject $carry, PackageIgnoreRule $item) {
-                        $carry[$item->getPackageName()][] = $item;
-
-                        return $carry;
-                    }, new \ArrayObject());
-                $this->optimizedIgnoreRules = $tmp->getArrayCopy();
+                $this->optimizedIgnoreRules = $this->optimizePackageIgnoreRules($this->packageIgnoreRuleProvider);
             }
 
             foreach (array_keys($result) as $package_name) {

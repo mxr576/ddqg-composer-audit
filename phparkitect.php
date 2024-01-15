@@ -30,6 +30,8 @@ return static function (Config $config): void {
       ->should(new NotHaveDependencyOutsideNamespace('mxr576\ddqgComposerAudit\Domain', [
         'RuntimeException',
         'DateTimeImmutable',
+        'Traversable',
+        'ArrayObject',
         // We have to handle some Composer stuff as part of our domain, we do not
         // want to redevelop them in the scope of a Composer plugin.
         'Composer\Advisory\SecurityAdvisory',
