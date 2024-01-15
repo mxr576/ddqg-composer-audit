@@ -22,6 +22,7 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVe
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinder;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinderFromProblematicPackageProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\UnexpectedSecurityAdvisoryFinderException;
+use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageIgnoreRulesFromConfiguration;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -42,7 +43,7 @@ final class FindUnsupportedPackages implements PackageFinder
         UnsupportedPackageVersionsProvider $unsupportedPackageVersionsProvider,
         VersionParser $versionParser,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly UnsupportedPackageFinderConfigurationProvider $configurationProvider
+        private readonly UnsupportedPackageIgnoreRulesFromConfiguration $packageIgnoreRuleProvider
     ) {
         $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($unsupportedPackageVersionsProvider, $versionParser);
     }
@@ -57,8 +58,11 @@ final class FindUnsupportedPackages implements PackageFinder
 
         if ([] !== $result) {
             if (null === $this->optimizedIgnoreRules) {
+                $rules = $this->packageIgnoreRuleProvider->getIgnoreRules();
+                /** @var \mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule[] $rules */
+                $rules = $rules instanceof \Traversable ? iterator_to_array($rules, false) : $rules;
                 /** @var \ArrayObject<string,array<\mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule>> $tmp */
-                $tmp = array_reduce($this->configurationProvider->getUnsupportedPackageIgnoreRules(),
+                $tmp = array_reduce($rules,
                     static function (\ArrayObject $carry, PackageIgnoreRule $item) {
                         $carry[$item->getPackageName()][] = $item;
 
