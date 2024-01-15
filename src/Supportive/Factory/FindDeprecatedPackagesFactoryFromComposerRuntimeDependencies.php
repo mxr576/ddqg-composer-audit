@@ -19,7 +19,9 @@ use Composer\Package\RootPackageInterface;
 use Composer\Semver\VersionParser;
 use Composer\Util\HttpDownloader;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindDeprecatedPackages;
+use mxr576\ddqgComposerAudit\Domain\InstalledPackages\InstalledPackagesReadOnlyRepository;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageFinderConfigurationProvider;
+use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageIgnoreRulesFromConfiguration;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DeprecatedPackageVersionsFromLatestDdqgBuild;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DeprecatedPackageVersionsFromSnapshotForTesting;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\Psr14EventDispatcherAdapterForComposer;
@@ -35,6 +37,7 @@ final class FindDeprecatedPackagesFactoryFromComposerRuntimeDependencies
         private readonly HttpDownloader $httpDownloader,
         private readonly EventDispatcher $eventDispatcher,
         private readonly VersionParser $versionParser,
+        private readonly InstalledPackagesReadOnlyRepository $installedPackagesReadOnlyRepository
     ) {
     }
 
@@ -45,7 +48,8 @@ final class FindDeprecatedPackagesFactoryFromComposerRuntimeDependencies
             Environment::isTestEnvironment() ? new DeprecatedPackageVersionsFromSnapshotForTesting() : new DeprecatedPackageVersionsFromLatestDdqgBuild($this->httpDownloader),
             $this->versionParser,
             new Psr14EventDispatcherAdapterForComposer($this->eventDispatcher),
-            new DeprecatedPackageFinderConfigurationProvider($this->project, $this->versionParser)
+            new DeprecatedPackageIgnoreRulesFromConfiguration(new DeprecatedPackageFinderConfigurationProvider($this->project, $this->versionParser)),
+            $this->installedPackagesReadOnlyRepository
         );
     }
 }

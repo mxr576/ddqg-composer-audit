@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d5db016e532ebce03732f45fe60f249c",
+    "content-hash": "a2679a564d7a01cc7710543dbc7db7f5",
     "packages": [
         {
             "name": "apigee/apigee-client-php",
@@ -799,6 +799,58 @@
             "homepage": "https://www.drupal.org/project/apigee_edge",
             "support": {
                 "source": "https://git.drupalcode.org/project/apigee_edge"
+            }
+        },
+        {
+            "name": "drupal/breakpoint_js_settings",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://git.drupalcode.org/project/breakpoint_js_settings.git",
+                "reference": "8.x-1.0"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://ftp.drupal.org/files/projects/breakpoint_js_settings-8.x-1.0.zip",
+                "reference": "8.x-1.0",
+                "shasum": "daf4763239eaaceacb0e134c0caf7ae7793f86d9"
+            },
+            "require": {
+                "drupal/core": "^8 || ^9 || ^10"
+            },
+            "type": "drupal-module",
+            "extra": {
+                "drupal": {
+                    "version": "8.x-1.0",
+                    "datestamp": "1702990096",
+                    "security-coverage": {
+                        "status": "not-covered",
+                        "message": "Project has not opted into security advisory coverage!"
+                    }
+                }
+            },
+            "notification-url": "https://packages.drupal.org/8/downloads",
+            "license": [
+                "GPL-2.0+"
+            ],
+            "authors": [
+                {
+                    "name": "chr.fritsch",
+                    "homepage": "https://www.drupal.org/user/2103716"
+                },
+                {
+                    "name": "daniel.bosen",
+                    "homepage": "https://www.drupal.org/user/404865"
+                },
+                {
+                    "name": "thunderbot",
+                    "homepage": "https://www.drupal.org/user/3511180"
+                }
+            ],
+            "description": "Write breakpoint information into javascript settings.",
+            "homepage": "https://www.drupal.org/project/breakpoint_js_settings",
+            "support": {
+                "source": "https://git.drupalcode.org/project/breakpoint_js_settings"
             }
         },
         {

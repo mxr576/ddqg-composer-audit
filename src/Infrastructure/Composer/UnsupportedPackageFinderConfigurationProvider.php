@@ -17,8 +17,8 @@ namespace mxr576\ddqgComposerAudit\Infrastructure\Composer;
 use Composer\Package\RootPackageInterface;
 use Composer\Semver\VersionParser;
 use cweagans\Composer\ConfigurablePlugin;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\IgnorePackageByVersionConstraintMatch;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\UnsupportedPackageFinderConfigurationProvider as UnsupportedPackageFinderConfigurationProviderContract;
+use mxr576\ddqgComposerAudit\Domain\PackageIgnore\IgnorePackageByVersionConstraintMatch;
 
 /**
  * @internal

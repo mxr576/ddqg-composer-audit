@@ -12,12 +12,15 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
+namespace mxr576\ddqgComposerAudit\Domain\PackageIgnore;
 
-interface UnsupportedPackageFinderConfigurationProvider
+/**
+ * @internal
+ */
+interface PackageIgnoreRuleProvider
 {
     /**
-     * @return \mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule[]
+     * @return iterable<\mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule>
      */
-    public function getUnsupportedPackageIgnoreRules(): array;
+    public function getIgnoreRules(): iterable;
 }

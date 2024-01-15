@@ -35,6 +35,7 @@ return static function (Config $config): void {
         'Composer\Advisory\SecurityAdvisory',
         'Composer\Semver\VersionParser',
         'Composer\Semver\Constraint\ConstraintInterface',
+        'Composer\Semver\Constraint\Constraint',
         ]))
       ->because('We want to protect the Domain');
 

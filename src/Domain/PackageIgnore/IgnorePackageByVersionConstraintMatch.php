@@ -12,7 +12,7 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore;
+namespace mxr576\ddqgComposerAudit\Domain\PackageIgnore;
 
 use Composer\Semver\Constraint\Constraint;
 use Composer\Semver\Constraint\ConstraintInterface;

@@ -22,6 +22,7 @@ use Composer\IO\NullIO;
 use Composer\Package\Version\VersionParser;
 use Composer\Plugin\PluginInterface;
 use Composer\Repository\InstalledRepository;
+use mxr576\ddqgComposerAudit\Infrastructure\Composer\InstalledPackagesReadOnlyRepository;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\ComposerAuditRepository;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\DeprecatedPackageWasIgnoredAdapter;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\UnsupportedPackageWasIgnoredAdapter;
@@ -111,6 +112,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                     $composer->getLoop()->getHttpDownloader(),
                     $composer->getEventDispatcher(),
                     $version_parser,
+                    // @todo Fix baselined layering rule issues.
+                    $locked_dependencies ? InstalledPackagesReadOnlyRepository::fromLocker($composer->getLocker(), $with_dev_dependencies) : ($with_dev_dependencies ? InstalledPackagesReadOnlyRepository::fromInstalledPackages(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()])) : InstalledPackagesReadOnlyRepository::fromInstalledRequiredPackages(new InstalledRepository([$composer->getRepositoryManager()->getLocalRepository()]), $composer->getPackage()))
                 ))->create(), $io
             )
         );

@@ -18,7 +18,7 @@ use Composer\Package\RootPackageInterface;
 use Composer\Semver\VersionParser;
 use cweagans\Composer\ConfigurablePlugin;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\DeprecatedPackageFinderConfigurationProvider as DeprecatedPackageFinderConfigurationProviderContract;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\IgnorePackageByVersionConstraintMatch;
+use mxr576\ddqgComposerAudit\Domain\PackageIgnore\IgnorePackageByVersionConstraintMatch;
 
 /**
  * @internal

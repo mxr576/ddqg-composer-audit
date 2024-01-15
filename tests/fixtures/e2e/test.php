@@ -38,14 +38,15 @@ foreach ($audit_result['advisories']['drupal/feeds'] as $advisory) {
 Assert::true($is_feeds_flagged, 'drupal/feeds is flagged as unsupported by DDQG Composer Audit extension');
 Assert::true(!array_key_exists('drupal/tamper', $audit_result['advisories']), 'drupal/tamper is on the ignore list so it was not flagged as unsupported by DDQG Composer Audit extension');
 
-$is_variationcache_flagged = false;
-foreach ($audit_result['advisories']['drupal/variationcache'] as $advisory) {
-    if ('DDQG-deprecated-drupal-variationcache-1.2.0.0' === $advisory['advisoryId']) {
-        $is_variationcache_flagged = true;
+$is_breakpoint_js_settings_flagged = false;
+foreach ($audit_result['advisories']['drupal/breakpoint_js_settings'] as $advisory) {
+    if ('DDQG-deprecated-drupal-breakpoint_js_settings-1.0.0.0' === $advisory['advisoryId']) {
+        $is_breakpoint_js_settings_flagged = true;
         break;
     }
 }
-Assert::true($is_variationcache_flagged, 'drupal/variationcache is flagged as deprecated by DDQG Composer Audit extension');
+Assert::true($is_breakpoint_js_settings_flagged, 'drupal/breakpoint_js_settings is flagged as deprecated by DDQG Composer Audit extension');
+Assert::true(!array_key_exists('drupal/variationcache', $audit_result['advisories']), 'drupal/variationcache is on the ignore list so it was not flagged as deprecated by DDQG Composer Audit extension');
 Assert::true(!array_key_exists('drupal/swiftmailer', $audit_result['advisories']), 'drupal/swiftmailer is on the ignore list so it was not flagged as deprecated by DDQG Composer Audit extension');
 
 $is_apigee_edge_flagged_as_insecure = false;

@@ -17,7 +17,7 @@ namespace mxr576\ddqgComposerAudit\Supportive\Adapter\Composer;
 use Composer\Advisory\SecurityAdvisory;
 use Composer\EventDispatcher\Event;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\UnsupportedPackageWasIgnored;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\PackageIgnoreRule;
+use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule;
 use Webmozart\Assert\Assert;
 
 /**

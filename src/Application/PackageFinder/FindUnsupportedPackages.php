@@ -17,7 +17,7 @@ namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
 use Composer\Semver\VersionParser;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\UnsupportedPackageWasIgnored;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\PackageIgnoreRule;
+use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinder;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinderFromProblematicPackageProvider;
@@ -32,7 +32,7 @@ use Psr\EventDispatcher\EventDispatcherInterface;
 final class FindUnsupportedPackages implements PackageFinder
 {
     /**
-     * @var array<string,array<\mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\PackageIgnoreRule>>
+     * @var array<string,array<\mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule>>
      */
     private ?array $optimizedIgnoreRules = null;
 
@@ -57,7 +57,7 @@ final class FindUnsupportedPackages implements PackageFinder
 
         if ([] !== $result) {
             if (null === $this->optimizedIgnoreRules) {
-                /** @var \ArrayObject<string,array<\mxr576\ddqgComposerAudit\Application\PackageFinder\PackageIgnore\PackageIgnoreRule>> $tmp */
+                /** @var \ArrayObject<string,array<\mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule>> $tmp */
                 $tmp = array_reduce($this->configurationProvider->getUnsupportedPackageIgnoreRules(),
                     static function (\ArrayObject $carry, PackageIgnoreRule $item) {
                         $carry[$item->getPackageName()][] = $item;
