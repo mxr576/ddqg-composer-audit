@@ -166,7 +166,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         foreach ($messages as $message) {
             // writeError() always writes to STDERR or nowhere.
             // https://github.com/composer/composer/blob/2.6.2/src/Composer/IO/ConsoleIO.php#L172-L177
-            $io->writeError(sprintf('[<href=https://packagist.org/packages/mxr576/ddqg-composer-audit>%s</a>] ', self::PACKAGE_NAME) . $message);
+          $io->writeError(sprintf('[<href=https://packagist.org/packages/mxr576/ddqg-composer-audit>%s</>] ', self::PACKAGE_NAME) . $message);
         }
     }
 }
