@@ -28,50 +28,31 @@ try {
     throw new LogicException(sprintf('Malformed JSON input: "%s". %s', base64_encode(gzdeflate($audit_output, 9)), $e->getMessage()), 0, $e);
 }
 
-$is_feeds_flagged = false;
-foreach ($audit_result['advisories']['drupal/feeds'] as $advisory) {
-    if ('DDQG-unsupported-drupal-feeds-3.0.0.0-beta3' === $advisory['advisoryId']) {
-        $is_feeds_flagged = true;
-        break;
-    }
-}
-Assert::true($is_feeds_flagged, 'drupal/feeds is flagged as unsupported by DDQG Composer Audit extension');
-Assert::true(!array_key_exists('drupal/tamper', $audit_result['advisories']), 'drupal/tamper is on the ignore list so it was not flagged as unsupported by DDQG Composer Audit extension');
-
-$is_breakpoint_js_settings_flagged = false;
-foreach ($audit_result['advisories']['drupal/breakpoint_js_settings'] as $advisory) {
-    if ('DDQG-deprecated-drupal-breakpoint_js_settings-1.0.0.0' === $advisory['advisoryId']) {
-        $is_breakpoint_js_settings_flagged = true;
-        break;
-    }
-}
-Assert::true($is_breakpoint_js_settings_flagged, 'drupal/breakpoint_js_settings is flagged as deprecated by DDQG Composer Audit extension');
-Assert::true(!array_key_exists('drupal/variationcache', $audit_result['advisories']), 'drupal/variationcache is on the ignore list so it was not flagged as deprecated by DDQG Composer Audit extension');
-Assert::true(!array_key_exists('drupal/swiftmailer', $audit_result['advisories']), 'drupal/swiftmailer is on the ignore list so it was not flagged as deprecated by DDQG Composer Audit extension');
-
-$is_apigee_edge_flagged_as_insecure = false;
-$is_apigee_edge_flagged_as_non_d10_compatible = false;
-foreach ($audit_result['advisories']['drupal/apigee_edge'] as $advisory) {
-    if ('DDQG-insecure-drupal-apigee_edge' === $advisory['advisoryId']) {
-        $is_apigee_edge_flagged_as_insecure = true;
-    }
-    if ('DDQG-D10-incompatible-drupal-apigee_edge' === $advisory['advisoryId']) {
-        $is_apigee_edge_flagged_as_non_d10_compatible = true;
+$package_has_advisory_by_id = static function (array $audit_result, string $package, string $advisory_id_needle): bool {
+    $result = false;
+    foreach ($audit_result['advisories'][$package] ?? [] as $advisory) {
+        if (str_contains($advisory['advisoryId'], $advisory_id_needle)) {
+            $result = true;
+            break;
+        }
     }
 
-    if ($is_apigee_edge_flagged_as_insecure && $is_apigee_edge_flagged_as_non_d10_compatible) {
-        break;
-    }
-}
-Assert::true($is_apigee_edge_flagged_as_non_d10_compatible, 'The installed version of drupal/apigee_edge is flagged by DDQG Composer Audit extension because it does not support Drupal 10');
+    return $result;
+};
+
+// Unsupported
+Assert::true($package_has_advisory_by_id($audit_result, 'drupal/feeds', 'DDQG-unsupported-drupal-feeds-3.0.0.0-beta3'), 'drupal/feeds is flagged as unsupported by DDQG Composer Audit extension');
+Assert::false($package_has_advisory_by_id($audit_result, 'drupal/tamper', 'DDQG-unsupported-tamper'), 'drupal/tamper is on the ignore list so it was not flagged as unsupported by DDQG Composer Audit extension');
+
+// Deprecated
+Assert::true($package_has_advisory_by_id($audit_result, 'drupal/breakpoint_js_settings', 'DDQG-deprecated-drupal-breakpoint_js_settings-1.0.0.0'), 'drupal/breakpoint_js_settings is flagged as deprecated by DDQG Composer Audit extension');
+Assert::false($package_has_advisory_by_id($audit_result, 'drupal/variationcache', 'DDQG-insecure-variationcache'), 'drupal/variationcache is on the ignore list so it was not flagged as deprecated by DDQG Composer Audit extension');
+Assert::false($package_has_advisory_by_id($audit_result, 'drupal/swiftmailer', 'DDQG-deprecated-swiftmailer'), 'drupal/swiftmailer is on the ignore list so it was not flagged as deprecated by DDQG Composer Audit extension');
+
+// Insecure
 // @TODO Requires Composer 2.6.0 and its multi-repo security advisory support.
-// Assert::true($is_apigee_edge_flagged_as_insecure, 'drupal/apigee_edge is flagged as insecure by DDQG Composer Audit extension');
+// Assert::true($package_has_advisory_by_id($audit_result, 'drupal/apigee_edge', 'DDQG-insecure-drupal-apigee_edge'), 'The installed version of drupal/apigee_edge is flagged as insecure by DDQG Composer Audit extension0');
+Assert::true($package_has_advisory_by_id($audit_result, 'drupal/core', 'DDQG-insecure-drupal-core'), 'drupal/core is flagged as insecure by DDQG Composer Audit extension');
 
-$is_drupal_core_flagged = false;
-foreach ($audit_result['advisories']['drupal/core'] as $advisory) {
-    if ('DDQG-insecure-drupal-core' === $advisory['advisoryId']) {
-        $is_drupal_core_flagged = true;
-        break;
-    }
-}
-Assert::true($is_drupal_core_flagged, 'drupal/core is flagged as insecure by DDQG Composer Audit extension');
+// D10 incompatibility
+Assert::true($package_has_advisory_by_id($audit_result, 'drupal/apigee_edge', 'DDQG-D10-incompatible-drupal-apigee_edge'), 'The installed version of drupal/apigee_edge is flagged by DDQG Composer Audit extension because it does not support Drupal 10');
