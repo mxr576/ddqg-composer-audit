@@ -48,23 +48,6 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     public function activate(Composer $composer, IOInterface $io): void
     {
         $this->io = $io;
-        // This is a runtime check instead of a dependency constraint to allow
-        // installation of this package on projects where composer/composer also
-        // installed as a project dependency (but a global version used instead).
-        // @see https://github.com/mxr576/ddqg-composer-audit/issues/1
-        if (version_compare($composer::getVersion(), '2.4.0', '<')) {
-            $this->displayConsoleMessages($io, sprintf('Plugin is disabled because audit command is only available since Composer 2.4.0. Your version is: %s.', $composer::getVersion()));
-
-            return;
-        }
-
-        if (version_compare(Composer::getVersion(), '2.6.0', '<')) {
-            $this->displayConsoleMessages(
-                $io,
-                sprintf('<comment>Composer version %s detected. Composer >=2.6.0 is <href=https://github.com/mxr576/ddqg-composer-audit#composer-version-support>recommended</>.</comment>', $composer::getVersion()),
-            );
-        }
-
         $with_dev_dependencies_included = false;
         $from_locked_dependencies = false;
         // This is not great, not terrible... the only benefit of this is

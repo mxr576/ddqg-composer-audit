@@ -17,13 +17,6 @@ with collected technical debt.
 $ composer require --dev mxr576/ddqg-composer-audit
 ```
 
-### Composer version support
-
-The minimum required version is Composer 2.4.0 because the `composer audit` command was introduced in that version.
-The recommended version is Composer 2.6.0 because it introduced essential improvements for the audit feature like
-[the support for multiple repositories to provide advisories for the same package](https://github.com/composer/composer/issues/11435)
-or [the advisory ignore feature](https://getcomposer.org/doc/06-config.md#ignore).
-
 ## Example output
 
 ```
