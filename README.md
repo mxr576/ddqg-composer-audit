@@ -79,7 +79,7 @@ comes with minimal opt-out options.
 ### Silence warning about a deprecated- or unsupported package version in use
 
 > [!WARNING]
-> For Composer < 2.6.0 only. This feature will be removed when the minimum required Composer version gets bumped to >=2.6.0.
+> This feature is **deprecated** and it is going to be removed in version 2.0.0. Composer's built-in [audit ignore](https://getcomposer.org/doc/06-config.md#ignore) feature replaced it.
 
 In a project's root composer.json, under the `extra` property, add a definition like this:
 
