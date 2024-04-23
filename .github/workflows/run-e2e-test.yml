@@ -42,11 +42,16 @@ jobs:
         with:
           dependency-versions: "${{ matrix.dependencies }}"
 
+      - name: "Init COMPOSER_HOME"
+        uses: "ramsey/composer-install@3.0.0"
+        with:
+          working-directory: "tests/fixtures/composer_home"
+
       - name: "Install e2e dependencies"
         uses: "ramsey/composer-install@3.0.0"
         with:
           working-directory: "tests/fixtures/e2e"
 
-      - name: Test composer audit output
+      - name: Test `composer audit` output
         # See https://github.com/symfony/symfony/issues/53460 why --no-ansi was added.
-        run: tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --format=json)"
+        run: tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --format=json)"

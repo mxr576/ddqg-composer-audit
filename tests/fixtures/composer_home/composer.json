@@ -1,0 +1,31 @@
+{
+    "name": "ddqg-audit-tests/composer-home",
+    "description": "COMPOSER_HOME with the plugin pre-installed. This prevents potential conflicts with other dependencies.",
+    "type": "project",
+    "require-dev": {
+        "mxr576/ddqg-composer-audit": "@dev"
+    },
+    "repositories": [
+        {
+            "type": "path",
+            "url": "../../../",
+            "options": {
+                "symlink": false,
+                "reference": "none"
+            }
+        },
+        {
+            "type": "composer",
+            "url": "https://packagist.org",
+            "exclude": [
+                "mxr576/ddqg-composer-audit"
+            ]
+        }
+    ],
+    "minimum-stability": "stable",
+    "config": {
+        "allow-plugins": {
+            "mxr576/ddqg-composer-audit": true
+        }
+    }
+}

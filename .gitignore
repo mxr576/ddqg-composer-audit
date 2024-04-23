@@ -2,3 +2,4 @@ vendor
 .php-cs-fixer.cache
 tests/fixtures/e2e/web
 tests/fixtures/e2e/vendor
+tests/fixtures/composer_home/cache/
