@@ -8,7 +8,6 @@
         "drupal/breakpoint_js_settings": "^1.0",
         "drupal/config_ignore": "2.4.0",
         "drupal/core": "9.4.0",
-        "drupal/core-composer-scaffold": "^9.4",
         "drupal/core-project-message": "^9.4",
         "drupal/core-recommended": "^9.4",
         "drupal/feeds": "3.0.0-beta3",
@@ -31,7 +30,6 @@
     "config": {
         "allow-plugins": {
             "composer/installers": true,
-            "drupal/core-composer-scaffold": true,
             "drupal/core-project-message": true,
             "php-http/discovery": true
         },
@@ -48,11 +46,6 @@
             },
             "ignore-unsupported-versions": {
                 "drupal/tamper": "1.0.0-alpha3"
-            }
-        },
-        "drupal-scaffold": {
-            "locations": {
-                "web-root": "web/"
             }
         },
         "installer-paths": {

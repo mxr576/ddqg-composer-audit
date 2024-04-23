@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "09c352a16b3e462bd5026705f1e3734d",
+    "content-hash": "b6539d62bb58b177d7ecce38d77710dc",
     "packages": [
         {
             "name": "apigee/apigee-client-php",
@@ -1237,56 +1237,6 @@
                 "source": "https://github.com/drupal/core/tree/9.4.0"
             },
             "time": "2022-06-15T16:34:03+00:00"
-        },
-        {
-            "name": "drupal/core-composer-scaffold",
-            "version": "9.4.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/drupal/core-composer-scaffold.git",
-                "reference": "3286dbf43922b4eb8b51ef55572aa8f2e78ba7aa"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-composer-scaffold/zipball/3286dbf43922b4eb8b51ef55572aa8f2e78ba7aa",
-                "reference": "3286dbf43922b4eb8b51ef55572aa8f2e78ba7aa",
-                "shasum": ""
-            },
-            "require": {
-                "composer-plugin-api": "^1 || ^2",
-                "php": ">=7.3.0"
-            },
-            "conflict": {
-                "drupal-composer/drupal-scaffold": "*"
-            },
-            "require-dev": {
-                "composer/composer": "^1.8@stable"
-            },
-            "type": "composer-plugin",
-            "extra": {
-                "class": "Drupal\\Composer\\Plugin\\Scaffold\\Plugin",
-                "branch-alias": {
-                    "dev-master": "1.0.x-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Drupal\\Composer\\Plugin\\Scaffold\\": ""
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-2.0-or-later"
-            ],
-            "description": "A flexible Composer project scaffold builder.",
-            "homepage": "https://www.drupal.org/project/drupal",
-            "keywords": [
-                "drupal"
-            ],
-            "support": {
-                "source": "https://github.com/drupal/core-composer-scaffold/tree/9.4.0"
-            },
-            "time": "2022-02-24T17:40:53+00:00"
         },
         {
             "name": "drupal/core-project-message",
