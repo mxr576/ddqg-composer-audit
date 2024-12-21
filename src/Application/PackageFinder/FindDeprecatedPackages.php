@@ -52,7 +52,7 @@ final class FindDeprecatedPackages implements PackageFinder
         VersionParser $versionParser,
         private readonly EventDispatcherInterface $eventDispatcher,
         PackageIgnoreRuleProvider $packageIgnoreRuleProvider,
-        InstalledPackagesReadOnlyRepository $installedPackagesReadOnlyRepository
+        InstalledPackagesReadOnlyRepository $installedPackagesReadOnlyRepository,
     ) {
         // This is a sufficient implementation for the one and only known
         // edge case.

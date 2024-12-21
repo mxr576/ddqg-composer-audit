@@ -34,7 +34,7 @@ final class FindNonDrupal10CompatiblePackages implements PackageFinder
     public function __construct(
         NonDrupal10CompatiblePackageVersionsProvider $nonDrupal10CompatiblePackageVersionsProvider,
         VersionParser $versionParser,
-        private readonly NonDrupal10CompatiblePackageFinderConfigurationProvider $configurationProvider
+        private readonly NonDrupal10CompatiblePackageFinderConfigurationProvider $configurationProvider,
     ) {
         $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($nonDrupal10CompatiblePackageVersionsProvider, $versionParser);
     }

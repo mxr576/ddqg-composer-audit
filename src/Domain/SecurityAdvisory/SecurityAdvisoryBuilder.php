@@ -100,10 +100,10 @@ final class SecurityAdvisoryBuilder
             $this->affectedVersions,
             $this->title . ' (Reported by <href=https://packagist.org/packages/mxr576/ddqg>Drupal Dependency Quality Gate</>.)',
             [
-              [
-                'name' => 'DDQG',
-                'remoteId' => $id,
-              ],
+                [
+                    'name' => 'DDQG',
+                    'remoteId' => $id,
+                ],
             ],
             new \DateTimeImmutable(),
             $id,

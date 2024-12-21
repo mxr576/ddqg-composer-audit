@@ -22,7 +22,7 @@ interface InstalledPackagesReadOnlyRepository
     public function findByName(string $package_name, string|ConstraintInterface $version): ?PackageInterface;
 
     /**
-     * @return \Composer\Package\PackageInterface[]
+     * @return PackageInterface[]
      */
     public function getPackages(): array;
 }

@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 
+declare(strict_types=1);
+
 /**
  * Copyright (c) 2023-2024 Dezső Biczó
  *

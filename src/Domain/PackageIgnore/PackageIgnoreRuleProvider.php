@@ -20,7 +20,7 @@ namespace mxr576\ddqgComposerAudit\Domain\PackageIgnore;
 interface PackageIgnoreRuleProvider
 {
     /**
-     * @return iterable<\mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule>
+     * @return iterable<PackageIgnoreRule>
      */
     public function getIgnoreRules(): iterable;
 }

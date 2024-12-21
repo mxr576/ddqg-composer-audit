@@ -38,7 +38,7 @@ final class UnsupportedPackageFinderConfigurationProvider implements Unsupported
         // We should only build this object once, but if we do in the
         // constructor then it is hard to explain PHPStan what are the
         // available public methods on an anonymous class.
-        $configReaderJail = new class() {
+        $configReaderJail = new class {
             use ConfigurablePlugin;
 
             public const CONFIG_KEY_IGNORE_UNSUPPORTED_VERSIONS = 'ignore-unsupported-versions';
@@ -46,10 +46,10 @@ final class UnsupportedPackageFinderConfigurationProvider implements Unsupported
             public function __construct()
             {
                 $this->configuration = [
-                  self::CONFIG_KEY_IGNORE_UNSUPPORTED_VERSIONS => [
-                    'type' => 'list',
-                    'default' => [],
-                  ],
+                    self::CONFIG_KEY_IGNORE_UNSUPPORTED_VERSIONS => [
+                        'type' => 'list',
+                        'default' => [],
+                    ],
                 ];
             }
         };

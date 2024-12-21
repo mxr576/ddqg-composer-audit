@@ -22,7 +22,7 @@ use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
 final class UnsupportedPackageIgnoreRulesFromConfiguration implements PackageIgnoreRuleProvider
 {
     public function __construct(
-        private readonly UnsupportedPackageFinderConfigurationProvider $configurationProvider
+        private readonly UnsupportedPackageFinderConfigurationProvider $configurationProvider,
     ) {
     }
 

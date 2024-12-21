@@ -26,7 +26,7 @@ final class IgnorePackageByInstalledVersionOfOtherPackage implements PackageIgno
         private readonly InstalledPackagesReadOnlyRepository $installedPackagesReadOnlyRepository,
         private readonly string $packageName,
         private readonly string $otherPackageName,
-        private readonly ConstraintInterface $otherPackageRule
+        private readonly ConstraintInterface $otherPackageRule,
     ) {
     }
 

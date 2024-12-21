@@ -20,15 +20,15 @@ namespace mxr576\ddqgComposerAudit\Domain\PackageIgnore;
 trait PackageIgnoreRuleOptimizer
 {
     /**
-     * @return array<string,array<\mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule>>
+     * @return array<string,array<PackageIgnoreRule>>
      */
     final protected function optimizePackageIgnoreRules(PackageIgnoreRuleProvider $provider): array
     {
         $rules = $provider->getIgnoreRules();
-        /** @var \mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule[] $rules */
+        /** @var PackageIgnoreRule[] $rules */
         $rules = $rules instanceof \Traversable ? iterator_to_array($rules, false) : $rules;
         $ignore_package_by_installed_version_of_other_package_counter = 0;
-        /** @var \ArrayObject<string,array<\mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule>> $tmp */
+        /** @var \ArrayObject<string,array<PackageIgnoreRule>> $tmp */
         $tmp = array_reduce($rules,
             static function (\ArrayObject $carry, PackageIgnoreRule $item) use (&$ignore_package_by_installed_version_of_other_package_counter) {
                 // This type of ignore rule can be only created programmatically at

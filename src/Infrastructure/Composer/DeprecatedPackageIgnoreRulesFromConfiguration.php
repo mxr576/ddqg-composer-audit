@@ -23,7 +23,7 @@ use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
 final class DeprecatedPackageIgnoreRulesFromConfiguration implements PackageIgnoreRuleProvider
 {
     public function __construct(
-        private readonly DeprecatedPackageFinderConfigurationProvider $configurationProvider
+        private readonly DeprecatedPackageFinderConfigurationProvider $configurationProvider,
     ) {
     }
 

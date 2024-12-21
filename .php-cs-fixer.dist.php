@@ -53,10 +53,10 @@ $config->setRiskyAllowed(true)
         'self_accessor' => false,
         'void_return' => true,
         'header_comment' => [
-          'comment_type' => 'PHPDoc',
-          'header' => $license->header(),
-          'location' => 'after_declare_strict',
-          'separate' => 'both',
+            'comment_type' => 'PHPDoc',
+            'header' => $license->header(),
+            'location' => 'after_declare_strict',
+            'separate' => 'both',
         ],
     ])
     ->setFinder($finder);

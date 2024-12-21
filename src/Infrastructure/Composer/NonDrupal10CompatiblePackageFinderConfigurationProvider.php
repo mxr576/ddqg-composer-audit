@@ -36,7 +36,7 @@ final class NonDrupal10CompatiblePackageFinderConfigurationProvider implements N
         // We should only build this object once, but if we do in the
         // constructor then it is hard to explain PHPStan what are the
         // available public methods on an anonymous class.
-        $configReaderJail = new class() {
+        $configReaderJail = new class {
             use ConfigurablePlugin;
 
             public const CONFIG_KEY_CHECK_D10_COMPATIBILITY = 'check-d10-compatibility';
@@ -44,10 +44,10 @@ final class NonDrupal10CompatiblePackageFinderConfigurationProvider implements N
             public function __construct()
             {
                 $this->configuration = [
-                  self::CONFIG_KEY_CHECK_D10_COMPATIBILITY => [
-                    'type' => 'bool',
-                    'default' => false,
-                  ],
+                    self::CONFIG_KEY_CHECK_D10_COMPATIBILITY => [
+                        'type' => 'bool',
+                        'default' => false,
+                    ],
                 ];
             }
         };

@@ -25,21 +25,21 @@ use mxr576\ddqgComposerAudit\Infrastructure\Composer\InstalledPackagesReadOnlyRe
 final class NonDrupal10CompatiblePackageVersionsProviderFromComposerLock implements NonDrupal10CompatiblePackageVersionsProvider
 {
     private const DRUPAL_PACKAGE_TYPES = [
-      'drupal-module',
-      'drupal-theme',
-      'drupal-profile',
-      'drupal-custom-module',
-      'drupal-custom-theme',
-      'drupal-custom-profile',
+        'drupal-module',
+        'drupal-theme',
+        'drupal-profile',
+        'drupal-custom-module',
+        'drupal-custom-theme',
+        'drupal-custom-profile',
     ];
 
     private const DRUPAL_CORE_PACKAGE_CANDIDATES_IN_ORDER = [
-      'drupal/core',
-      'drupal/core-recommended',
+        'drupal/core',
+        'drupal/core-recommended',
     ];
 
     private const DRUPAL_CORE_DEV_PACKAGE_CANDIDATES_IN_ORDER = [
-      'drupal/core-dev',
+        'drupal/core-dev',
     ];
 
     public function __construct(private readonly InstalledPackagesReadOnlyRepository $installedPackagesRepository, private readonly VersionParser $versionParser)

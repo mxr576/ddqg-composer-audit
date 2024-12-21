@@ -46,7 +46,7 @@ final class InstalledPackagesReadOnlyRepository implements InstalledPackagesRead
      */
     private function __construct(
         $packageFinder,
-        $packageGetter
+        $packageGetter,
     ) {
         $this->packageGetter = $packageGetter;
         $this->packageFinder = $packageFinder;

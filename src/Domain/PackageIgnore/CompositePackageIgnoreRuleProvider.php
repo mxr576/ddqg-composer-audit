@@ -20,7 +20,7 @@ namespace mxr576\ddqgComposerAudit\Domain\PackageIgnore;
 final class CompositePackageIgnoreRuleProvider implements PackageIgnoreRuleProvider
 {
     /**
-     * @var \mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider[]
+     * @var PackageIgnoreRuleProvider[]
      */
     private readonly array $providers;
 

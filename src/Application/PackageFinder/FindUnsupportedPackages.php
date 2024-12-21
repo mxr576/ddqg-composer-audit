@@ -45,7 +45,7 @@ final class FindUnsupportedPackages implements PackageFinder
         UnsupportedPackageVersionsProvider $unsupportedPackageVersionsProvider,
         VersionParser $versionParser,
         private readonly EventDispatcherInterface $eventDispatcher,
-        private readonly UnsupportedPackageIgnoreRulesFromConfiguration $packageIgnoreRuleProvider
+        private readonly UnsupportedPackageIgnoreRulesFromConfiguration $packageIgnoreRuleProvider,
     ) {
         $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($unsupportedPackageVersionsProvider, $versionParser);
     }

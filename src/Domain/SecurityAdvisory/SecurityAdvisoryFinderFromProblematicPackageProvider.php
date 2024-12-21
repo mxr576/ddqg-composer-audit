@@ -60,7 +60,7 @@ final class SecurityAdvisoryFinderFromProblematicPackageProvider implements Secu
                     }
 
                     $advisories[$package_name] = [
-                      $advisory->build(),
+                        $advisory->build(),
                     ];
                 }
             }

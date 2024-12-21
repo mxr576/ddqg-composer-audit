@@ -23,7 +23,7 @@ final class UnsupportedPackageWasIgnored
     /**
      * Constructs a new object.
      *
-     * @param \Composer\Advisory\SecurityAdvisory[] $advisories
+     * @param SecurityAdvisory[] $advisories
      */
     public function __construct(
         public readonly string $packageName,

@@ -137,8 +137,8 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-          UnsupportedPackageWasIgnoredAdapter::class => 'warnAboutIgnoredUnsupportedPackage',
-          DeprecatedPackageWasIgnoredAdapter::class => 'warnAboutIgnoredDeprecatedPackage',
+            UnsupportedPackageWasIgnoredAdapter::class => 'warnAboutIgnoredUnsupportedPackage',
+            DeprecatedPackageWasIgnoredAdapter::class => 'warnAboutIgnoredDeprecatedPackage',
         ];
     }
 
