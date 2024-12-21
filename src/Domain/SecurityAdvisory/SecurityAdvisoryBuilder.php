@@ -35,13 +35,13 @@ final class SecurityAdvisoryBuilder
     private string $title = 'Low quality dependency detected.';
 
     /**
-     * @phpstan-var self::TYPE_*|null
+     * @phpstan-var self::TYPE_*
      */
-    private string|null $type;
+    private string $type;
 
     public function __construct(private readonly string $packageName, private readonly string $installedVersion, private readonly ConstraintInterface $affectedVersions)
     {
-        // This may not be 100% accurate but good enough.
+        // This may not be 100% correct but good enough.
         [, $module_name] = explode('/', $packageName);
         $this->drupalProjectId = $module_name;
     }
@@ -81,9 +81,7 @@ final class SecurityAdvisoryBuilder
     public function build(): SecurityAdvisory
     {
         $id_parts = ['DDQG'];
-        if (null !== $this->type) {
-            $id_parts[] = $this->type;
-        }
+        $id_parts[] = $this->type;
         $id_parts[] = str_replace('/', '-', $this->packageName);
         // Composer >=2.6.0 supports ignoring security advisories. We would like to
         // push projects to depend on stable components, so let's make
