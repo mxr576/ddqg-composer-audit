@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e9b020c4f72c63d5c9d1eef7f12002b2",
+    "content-hash": "1110199acb883f1ed6cdde406f218832",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -811,20 +811,20 @@
         },
         {
             "name": "loophp/collection",
-            "version": "7.3.0",
+            "version": "7.6.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/loophp/collection.git",
-                "reference": "ed5ef2036a4e42c5372056d91b9470c564e2c66c"
+                "reference": "8448fdd1c82e6e72d1edd51f358cea72ba983817"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/loophp/collection/zipball/ed5ef2036a4e42c5372056d91b9470c564e2c66c",
-                "reference": "ed5ef2036a4e42c5372056d91b9470c564e2c66c",
+                "url": "https://api.github.com/repos/loophp/collection/zipball/8448fdd1c82e6e72d1edd51f358cea72ba983817",
+                "reference": "8448fdd1c82e6e72d1edd51f358cea72ba983817",
                 "shasum": ""
             },
             "require": {
-                "loophp/iterators": "^3",
+                "loophp/iterators": "^3.2.0",
                 "php": ">= 8.1"
             },
             "require-dev": {
@@ -832,14 +832,14 @@
                 "doctrine/collections": "^2",
                 "drupol/php-conventions": "^5",
                 "ext-pcov": "*",
-                "infection/infection": "^0.27",
+                "infection/infection": "^0.27 || ^0.28 || ^0.29",
                 "loophp/phpunit-iterable-assertions": "^1.0",
                 "phpstan/phpstan-strict-rules": "^1.0",
                 "phpunit/php-code-coverage": "^10",
                 "phpunit/phpunit": "^10",
                 "psr/cache": "^2.0 || 3.0",
                 "symfony/cache": "^6",
-                "vimeo/psalm": "^5.14"
+                "vimeo/psalm": "^5"
             },
             "type": "library",
             "autoload": {
@@ -883,20 +883,20 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-10T19:23:13+00:00"
+            "time": "2024-08-27T16:18:05+00:00"
         },
         {
             "name": "loophp/iterators",
-            "version": "3.0.2",
+            "version": "3.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/loophp/iterators.git",
-                "reference": "ade1a1ab70d728286899effee9ffcef28a417242"
+                "reference": "a0ba41c111f9c3eb09642ad9260cd6753edeb3e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/loophp/iterators/zipball/ade1a1ab70d728286899effee9ffcef28a417242",
-                "reference": "ade1a1ab70d728286899effee9ffcef28a417242",
+                "url": "https://api.github.com/repos/loophp/iterators/zipball/a0ba41c111f9c3eb09642ad9260cd6753edeb3e0",
+                "reference": "a0ba41c111f9c3eb09642ad9260cd6753edeb3e0",
                 "shasum": ""
             },
             "require": {
@@ -946,7 +946,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-25T09:11:42+00:00"
+            "time": "2024-08-27T16:04:50+00:00"
         },
         {
             "name": "psr/container",
