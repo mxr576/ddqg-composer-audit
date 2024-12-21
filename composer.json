@@ -31,7 +31,7 @@
         "ergebnis/composer-normalize": "^2.30",
         "ergebnis/license": "^2.1",
         "friendsofphp/php-cs-fixer": "^3.65",
-        "phparkitect/phparkitect": "~0.3.24",
+        "phparkitect/phparkitect": "~0.3.33",
         "phpstan/phpstan": "^2.0.4",
         "phpstan/phpstan-deprecation-rules": "^2.0.1",
         "phpstan/phpstan-webmozart-assert": "^2.0.0"

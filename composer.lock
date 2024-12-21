@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "1110199acb883f1ed6cdde406f218832",
+    "content-hash": "b49a636b5383f0c4410de2bb71f12a85",
     "packages": [
         {
             "name": "composer/ca-bundle",
@@ -3392,16 +3392,16 @@
         },
         {
             "name": "phparkitect/phparkitect",
-            "version": "0.3.26",
+            "version": "0.3.33",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phparkitect/arkitect.git",
-                "reference": "040715e30c853aa7a9bac11894a323689012c5cf"
+                "reference": "aa15c864bef601d797e24f479852ec3f7d35cdd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phparkitect/arkitect/zipball/040715e30c853aa7a9bac11894a323689012c5cf",
-                "reference": "040715e30c853aa7a9bac11894a323689012c5cf",
+                "url": "https://api.github.com/repos/phparkitect/arkitect/zipball/aa15c864bef601d797e24f479852ec3f7d35cdd1",
+                "reference": "aa15c864bef601d797e24f479852ec3f7d35cdd1",
                 "shasum": ""
             },
             "require": {
@@ -3459,7 +3459,7 @@
             "description": "Enforce architectural constraints in your PHP applications",
             "support": {
                 "issues": "https://github.com/phparkitect/arkitect/issues",
-                "source": "https://github.com/phparkitect/arkitect/tree/0.3.26"
+                "source": "https://github.com/phparkitect/arkitect/tree/0.3.33"
             },
             "funding": [
                 {
@@ -3471,7 +3471,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-12-22T15:55:46+00:00"
+            "time": "2024-05-28T05:56:58+00:00"
         },
         {
             "name": "phpstan/phpdoc-parser",
