@@ -27,7 +27,7 @@ final class IgnorePackageByVersionConstraintMatch implements PackageIgnoreRule
     {
     }
 
-    public static function fromUserInput(string $packageName, string $version, VersionParser $parser = null): self
+    public static function fromUserInput(string $packageName, string $version, ?VersionParser $parser = null): self
     {
         $parser = $parser ?? new VersionParser();
 
