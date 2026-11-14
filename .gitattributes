@@ -7,3 +7,5 @@
 /phparkitect.php          export-ignore
 /phpstan.neon.dist        export-ignore
 /phpstan-baseline.neon       export-ignore
+/AGENTS.md                export-ignore
+/docs                    export-ignore
