@@ -34,7 +34,8 @@
         "phparkitect/phparkitect": "~1.3.1",
         "phpstan/phpstan": "^2.3",
         "phpstan/phpstan-deprecation-rules": "^2.0",
-        "phpstan/phpstan-webmozart-assert": "^2.0"
+        "phpstan/phpstan-webmozart-assert": "^2.0",
+        "phpunit/phpunit": "^10.5"
     },
     "suggest": {
         "mxr576/composer-audit-changes": "The `composer audit-changes` Composer command works similarly to the built-in `composer audit` command but it only audits newly installed or updated packages since a previous version of `composer.lock`."
@@ -43,6 +44,11 @@
     "autoload": {
         "psr-4": {
             "mxr576\\ddqgComposerAudit\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "mxr576\\ddqgComposerAudit\\Tests\\": "tests/"
         }
     },
     "config": {

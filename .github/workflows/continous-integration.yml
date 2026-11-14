@@ -8,42 +8,44 @@ on:
       - "master"
 
 jobs:
-#  phpunit:
-#    name: "PHPUnit tests"
-#
-#    runs-on: ${{ matrix.operating-system }}
-#
-#    strategy:
-#      matrix:
-#        dependencies:
-#          - "lowest"
-#          - "highest"
-#          - "locked"
-#        php-version:
-#          - "8.1"
-#          - "8.2"
-#        operating-system:
-#          - "ubuntu-latest"
-#          - "windows-latest"
-#
-#    steps:
-#      - name: "Checkout"
-#        uses: "actions/checkout@v4.1.1"
-#
-#      - name: "Install PHP"
-#        uses: "shivammathur/setup-php@2.30.0"
-#        with:
-#          coverage: "none"
-#          php-version: "${{ matrix.php-version }}"
-#          ini-values: memory_limit=-1
-#
-#      - name: "Install dependencies"
-#        uses: "ramsey/composer-install@2.2.0"
-#        with:
-#          dependency-versions: "${{ matrix.dependencies }}"
-#
-#      - name: "Run tests"
-#        run: "vendor/bin/phpunit"
+  phpunit:
+    name: "PHPUnit tests"
+
+    runs-on: ${{ matrix.operating-system }}
+
+    strategy:
+      matrix:
+        dependencies:
+          - "highest"
+          - "lowest"
+          - "locked"
+        php-version:
+          - "8.1"
+          - "8.2"
+          - "8.3"
+          - "8.4"
+          - "8.5"
+        operating-system:
+          - "ubuntu-latest"
+
+    steps:
+      - name: "Checkout"
+        uses: "actions/checkout@v4.1.1"
+
+      - name: "Install PHP"
+        uses: "shivammathur/setup-php@2.30.0"
+        with:
+          coverage: "none"
+          php-version: "${{ matrix.php-version }}"
+          ini-values: memory_limit=-1
+
+      - name: "Install dependencies"
+        uses: "ramsey/composer-install@3.0.0"
+        with:
+          dependency-versions: "${{ matrix.dependencies }}"
+
+      - name: "Run tests"
+        run: "vendor/bin/phpunit"
 
   static-analysis-phpstan:
     name: "Static Analysis by PHPStan"

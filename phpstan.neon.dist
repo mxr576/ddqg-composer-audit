@@ -18,6 +18,8 @@ parameters:
       - 'LogicException'
       - 'UnexpectedValueException'
       - 'PHPUnit\Framework\ExpectationFailedException'
+      - 'PHPUnit\Framework\Exception'
+      - 'PHPUnit\Framework\SkippedWithMessageException'
     checkedExceptionClasses:
       - 'RuntimeException'
   paths:

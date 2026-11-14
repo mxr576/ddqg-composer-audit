@@ -29,13 +29,16 @@ composer validate && composer normalize
 vendor/bin/php-cs-fixer fix
 vendor/bin/phpstan analyse --memory-limit=-1
 vendor/bin/phparkitect check
+vendor/bin/phpunit
 ```
 
 When you add or change a check, edit the workflow and this section together. When you change a constraint in `composer.json`, follow `docs/agents/changing-constraints.md`.
 
 `php-cs-fixer` rewrites `LICENSE.md` to the current year and adds the license header to PHP files. Keep those edits. When it refuses to start because the local PHP is newer than it supports, rerun it with `PHP_CS_FIXER_IGNORE_ENV=1`.
 
-The only behavioural test is the e2e test, which runs `composer audit` against a fixture project (`tests/fixtures/e2e`) and checks the JSON in `tests/fixtures/e2e/test.php`:
+`vendor/bin/phpunit` tests the package finders through `PackageFinder`, asserting only on the returned advisories. When you add or change a test, follow `docs/agents/writing-tests.md`.
+
+The e2e test is the acceptance test for Composer integration. It runs `composer audit` against a fixture project (`tests/fixtures/e2e`) and checks the JSON in `tests/fixtures/e2e/test.php`:
 
 ```shell
 composer install -d tests/fixtures/composer_home && composer install -d tests/fixtures/e2e
