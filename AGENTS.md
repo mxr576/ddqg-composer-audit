@@ -33,7 +33,7 @@ vendor/bin/phparkitect check
 
 When you add or change a check, edit the workflow and this section together. When you change a constraint in `composer.json`, follow `docs/agents/changing-constraints.md`.
 
-`php-cs-fixer` also rewrites `LICENSE.md` to the current year and adds the license header to PHP files. Keep those edits.
+`php-cs-fixer` rewrites `LICENSE.md` to the current year and adds the license header to PHP files. Keep those edits. When it refuses to start because the local PHP is newer than it supports, rerun it with `PHP_CS_FIXER_IGNORE_ENV=1`.
 
 The only behavioural test is the e2e test, which runs `composer audit` against a fixture project (`tests/fixtures/e2e`) and checks the JSON in `tests/fixtures/e2e/test.php`:
 
