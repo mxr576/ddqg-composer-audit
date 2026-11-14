@@ -29,7 +29,7 @@ abstract class PackageVersionsFromRemoteComposerJsonRepository implements Proble
     {
     }
 
-    final public function findByPackages(string ...$package_names): array
+    final public function findByPackages(array $packageConstraintMap): array
     {
         // Streaming the response would be good, but using native Composer tools
         // is better instead of depending on new 3rd party packages that may
@@ -42,6 +42,6 @@ abstract class PackageVersionsFromRemoteComposerJsonRepository implements Proble
 
         assert(null !== $composer_json);
 
-        return PackageVersionConstraintsFromDdqgComposerJson::extract(new StringChunks($composer_json), $package_names);
+        return PackageVersionConstraintsFromDdqgComposerJson::extract(new StringChunks($composer_json), array_keys($packageConstraintMap));
     }
 }

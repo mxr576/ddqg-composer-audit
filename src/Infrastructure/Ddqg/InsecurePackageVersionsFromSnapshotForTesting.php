@@ -22,8 +22,8 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\InsecurePackageVersi
  */
 final class InsecurePackageVersionsFromSnapshotForTesting implements InsecurePackageVersionsProvider
 {
-    public function findByPackages(string ...$package_names): array
+    public function findByPackages(array $packageConstraintMap): array
     {
-        return PackageVersionConstraintsFromDdqgComposerJson::extract(new FileChunks(__DIR__ . '/fixtures/insecure-composer-2023-04-20.json'), $package_names);
+        return PackageVersionConstraintsFromDdqgComposerJson::extract(new FileChunks(__DIR__ . '/fixtures/insecure-composer-2023-04-20.json'), array_keys($packageConstraintMap));
     }
 }

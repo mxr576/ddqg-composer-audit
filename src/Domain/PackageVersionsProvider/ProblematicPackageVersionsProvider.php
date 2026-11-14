@@ -17,6 +17,10 @@ namespace mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider;
 interface ProblematicPackageVersionsProvider
 {
     /**
+     * @param array<string,\Composer\Semver\Constraint\ConstraintInterface> $packageConstraintMap
+     *   Map of package name to the constraint to judge: an exact version, or
+     *   an OR of exact versions (e.g, update candidates).
+     *
      * @throws Exception\PackageVersionsCouldNotBeFetched
      *
      * @return array<string,string>
@@ -25,5 +29,5 @@ interface ProblematicPackageVersionsProvider
      *
      * @see \Composer\Semver\VersionParser::parseConstraints()
      */
-    public function findByPackages(string ...$package_names): array;
+    public function findByPackages(array $packageConstraintMap): array;
 }

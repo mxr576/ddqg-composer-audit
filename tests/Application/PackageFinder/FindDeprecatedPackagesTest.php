@@ -14,17 +14,58 @@ declare(strict_types=1);
 
 namespace mxr576\ddqgComposerAudit\Tests\Application\PackageFinder;
 
+use Composer\Package\CompletePackage;
+use Composer\Package\PackageInterface;
 use Composer\Repository\InstalledArrayRepository;
-use Composer\Repository\InstalledRepository;
+use Composer\Repository\LockArrayRepository;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindDeprecatedPackages;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageFinder;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\DeprecatedPackageVersionsProvider;
-use mxr576\ddqgComposerAudit\Infrastructure\Composer\InstalledPackagesReadOnlyRepository;
+use mxr576\ddqgComposerAudit\Infrastructure\Composer\PackageMetadataLookupFromComposerRepositories;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DeprecatedPackageVersionsFromSnapshotForTesting;
 
 final class FindDeprecatedPackagesTest extends PackageFinderTestCase
 {
+    /**
+     * VariationCache moved into core in 10.2.0, so it is only reported as
+     * deprecated for projects that have such a core.
+     *
+     * @throws UnexpectedPackageFinderException
+     */
+    public function testVariationcacheIsFlaggedWhileCore102OrNewerIsInstalled(): void
+    {
+        $result = $this->variationcacheFinder(new InstalledArrayRepository([$this->package('drupal/core', '10.2.0')]), null)(['drupal/variationcache' => $this->exact('1.0.0')]);
+
+        self::assertSame(['drupal/variationcache'], array_keys($result));
+    }
+
+    /**
+     * @throws UnexpectedPackageFinderException
+     */
+    public function testVariationcacheIsFlaggedWhileCore102OrNewerIsLocked(): void
+    {
+        $result = $this->variationcacheFinder(new InstalledArrayRepository(), new LockArrayRepository([$this->package('drupal/core', '10.3.1')]))(['drupal/variationcache' => $this->exact('1.0.0')]);
+
+        self::assertSame(['drupal/variationcache'], array_keys($result));
+    }
+
+    /**
+     * @throws UnexpectedPackageFinderException
+     */
+    public function testVariationcacheIsNotFlaggedWithOlderOrNoCore(): void
+    {
+        $constraint = ['drupal/variationcache' => $this->exact('1.0.0')];
+
+        $older = $this->variationcacheFinder(new InstalledArrayRepository([$this->package('drupal/core', '10.1.0')]), null)($constraint);
+        $none = $this->variationcacheFinder(new InstalledArrayRepository(), null)($constraint);
+
+        self::assertSame([], $older, 'Core 10.1.0 keeps the package ignored.');
+        self::assertSame([], $none, 'Without core metadata and without a lock file the package stays ignored.');
+    }
+
     protected function snapshotPackageName(): string
     {
         return 'drupal/ablock';
@@ -53,7 +94,19 @@ final class FindDeprecatedPackagesTest extends PackageFinderTestCase
         });
     }
 
-    private function build(DeprecatedPackageVersionsProvider $provider): FindDeprecatedPackages
+    private function package(string $name, string $version): PackageInterface
+    {
+        return new CompletePackage($name, $this->versionParser()->normalize($version), $version);
+    }
+
+    private function variationcacheFinder(InstalledArrayRepository $installed, ?LockArrayRepository $locked): FindDeprecatedPackages
+    {
+        return $this->build(new class(['drupal/variationcache' => '*']) implements DeprecatedPackageVersionsProvider {
+            use RangesProviderStub;
+        }, new PackageMetadataLookupFromComposerRepositories($installed, static fn (): ?LockArrayRepository => $locked));
+    }
+
+    private function build(DeprecatedPackageVersionsProvider $provider, ?PackageMetadataLookup $lookup = null): FindDeprecatedPackages
     {
         return new FindDeprecatedPackages(
             $provider,
@@ -65,7 +118,7 @@ final class FindDeprecatedPackagesTest extends PackageFinderTestCase
                     return [];
                 }
             },
-            InstalledPackagesReadOnlyRepository::fromInstalledPackages(new InstalledRepository([new InstalledArrayRepository()])),
+            $lookup ?? new PackageMetadataLookupFromComposerRepositories(new InstalledArrayRepository(), static fn (): ?LockArrayRepository => null),
         );
     }
 }

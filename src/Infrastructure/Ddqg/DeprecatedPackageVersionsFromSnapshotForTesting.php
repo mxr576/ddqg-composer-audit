@@ -22,8 +22,8 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\DeprecatedPackageVer
  */
 final class DeprecatedPackageVersionsFromSnapshotForTesting implements DeprecatedPackageVersionsProvider
 {
-    public function findByPackages(string ...$package_names): array
+    public function findByPackages(array $packageConstraintMap): array
     {
-        return PackageVersionConstraintsFromDdqgComposerJson::extract(new FileChunks(__DIR__ . '/fixtures/deprecated-composer-2024-01-08.json'), $package_names);
+        return PackageVersionConstraintsFromDdqgComposerJson::extract(new FileChunks(__DIR__ . '/fixtures/deprecated-composer-2024-01-08.json'), array_keys($packageConstraintMap));
     }
 }

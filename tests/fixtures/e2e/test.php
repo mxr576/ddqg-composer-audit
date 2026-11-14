@@ -58,3 +58,6 @@ Assert::true($package_has_advisory_by_id($audit_result, 'drupal/core', 'DDQG-ins
 
 // D10 incompatibility
 Assert::true($package_has_advisory_by_id($audit_result, 'drupal/apigee_edge', 'DDQG-D10-incompatible-drupal-apigee_edge'), 'The installed version of drupal/apigee_edge is flagged by DDQG Composer Audit extension because it does not support Drupal 10');
+
+// D10 incompatibility of a dev-only package, found when auditing the lock file.
+Assert::true($package_has_advisory_by_id($audit_result, 'drupal/devel', 'DDQG-D10-incompatible-drupal-devel'), 'The locked version of dev-only drupal/devel is flagged by DDQG Composer Audit extension because it does not support Drupal 10');

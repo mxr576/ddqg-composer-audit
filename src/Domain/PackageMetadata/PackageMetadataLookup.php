@@ -12,17 +12,15 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Domain\InstalledPackages;
+namespace mxr576\ddqgComposerAudit\Domain\PackageMetadata;
 
 use Composer\Package\PackageInterface;
 use Composer\Semver\Constraint\ConstraintInterface;
 
-interface InstalledPackagesReadOnlyRepository
+interface PackageMetadataLookup
 {
-    public function findByName(string $package_name, string|ConstraintInterface $version): ?PackageInterface;
-
     /**
-     * @return PackageInterface[]
+     * Finds the metadata of a package version, or null if there is none.
      */
-    public function getPackages(): array;
+    public function find(string $packageName, string|ConstraintInterface $version): ?PackageInterface;
 }

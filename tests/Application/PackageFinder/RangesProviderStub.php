@@ -33,12 +33,12 @@ trait RangesProviderStub
     /**
      * @throws PackageVersionsCouldNotBeFetched
      */
-    public function findByPackages(string ...$package_names): array
+    public function findByPackages(array $packageConstraintMap): array
     {
         if ($this->fails) {
             throw new PackageVersionsCouldNotBeFetched('DDQG could not be fetched.');
         }
 
-        return array_intersect_key($this->ranges, array_flip($package_names));
+        return array_intersect_key($this->ranges, array_flip(array_keys($packageConstraintMap)));
     }
 }

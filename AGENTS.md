@@ -44,6 +44,7 @@ The e2e test is the acceptance test for Composer integration. It runs `composer 
 composer install -d tests/fixtures/composer_home && composer install -d tests/fixtures/e2e
 composer reinstall -d tests/fixtures/composer_home mxr576/ddqg-composer-audit
 tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --format=json)"
+tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --locked --format=json)"
 ```
 
 `tests/fixtures/composer_home` holds a mirrored copy of this plugin, and `composer install` leaves an existing copy as it is. Run the `reinstall` line after every `src/` change, or the e2e test runs stale plugin code.

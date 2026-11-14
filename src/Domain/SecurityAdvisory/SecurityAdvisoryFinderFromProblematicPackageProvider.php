@@ -34,9 +34,8 @@ final class SecurityAdvisoryFinderFromProblematicPackageProvider implements Secu
     public function find(array $packageConstraintMap): array
     {
         $advisories = [];
-        $filter_by_packages = array_keys($packageConstraintMap);
         try {
-            foreach ($this->provider->findByPackages(...$filter_by_packages) as $package_name => $version_range) {
+            foreach ($this->provider->findByPackages($packageConstraintMap) as $package_name => $version_range) {
                 $package_version_constraint = $this->versionParser->parseConstraints($version_range);
                 if ($package_version_constraint->matches($packageConstraintMap[$package_name])) {
                     // getVersion() only exists on \Composer\Semver\Constraint\Constraint::getVersion().

@@ -15,16 +15,14 @@ declare(strict_types=1);
 namespace mxr576\ddqgComposerAudit\Supportive\Factory;
 
 use Composer\EventDispatcher\EventDispatcher;
-use Composer\Package\Locker;
 use Composer\Package\RootPackageInterface;
-use Composer\Repository\InstalledRepository;
 use Composer\Semver\VersionParser;
 use Composer\Util\HttpDownloader;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindDeprecatedPackages;
+use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\DeprecatedPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageFinderConfigurationProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageIgnoreRulesFromConfiguration;
-use mxr576\ddqgComposerAudit\Infrastructure\Composer\InstalledPackagesReadOnlyRepository;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DeprecatedPackageVersionsFromLatestDdqgBuild;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DeprecatedPackageVersionsFromSnapshotForTesting;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\Psr14EventDispatcherAdapterForComposer;
@@ -43,47 +41,14 @@ final class FindDeprecatedPackagesFactory
     ) {
     }
 
-    public function inInstalledDependencies(InstalledRepository $installedRepository): FindDeprecatedPackages
+    public function create(PackageMetadataLookup $packageMetadataLookup): FindDeprecatedPackages
     {
         return new FindDeprecatedPackages(
             $this->getDeprecatedPackageVersionsSource(),
             $this->versionParser,
             new Psr14EventDispatcherAdapterForComposer($this->eventDispatcher),
             new DeprecatedPackageIgnoreRulesFromConfiguration(new DeprecatedPackageFinderConfigurationProvider($this->project, $this->versionParser)),
-            InstalledPackagesReadOnlyRepository::fromInstalledPackages($installedRepository),
-        );
-    }
-
-    public function inInstalledRequiredDependencies(InstalledRepository $installedRepository): FindDeprecatedPackages
-    {
-        return new FindDeprecatedPackages(
-            $this->getDeprecatedPackageVersionsSource(),
-            $this->versionParser,
-            new Psr14EventDispatcherAdapterForComposer($this->eventDispatcher),
-            new DeprecatedPackageIgnoreRulesFromConfiguration(new DeprecatedPackageFinderConfigurationProvider($this->project, $this->versionParser)),
-            InstalledPackagesReadOnlyRepository::fromInstalledRequiredPackages($installedRepository, $this->project),
-        );
-    }
-
-    public function inLockedDependencies(Locker $locker): FindDeprecatedPackages
-    {
-        return new FindDeprecatedPackages(
-            $this->getDeprecatedPackageVersionsSource(),
-            $this->versionParser,
-            new Psr14EventDispatcherAdapterForComposer($this->eventDispatcher),
-            new DeprecatedPackageIgnoreRulesFromConfiguration(new DeprecatedPackageFinderConfigurationProvider($this->project, $this->versionParser)),
-            InstalledPackagesReadOnlyRepository::fromLocker($locker, true),
-        );
-    }
-
-    public function inLockedRequiredDependencies(Locker $locker): FindDeprecatedPackages
-    {
-        return new FindDeprecatedPackages(
-            $this->getDeprecatedPackageVersionsSource(),
-            $this->versionParser,
-            new Psr14EventDispatcherAdapterForComposer($this->eventDispatcher),
-            new DeprecatedPackageIgnoreRulesFromConfiguration(new DeprecatedPackageFinderConfigurationProvider($this->project, $this->versionParser)),
-            InstalledPackagesReadOnlyRepository::fromLocker($locker, false),
+            $packageMetadataLookup,
         );
     }
 

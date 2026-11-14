@@ -18,10 +18,10 @@ use Composer\Util\HttpDownloader;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\NonDrupal10CompatiblePackageVersionsProvider;
 
 /**
- * @see \mxr576\ddqgComposerAudit\Supportive\Infrastructure\Composer\NonDrupal10CompatiblePackageVersionsProviderFromComposerLock
+ * @see \mxr576\ddqgComposerAudit\Supportive\Infrastructure\Composer\NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata
  *
  *@todo This is currently dead code because always an instance of
- *   NonDrupal10CompatiblePackageVersionsProviderFromComposerLock is used
+ *   NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata is used
  *   instead.
  *
  * @internal

@@ -15,15 +15,15 @@ declare(strict_types=1);
 namespace mxr576\ddqgComposerAudit\Domain\PackageIgnore;
 
 use Composer\Semver\Constraint\ConstraintInterface;
-use mxr576\ddqgComposerAudit\Domain\InstalledPackages\InstalledPackagesReadOnlyRepository;
+use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
 
 /**
  * @internal
  */
-final class IgnorePackageByInstalledVersionOfOtherPackage implements PackageIgnoreRule
+final class IgnorePackageByPresentVersionOfOtherPackage implements PackageIgnoreRule
 {
     public function __construct(
-        private readonly InstalledPackagesReadOnlyRepository $installedPackagesReadOnlyRepository,
+        private readonly PackageMetadataLookup $packageMetadataLookup,
         private readonly string $packageName,
         private readonly string $otherPackageName,
         private readonly ConstraintInterface $otherPackageRule,
@@ -33,7 +33,7 @@ final class IgnorePackageByInstalledVersionOfOtherPackage implements PackageIgno
     public function evaluate(string $packageName, ConstraintInterface $version): bool
     {
         if ($packageName === $this->packageName) {
-            $other_package = $this->installedPackagesReadOnlyRepository->findByName($this->otherPackageName, $this->otherPackageRule);
+            $other_package = $this->packageMetadataLookup->find($this->otherPackageName, $this->otherPackageRule);
 
             return null === $other_package;
         }

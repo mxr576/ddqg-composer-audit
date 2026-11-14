@@ -77,5 +77,8 @@
                 "type:drupal-custom-theme"
             ]
         }
+    },
+    "require-dev": {
+        "drupal/devel": "4.2.1"
     }
 }
