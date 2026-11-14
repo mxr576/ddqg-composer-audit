@@ -57,7 +57,6 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         if ($io instanceof ConsoleIO) {
             $ro_io = new \ReflectionObject($io);
             if ($ro_io->hasProperty('input')) {
-                $ro_io->getProperty('input')->setAccessible(true);
                 assert($ro_io->getProperty('input')->getValue($io) instanceof InputInterface);
                 $with_dev_dependencies_included = str_contains((string) $ro_io->getProperty('input')->getValue($io), '--no-dev');
                 $from_locked_dependencies = str_contains((string) $ro_io->getProperty('input')->getValue($io), '--locked');
