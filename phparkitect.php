@@ -15,6 +15,8 @@ declare(strict_types=1);
 use Arkitect\ClassSet;
 use Arkitect\CLI\Config;
 use Arkitect\Expression\ForClasses\IsFinal;
+use Arkitect\Expression\ForClasses\IsNotInterface;
+use Arkitect\Expression\ForClasses\IsNotTrait;
 use Arkitect\Expression\ForClasses\NotDependsOnTheseNamespaces;
 use Arkitect\Expression\ForClasses\NotHaveDependencyOutsideNamespace;
 use Arkitect\Expression\ForClasses\ResideInOneOfTheseNamespaces;
@@ -44,17 +46,19 @@ return static function (Config $config): void {
 
     $rules[] = Rule::allClasses()
       ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Domain'))
+      ->andThat(new IsNotInterface())
+      ->andThat(new IsNotTrait())
       ->should(new IsFinal())
       ->because('We want to protect our Domain');
 
     $rules[] = Rule::allClasses()
       ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Infrastructure'))
-      ->should(new NotDependsOnTheseNamespaces('mxr576\ddqgComposerAudit\Application', 'mxr576\ddqgComposerAudit\Presentation', 'mxr576\ddqgComposerAudit\Supportive'))
+      ->should(new NotDependsOnTheseNamespaces(['mxr576\ddqgComposerAudit\Application', 'mxr576\ddqgComposerAudit\Presentation', 'mxr576\ddqgComposerAudit\Supportive']))
       ->because('The Infrastructure layer should only depend on the Domain layer and on external namespaces. It is better if it does not depend on anything from Application. (See exceptions in baseline.)');
 
     $rules[] = Rule::allClasses()
       ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Presentation'))
-      ->should(new NotDependsOnTheseNamespaces('mxr576\ddqgComposerAudit\Domain', 'mxr576\ddqgComposerAudit\Infrastructure'))
+      ->should(new NotDependsOnTheseNamespaces(['mxr576\ddqgComposerAudit\Domain', 'mxr576\ddqgComposerAudit\Infrastructure']))
       ->because('The Presentation layer should only depend on the Application layer, stuff in Supportive and external namespaces.');
 
     $rules[] = Rule::allClasses()
