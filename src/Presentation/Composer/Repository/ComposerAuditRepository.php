@@ -46,6 +46,6 @@ final class ComposerAuditRepository extends ArrayRepository implements AdvisoryP
             return ['namesFound' => [], 'advisories' => []];
         }
 
-        return ['namesFound' => array_keys($advisories), 'advisories' => $advisories];
+        return ['namesFound' => array_keys($advisories), 'advisories' => array_map(array_values(...), $advisories)];
     }
 }
