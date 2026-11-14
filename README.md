@@ -70,6 +70,43 @@ $ composer audit
 +-------------------+----------------------------------------------------------------------------------+
 ```
 
+## Update-time blocking
+
+Composer uses DDQG advisories to block package versions: during `composer update`, `require` and `remove`, it drops
+candidate versions that have a matching advisory, so insecure, unsupported and deprecated versions (and, if
+[enabled](#check-drupal-10-compatibility), versions that are not Drupal 10 compatible) are not selected. Blocking applies
+only to packages Composer is allowed to change: `composer update vendor/package` does not block the locked versions of
+other packages.
+
+This plugin has no setting of its own for update-time blocking. Control it with Composer's
+[`policy`](https://getcomposer.org/doc/06-config.md#policy) settings, from the narrowest to the broadest:
+
+* Keep reporting an advisory in `composer audit`, but stop it from blocking, with an `ignore-id` rule that applies only
+  to blocking (`on-block: true`, `on-audit: false`):
+
+  ```json
+      "config": {
+          "policy": {
+              "advisories": {
+                  "ignore-id": {
+                      "DDQG-insecure-drupal-core": {
+                          "reason": "Upgrade scheduled for next sprint",
+                          "on-block": true,
+                          "on-audit": false
+                      }
+                  }
+              }
+          }
+      }
+  ```
+
+* Skip blocking for a single run with `--no-blocking` or the `COMPOSER_NO_BLOCKING=1` environment variable. This
+  disables every Composer blocking policy, not only advisories.
+* Turn advisory blocking off permanently with `policy.advisories.block: false`.
+
+The legacy `audit.ignore` and `audit.block-insecure` settings still work, but Composer deprecated them in favour of
+`policy`.
+
 ## Configuration
 
 Quality Assurance can feel painful, but it is an important part of professional software development. The goal of this
@@ -125,6 +162,11 @@ painless.
 ```
 
 or by setting the `DDQG_COMPOSER_AUDIT_CHECK_D10_COMPATIBILITY=true` environment variable.
+
+Notice: during `composer update`, this advisory can block the installed version of a package that is not Drupal 10
+compatible (see [Update-time blocking](#update-time-blocking)). Composer then resolves to a different version or fails to
+resolve. The check does not judge versions that are neither installed nor locked, so the version Composer picks is not
+guaranteed to be Drupal 10 compatible.
 
 **This is a seasonal feature that will be removed after Drupal 9 EOL.**
 
