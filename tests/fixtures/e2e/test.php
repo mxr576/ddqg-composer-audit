@@ -24,6 +24,12 @@ if (null === $audit_output) {
 
 fwrite(STDERR, $audit_output);
 
+$mode = $argv[2] ?? null;
+if (null !== $mode && 'no-d10' !== $mode) {
+    throw new LogicException(sprintf('Unknown mode "%s". The only supported mode is "no-d10".', $mode));
+}
+$d10_check_disabled = 'no-d10' === $mode;
+
 try {
     $audit_result = json_decode($audit_output, true, flags: JSON_THROW_ON_ERROR);
 } catch (JsonException $e) {
@@ -55,6 +61,14 @@ Assert::false($package_has_advisory_by_id($audit_result, 'drupal/swiftmailer', '
 // @TODO Requires Composer 2.6.0 and its multi-repo security advisory support.
 // Assert::true($package_has_advisory_by_id($audit_result, 'drupal/apigee_edge', 'DDQG-insecure-drupal-apigee_edge'), 'The installed version of drupal/apigee_edge is flagged as insecure by DDQG Composer Audit extension0');
 Assert::true($package_has_advisory_by_id($audit_result, 'drupal/core', 'DDQG-insecure-drupal-core'), 'drupal/core is flagged as insecure by DDQG Composer Audit extension');
+
+if ($d10_check_disabled) {
+    // The D10 check is off: no D10 advisory at all, other categories still report (asserted above).
+    foreach ($audit_result['advisories'] ?? [] as $package => $_) {
+        Assert::false($package_has_advisory_by_id($audit_result, $package, 'DDQG-D10-incompatible'), sprintf('%s is not flagged as D10 incompatible while the check is disabled', $package));
+    }
+    exit(0);
+}
 
 // D10 incompatibility
 Assert::true($package_has_advisory_by_id($audit_result, 'drupal/apigee_edge', 'DDQG-D10-incompatible-drupal-apigee_edge'), 'The installed version of drupal/apigee_edge is flagged by DDQG Composer Audit extension because it does not support Drupal 10');

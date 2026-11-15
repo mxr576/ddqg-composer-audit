@@ -21,7 +21,6 @@ use Composer\Repository\InstalledArrayRepository;
 use Composer\Repository\LockArrayRepository;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindNonDrupal10CompatiblePackages;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\NonDrupal10CompatiblePackageFinderConfigurationProvider;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageFinder;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\NonDrupal10CompatiblePackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\PackageMetadataLookupFromComposerRepositories;
@@ -75,16 +74,6 @@ final class FindNonDrupal10CompatiblePackagesTest extends PackageFinderTestCase
     /**
      * @throws UnexpectedPackageFinderException
      */
-    public function testNothingIsFlaggedWhileCheckIsDisabled(): void
-    {
-        $installed = new InstalledArrayRepository([$this->module('1.0.0', '^9.4')]);
-
-        self::assertSame([], $this->finder($installed, null, false)([self::PACKAGE => $this->exact('1.0.0')]));
-    }
-
-    /**
-     * @throws UnexpectedPackageFinderException
-     */
     public function testMetadataIsFoundInLockFileWhenNothingIsInstalled(): void
     {
         $locked = new LockArrayRepository([$this->module('1.0.0', '^9.4')]);
@@ -119,7 +108,7 @@ final class FindNonDrupal10CompatiblePackagesTest extends PackageFinderTestCase
     {
         return $this->build(new class($ranges, $fetchFails) implements NonDrupal10CompatiblePackageVersionsProvider {
             use RangesProviderStub;
-        }, true);
+        });
     }
 
     private function module(string $version, string $coreConstraint): PackageInterface
@@ -131,32 +120,21 @@ final class FindNonDrupal10CompatiblePackagesTest extends PackageFinderTestCase
         return $package;
     }
 
-    private function finder(InstalledArrayRepository $installed, ?LockArrayRepository $locked, bool $enabled = true): FindNonDrupal10CompatiblePackages
+    private function finder(InstalledArrayRepository $installed, ?LockArrayRepository $locked): FindNonDrupal10CompatiblePackages
     {
         return $this->build(
             new NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata(
                 new PackageMetadataLookupFromComposerRepositories($installed, static fn (): ?LockArrayRepository => $locked),
                 $this->versionParser(),
             ),
-            $enabled,
         );
     }
 
-    private function build(NonDrupal10CompatiblePackageVersionsProvider $provider, bool $enabled): FindNonDrupal10CompatiblePackages
+    private function build(NonDrupal10CompatiblePackageVersionsProvider $provider): FindNonDrupal10CompatiblePackages
     {
         return new FindNonDrupal10CompatiblePackages(
             $provider,
             $this->versionParser(),
-            new class($enabled) implements NonDrupal10CompatiblePackageFinderConfigurationProvider {
-                public function __construct(private readonly bool $enabled)
-                {
-                }
-
-                public function isEnabled(): bool
-                {
-                    return $this->enabled;
-                }
-            },
         );
     }
 }

@@ -16,12 +16,11 @@ namespace mxr576\ddqgComposerAudit\Infrastructure\Composer;
 
 use Composer\Package\RootPackageInterface;
 use cweagans\Composer\ConfigurablePlugin;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\NonDrupal10CompatiblePackageFinderConfigurationProvider as NonDrupal10CompatiblePackageVersionsProviderContract;
 
 /**
  * @internal
  */
-final class NonDrupal10CompatiblePackageFinderConfigurationProvider implements NonDrupal10CompatiblePackageVersionsProviderContract
+final class NonDrupal10CompatiblePackageFinderConfigurationProvider
 {
     private bool $isConfigured = false;
 

@@ -32,12 +32,22 @@ final class FindNonDrupal10CompatiblePackagesFactory
     ) {
     }
 
+    /**
+     * Whether the D10 check is on, from `extra` or the environment.
+     *
+     * The setting is fixed for the whole Composer run, so the wiring decides
+     * once whether to register the finder at all.
+     */
+    public function isCheckEnabled(): bool
+    {
+        return (new NonDrupal10CompatiblePackageFinderConfigurationProvider($this->rootPackage))->isEnabled();
+    }
+
     public function create(PackageMetadataLookup $packageMetadataLookup): FindNonDrupal10CompatiblePackages
     {
         return new FindNonDrupal10CompatiblePackages(
             new NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata($packageMetadataLookup, $this->versionParser),
             $this->versionParser,
-            new NonDrupal10CompatiblePackageFinderConfigurationProvider($this->rootPackage)
         );
     }
 }

@@ -80,12 +80,15 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
                 $io
             )
         );
-        $composer->getRepositoryManager()->prependRepository(
-            new ComposerAuditRepository(
-                (new FindNonDrupal10CompatiblePackagesFactory($composer->getPackage(), $version_parser))->create($package_metadata_lookup),
-                $io
-            )
-        );
+        $find_non_drupal10_compatible_packages_factory = new FindNonDrupal10CompatiblePackagesFactory($composer->getPackage(), $version_parser);
+        if ($find_non_drupal10_compatible_packages_factory->isCheckEnabled()) {
+            $composer->getRepositoryManager()->prependRepository(
+                new ComposerAuditRepository(
+                    $find_non_drupal10_compatible_packages_factory->create($package_metadata_lookup),
+                    $io
+                )
+            );
+        }
     }
 
     public function deactivate(Composer $composer, IOInterface $io): void

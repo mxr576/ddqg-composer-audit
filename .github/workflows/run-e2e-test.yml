@@ -63,3 +63,6 @@ jobs:
 
       - name: Test `composer audit --locked` output
         run: tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --locked --format=json)"
+
+      - name: Test `composer audit` output with the D10 check disabled
+        run: tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_CHECK_D10_COMPATIBILITY=false DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --format=json)" no-d10
