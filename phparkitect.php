@@ -30,6 +30,16 @@ return static function (Config $config): void {
     $rules = [];
 
     $rules[] = Rule::allClasses()
+      ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit'))
+      ->should(new ResideInOneOfTheseNamespaces(
+          'mxr576\ddqgComposerAudit\Domain',
+          'mxr576\ddqgComposerAudit\Application',
+          'mxr576\ddqgComposerAudit\Infrastructure',
+          'mxr576\ddqgComposerAudit\Presentation',
+      ))
+      ->because('Every class belongs to exactly one layer, so the dependency rules below cover all of src/.');
+
+    $rules[] = Rule::allClasses()
       ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Domain'))
       ->should(new NotHaveDependencyOutsideNamespace('mxr576\ddqgComposerAudit\Domain', [
           'RuntimeException',
