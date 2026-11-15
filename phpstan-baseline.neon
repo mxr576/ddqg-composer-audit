@@ -16,37 +16,37 @@ parameters:
 			message: '#^Parameter \#1 \$haystack of function str_contains expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Infrastructure/Composer/DeprecatedPackageFinderConfigurationProvider.php
+			path: src/Infrastructure/Composer/DeprecatedPackageIgnoreRulesFromConfiguration.php
 
 		-
 			message: '#^Parameter \#2 \$callback of function array_reduce expects callable\(array, mixed\)\: array, Closure\(array, string\)\: non\-empty\-array given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Infrastructure/Composer/DeprecatedPackageFinderConfigurationProvider.php
+			path: src/Infrastructure/Composer/DeprecatedPackageIgnoreRulesFromConfiguration.php
 
 		-
 			message: '#^Parameter \#2 \$version of static method mxr576\\ddqgComposerAudit\\Domain\\PackageIgnore\\IgnorePackageByVersionConstraintMatch\:\:fromUserInput\(\) expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Infrastructure/Composer/DeprecatedPackageFinderConfigurationProvider.php
+			path: src/Infrastructure/Composer/DeprecatedPackageIgnoreRulesFromConfiguration.php
 
 		-
 			message: '#^Parameter \#1 \$haystack of function str_contains expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Infrastructure/Composer/UnsupportedPackageFinderConfigurationProvider.php
+			path: src/Infrastructure/Composer/UnsupportedPackageIgnoreRulesFromConfiguration.php
 
 		-
 			message: '#^Parameter \#2 \$callback of function array_reduce expects callable\(array, mixed\)\: array, Closure\(array, string\)\: non\-empty\-array given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Infrastructure/Composer/UnsupportedPackageFinderConfigurationProvider.php
+			path: src/Infrastructure/Composer/UnsupportedPackageIgnoreRulesFromConfiguration.php
 
 		-
 			message: '#^Parameter \#2 \$version of static method mxr576\\ddqgComposerAudit\\Domain\\PackageIgnore\\IgnorePackageByVersionConstraintMatch\:\:fromUserInput\(\) expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
-			path: src/Infrastructure/Composer/UnsupportedPackageFinderConfigurationProvider.php
+			path: src/Infrastructure/Composer/UnsupportedPackageIgnoreRulesFromConfiguration.php
 
 		-
 			message: '#^Method mxr576\\ddqgComposerAudit\\Infrastructure\\Ddqg\\PackageVersionConstraintsFromDdqgComposerJson\:\:extract\(\) should return array\<string, string\> but returns array\.$#'

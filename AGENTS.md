@@ -14,7 +14,7 @@ The plugin runs inside the user's Composer process, so:
 
 `src/` uses layers: `Domain` → `Application` → `Infrastructure` / `Presentation`, plus `Supportive` for wiring (factories, adapters) that fits no layer. `phparkitect.php` holds the dependency rules, including the short list of Composer classes `Domain` may use.
 
-Fix new violations in the code. Leave `phparkitect-baseline.json` and `phpstan-baseline.neon` as they are: both record existing debt.
+Fix new violations in the code. Leave `phpstan-baseline.neon` as it is: it records existing debt. There is no phparkitect baseline.
 
 ## Static analysis
 
@@ -43,7 +43,8 @@ The e2e test is the acceptance test for Composer integration. It runs `composer 
 ```shell
 composer install -d tests/fixtures/composer_home && composer install -d tests/fixtures/e2e
 composer reinstall -d tests/fixtures/composer_home mxr576/ddqg-composer-audit
-tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --format=json)"
+tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -v -d tests/fixtures/e2e audit --format=json 2>/tmp/audit-stderr.txt)"
+test "$(grep -c "DDQG Composer Audit plugin's ignore features are deprecated" /tmp/audit-stderr.txt)" -eq 2
 tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --locked --format=json)"
 tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_CHECK_D10_COMPATIBILITY=false DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --format=json)" no-d10
 ```

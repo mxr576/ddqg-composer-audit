@@ -56,7 +56,7 @@ return static function (Config $config): void {
     $rules[] = Rule::allClasses()
       ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Infrastructure'))
       ->should(new NotDependsOnTheseNamespaces(['mxr576\ddqgComposerAudit\Application', 'mxr576\ddqgComposerAudit\Presentation', 'mxr576\ddqgComposerAudit\Supportive']))
-      ->because('The Infrastructure layer should only depend on the Domain layer and on external namespaces. It is better if it does not depend on anything from Application. (See exceptions in baseline.)');
+      ->because('The Infrastructure layer should only depend on the Domain layer and on external namespaces. It is better if it does not depend on anything from Application.');
 
     $rules[] = Rule::allClasses()
       ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Presentation'))

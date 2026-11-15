@@ -29,10 +29,8 @@ use mxr576\ddqgComposerAudit\Domain\PackageIgnore\IgnoreVariationcacheMovedIntoC
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\NoPackageIgnoreRules;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
-use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageFinderConfigurationProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageIgnoreRulesFromConfiguration;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\PackageMetadataLookupFromComposerRepositories;
-use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageFinderConfigurationProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageIgnoreRulesFromConfiguration;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DdqgBranch;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromSnapshotForTesting;
@@ -270,8 +268,8 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
         $parser = $this->parser();
 
         return DdqgCategory::Unsupported === $category
-            ? new UnsupportedPackageIgnoreRulesFromConfiguration(new UnsupportedPackageFinderConfigurationProvider($root, $parser))
-            : new DeprecatedPackageIgnoreRulesFromConfiguration(new DeprecatedPackageFinderConfigurationProvider($root, $parser));
+            ? new UnsupportedPackageIgnoreRulesFromConfiguration($root, $parser)
+            : new DeprecatedPackageIgnoreRulesFromConfiguration($root, $parser);
     }
 
     private function build(DdqgCategory $category, ProblematicPackageVersionsProvider $source, ?PackageIgnoreRuleProvider $ignoreRules = null): PackageFinder

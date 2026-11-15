@@ -20,7 +20,7 @@ use cweagans\Composer\ConfigurablePlugin;
 /**
  * @internal
  */
-final class NonDrupal10CompatiblePackageFinderConfigurationProvider
+final class D10CompatibilityCheckSetting
 {
     private bool $isConfigured = false;
 

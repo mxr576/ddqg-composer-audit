@@ -59,7 +59,11 @@ jobs:
 
       - name: Test `composer audit` output
         # See https://github.com/symfony/symfony/issues/53460 why --no-ansi was added.
-        run: tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --format=json)"
+        # Composer shows every E_USER_DEPRECATED only at -v. The fixture sets both
+        # ignore-unsupported-versions and ignore-deprecated-versions, so the notice fires twice.
+        run: |
+          tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -v -d tests/fixtures/e2e audit --format=json 2>/tmp/audit-stderr.txt)"
+          test "$(grep -c "DDQG Composer Audit plugin's ignore features are deprecated" /tmp/audit-stderr.txt)" -eq 2
 
       - name: Test `composer audit --locked` output
         run: tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_TEST_ENV=1 COMPOSER_HOME=$PWD/tests/fixtures/composer_home ./vendor/bin/composer --no-ansi -d tests/fixtures/e2e audit --locked --format=json)"

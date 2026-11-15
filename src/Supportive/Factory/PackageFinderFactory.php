@@ -27,10 +27,8 @@ use mxr576\ddqgComposerAudit\Domain\PackageIgnore\NoPackageIgnoreRules;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
-use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageFinderConfigurationProvider;
+use mxr576\ddqgComposerAudit\Infrastructure\Composer\D10CompatibilityCheckSetting;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageIgnoreRulesFromConfiguration;
-use mxr576\ddqgComposerAudit\Infrastructure\Composer\NonDrupal10CompatiblePackageFinderConfigurationProvider;
-use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageFinderConfigurationProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageIgnoreRulesFromConfiguration;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DdqgBranch;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromLatestDdqgBuild;
@@ -73,7 +71,7 @@ final class PackageFinderFactory
             $this->create(DdqgCategory::Deprecated, $this->ddqgSource(DdqgBranch::Deprecated)),
             $this->create(DdqgCategory::Insecure, $this->ddqgSource(DdqgBranch::Insecure)),
         ];
-        if ((new NonDrupal10CompatiblePackageFinderConfigurationProvider($this->project))->isEnabled()) {
+        if ((new D10CompatibilityCheckSetting($this->project))->isEnabled()) {
             $finders[] = $this->create(DdqgCategory::D10Incompatible, new NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata($this->packageMetadataLookup, $this->versionParser));
         }
 
@@ -102,9 +100,9 @@ final class PackageFinderFactory
     private function ignoreRules(DdqgCategory $category): PackageIgnoreRuleProvider
     {
         return match ($category) {
-            DdqgCategory::Unsupported => new UnsupportedPackageIgnoreRulesFromConfiguration(new UnsupportedPackageFinderConfigurationProvider($this->project, $this->versionParser)),
+            DdqgCategory::Unsupported => new UnsupportedPackageIgnoreRulesFromConfiguration($this->project, $this->versionParser),
             DdqgCategory::Deprecated => new CompositePackageIgnoreRuleProvider(
-                new DeprecatedPackageIgnoreRulesFromConfiguration(new DeprecatedPackageFinderConfigurationProvider($this->project, $this->versionParser)),
+                new DeprecatedPackageIgnoreRulesFromConfiguration($this->project, $this->versionParser),
                 new IgnoreVariationcacheMovedIntoCore($this->packageMetadataLookup),
             ),
             default => new NoPackageIgnoreRules(),
