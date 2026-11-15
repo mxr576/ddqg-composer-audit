@@ -12,7 +12,7 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Supportive\Factory;
+namespace mxr576\ddqgComposerAudit\Presentation\Composer\Wiring;
 
 use Composer\EventDispatcher\EventDispatcher;
 use Composer\Package\RootPackageInterface;
@@ -29,13 +29,13 @@ use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\D10CompatibilityCheckSetting;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageIgnoreRulesFromConfiguration;
+use mxr576\ddqgComposerAudit\Infrastructure\Composer\NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageIgnoreRulesFromConfiguration;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DdqgBranch;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromLatestDdqgBuild;
 use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromSnapshotForTesting;
-use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\Psr14EventDispatcherAdapterForComposer;
-use mxr576\ddqgComposerAudit\Supportive\Infrastructure\Composer\NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata;
-use mxr576\ddqgComposerAudit\Supportive\Util\Environment;
+use mxr576\ddqgComposerAudit\Presentation\Composer\Environment;
+use mxr576\ddqgComposerAudit\Presentation\Composer\Event\Psr14EventDispatcherAdapterForComposer;
 
 /**
  * Builds the package finder of a DDQG category.

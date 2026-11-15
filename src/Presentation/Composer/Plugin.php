@@ -20,10 +20,10 @@ use Composer\IO\IOInterface;
 use Composer\IO\NullIO;
 use Composer\Package\Version\VersionParser;
 use Composer\Plugin\PluginInterface;
+use mxr576\ddqgComposerAudit\Presentation\Composer\Event\AdvisoryWasIgnoredAdapter;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\ComposerAuditRepository;
-use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\AdvisoryWasIgnoredAdapter;
-use mxr576\ddqgComposerAudit\Supportive\Factory\PackageFinderFactory;
-use mxr576\ddqgComposerAudit\Supportive\Factory\PackageMetadataLookupFactory;
+use mxr576\ddqgComposerAudit\Presentation\Composer\Wiring\PackageFinderFactory;
+use mxr576\ddqgComposerAudit\Presentation\Composer\Wiring\PackageMetadataLookupFactory;
 
 /**
  * @internal
@@ -70,7 +70,7 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
 
     public function warnAboutIgnoredAdvisory(AdvisoryWasIgnoredAdapter $event): void
     {
-        $this->displayConsoleMessages($this->io, sprintf('<comment>An advisory about the %s "%s" package was ignored by configuration.</comment>', $event->category, $event->packageName));
+        $this->displayConsoleMessages($this->io, sprintf('<comment>An advisory about the %s "%s" package was ignored by configuration.</comment>', $event->wrapped->category->type(), $event->wrapped->packageName));
     }
 
     public static function getSubscribedEvents(): array

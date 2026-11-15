@@ -12,15 +12,15 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Supportive\Factory;
+namespace mxr576\ddqgComposerAudit\Presentation\Composer\Wiring;
 
 use Composer\Composer;
 use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\PackageMetadataLookupFromComposerRepositories;
 
 /**
- * Lets the Presentation layer build the lookup without depending on
- * Infrastructure.
+ * Builds the package metadata lookup from the Composer instance, so
+ * the plugin does not have to know which repositories feed it.
  *
  * @internal
  */

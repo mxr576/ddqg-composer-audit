@@ -12,13 +12,21 @@ The plugin runs inside the user's Composer process, so:
 
 ## Architecture
 
-`src/` uses layers: `Domain` → `Application` → `Infrastructure` / `Presentation`, plus `Supportive` for wiring (factories, adapters) that fits no layer. `phparkitect.php` holds the dependency rules, including the short list of Composer classes `Domain` may use.
+`src/` has four layers: `Domain`, `Application`, `Infrastructure` and `Presentation`. `phparkitect.php` enforces the layering:
 
-Fix new violations in the code. Leave `phpstan-baseline.neon` as it is: it records existing debt. There is no phparkitect baseline.
+- `Domain` sees only `Domain` and a short allow-list of Composer classes.
+- `Application` and `Infrastructure` see only themselves, `Domain` and external code.
+- `Presentation` sees anything, and nothing sees `Presentation`.
+
+`Presentation` is the composition root: `Plugin` and `Presentation\Composer\Wiring` build the object graph, and the event adapters and `Environment` live there too. Every `Presentation` class is `final` and `@internal`.
+
+No phparkitect baseline exists: fix every violation in the code.
 
 ## Static analysis
 
 PHPStan checks exceptions: every method a `RuntimeException` (or subclass) can leave needs a `@throws` tag. `phpstan.neon.dist` lists the unchecked exceptions.
+
+`phpstan-baseline.neon` records existing debt. Fix new errors in the code, and remove an entry when you fix its error (`reportUnmatchedIgnoredErrors: true` fails the build on stale entries).
 
 ## Checks
 
@@ -36,7 +44,7 @@ When you add or change a check, edit the workflow and this section together. Whe
 
 `php-cs-fixer` rewrites `LICENSE.md` to the current year and adds the license header to PHP files. Keep those edits. When it refuses to start because the local PHP is newer than it supports, rerun it with `PHP_CS_FIXER_IGNORE_ENV=1`.
 
-`vendor/bin/phpunit` tests the package finders through `PackageFinder`, asserting only on the returned advisories. When you add or change a test, follow `docs/agents/writing-tests.md`.
+When you add or change a test, follow `docs/agents/writing-tests.md`.
 
 The e2e test is the acceptance test for Composer integration. It runs `composer audit` against a fixture project (`tests/fixtures/e2e`) and checks the JSON in `tests/fixtures/e2e/test.php`:
 

@@ -12,7 +12,7 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Supportive\Adapter\Composer;
+namespace mxr576\ddqgComposerAudit\Presentation\Composer\Event;
 
 use Composer\EventDispatcher\Event as ComposerEvent;
 use Composer\EventDispatcher\EventDispatcher as ComposerEventDispatcher;
@@ -32,7 +32,7 @@ final class Psr14EventDispatcherAdapterForComposer implements EventDispatcherInt
     public function dispatch(object $event): object
     {
         if ($event instanceof AdvisoryWasIgnored) {
-            $composer_event = AdvisoryWasIgnoredAdapter::createFromWrapped($event);
+            $composer_event = new AdvisoryWasIgnoredAdapter($event);
         } else {
             $composer_event = new ComposerEvent($event::class);
         }

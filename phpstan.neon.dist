@@ -7,7 +7,7 @@ includes:
 parameters:
   level: max
   tipsOfTheDay: false
-  reportUnmatchedIgnoredErrors: false
+  reportUnmatchedIgnoredErrors: true
   treatPhpDocTypesAsCertain: false
   exceptions:
     check:

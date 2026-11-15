@@ -13,7 +13,7 @@ composer why-not php <lowest> --locked   # exit 0: every locked package installs
 composer config platform.php <lowest>
 composer update <packages>
 composer config --unset platform.php
-composer update --lock   # the pin changed composer.json; refresh the content-hash
+composer update --lock   # the content-hash covers config.platform, so unsetting the pin makes it stale
 ```
 
 1. **`php` constraint:** update the `php-version` matrices in `.github/workflows/` to match. The lint job runs on the lowest allowed version.

@@ -12,7 +12,7 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Supportive\Util;
+namespace mxr576\ddqgComposerAudit\Presentation\Composer;
 
 use Composer\Util\Platform;
 
