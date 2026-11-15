@@ -22,10 +22,7 @@ use Composer\Package\Version\VersionParser;
 use Composer\Plugin\PluginInterface;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\ComposerAuditRepository;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\AdvisoryWasIgnoredAdapter;
-use mxr576\ddqgComposerAudit\Supportive\Factory\FindDeprecatedPackagesFactory;
-use mxr576\ddqgComposerAudit\Supportive\Factory\FindInsecurePackagesFactoryFromComposerRuntimeDependencies;
-use mxr576\ddqgComposerAudit\Supportive\Factory\FindNonDrupal10CompatiblePackagesFactory;
-use mxr576\ddqgComposerAudit\Supportive\Factory\FindUnsupportedPackagesFactoryFromComposerRuntimeDependencies;
+use mxr576\ddqgComposerAudit\Supportive\Factory\PackageFinderFactory;
 use mxr576\ddqgComposerAudit\Supportive\Factory\PackageMetadataLookupFactory;
 
 /**
@@ -45,48 +42,21 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     public function activate(Composer $composer, IOInterface $io): void
     {
         $this->io = $io;
-        $version_parser = new VersionParser();
-        $package_metadata_lookup = (new PackageMetadataLookupFactory())->create($composer);
+        $finders = (new PackageFinderFactory(
+            $composer->getPackage(),
+            $composer->getLoop()->getHttpDownloader(),
+            $composer->getEventDispatcher(),
+            new VersionParser(),
+            (new PackageMetadataLookupFactory())->create($composer),
+        ))->createForEnabledCategories();
 
-        // Composer currently only displays advisories from one repository for
-        // a package. If multiple ones provides advisories only the first one
-        // is visible.
-        // @see https://github.com/composer/composer/issues/11435.
-        $composer->getRepositoryManager()->prependRepository(
-            new ComposerAuditRepository(
-                (new FindUnsupportedPackagesFactoryFromComposerRuntimeDependencies(
-                    $composer->getPackage(),
-                    $composer->getLoop()->getHttpDownloader(),
-                    $composer->getEventDispatcher(),
-                    $version_parser,
-                ))->create(), $io
-            )
-        );
-        $composer->getRepositoryManager()->prependRepository(
-            new ComposerAuditRepository(
-                (new FindDeprecatedPackagesFactory(
-                    $composer->getPackage(),
-                    $composer->getLoop()->getHttpDownloader(),
-                    $composer->getEventDispatcher(),
-                    $version_parser,
-                ))->create($package_metadata_lookup),
-                $io
-            )
-        );
-        $composer->getRepositoryManager()->prependRepository(
-            new ComposerAuditRepository(
-                (new FindInsecurePackagesFactoryFromComposerRuntimeDependencies($composer->getLoop()->getHttpDownloader(), $version_parser))->create(),
-                $io
-            )
-        );
-        $find_non_drupal10_compatible_packages_factory = new FindNonDrupal10CompatiblePackagesFactory($composer->getPackage(), $version_parser);
-        if ($find_non_drupal10_compatible_packages_factory->isCheckEnabled()) {
-            $composer->getRepositoryManager()->prependRepository(
-                new ComposerAuditRepository(
-                    $find_non_drupal10_compatible_packages_factory->create($package_metadata_lookup),
-                    $io
-                )
-            );
+        // One repository per DDQG category, not one for all: each repository
+        // catches its own fetch failure, so an unreachable DDQG branch empties
+        // only its category and the others still report. The factory returns
+        // the finders in the order they have always been prepended, which
+        // keeps the order of advisories in the audit output.
+        foreach ($finders as $finder) {
+            $composer->getRepositoryManager()->prependRepository(new ComposerAuditRepository($finder, $io));
         }
     }
 
