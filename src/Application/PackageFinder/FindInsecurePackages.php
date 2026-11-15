@@ -16,7 +16,8 @@ namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
 
 use Composer\Semver\VersionParser;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\InsecurePackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinder;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinderFromProblematicPackageProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\UnexpectedSecurityAdvisoryFinderException;
@@ -32,10 +33,10 @@ final class FindInsecurePackages implements PackageFinder
      * Constructs a new object.
      */
     public function __construct(
-        InsecurePackageVersionsProvider $insecurePackageVersionsProvider,
+        ProblematicPackageVersionsProvider $insecurePackageVersionsProvider,
         VersionParser $versionParser,
     ) {
-        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($insecurePackageVersionsProvider, $versionParser);
+        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($insecurePackageVersionsProvider, $versionParser, DdqgCategory::Insecure);
     }
 
     public function __invoke(array $packageConstraintMap): array

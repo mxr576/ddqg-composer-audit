@@ -12,18 +12,14 @@ declare(strict_types=1);
  *
  */
 
-namespace mxr576\ddqgComposerAudit\Supportive\Adapter\Composer;
+namespace mxr576\ddqgComposerAudit\Application\PackageFinder\Event;
 
 use Composer\Advisory\SecurityAdvisory;
-use Composer\EventDispatcher\Event;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\DeprecatedPackageWasIgnored;
+use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule;
 use Webmozart\Assert\Assert;
 
-/**
- * @internal
- */
-final class DeprecatedPackageWasIgnoredAdapter extends Event
+final class AdvisoryWasIgnored
 {
     /**
      * Constructs a new object.
@@ -31,16 +27,11 @@ final class DeprecatedPackageWasIgnoredAdapter extends Event
      * @param SecurityAdvisory[] $advisories
      */
     public function __construct(
+        public readonly DdqgCategory $category,
         public readonly string $packageName,
         public readonly PackageIgnoreRule $ignoreRule,
         public readonly array $advisories,
     ) {
         Assert::allIsInstanceOf($this->advisories, SecurityAdvisory::class);
-        parent::__construct(self::class);
-    }
-
-    public static function createFromWrapped(DeprecatedPackageWasIgnored $event): self
-    {
-        return new self($event->packageName, $event->ignoreRule, $event->advisories);
     }
 }

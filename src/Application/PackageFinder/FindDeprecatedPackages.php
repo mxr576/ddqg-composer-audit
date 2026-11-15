@@ -16,14 +16,15 @@ namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
 
 use Composer\Semver\Constraint\Constraint;
 use Composer\Semver\VersionParser;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\DeprecatedPackageWasIgnored;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\AdvisoryWasIgnored;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
+use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\CompositePackageIgnoreRuleProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\IgnorePackageByPresentVersionOfOtherPackage;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleOptimizer;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\DeprecatedPackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinder;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinderFromProblematicPackageProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\UnexpectedSecurityAdvisoryFinderException;
@@ -38,6 +39,8 @@ final class FindDeprecatedPackages implements PackageFinder
 {
     use PackageIgnoreRuleOptimizer;
 
+    private const CATEGORY = DdqgCategory::Deprecated;
+
     /**
      * @var array<string,array<\mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule>>
      */
@@ -48,7 +51,7 @@ final class FindDeprecatedPackages implements PackageFinder
     private readonly PackageIgnoreRuleProvider $packageIgnoreRuleProvider;
 
     public function __construct(
-        DeprecatedPackageVersionsProvider $unsupportedPackageVersionsProvider,
+        ProblematicPackageVersionsProvider $deprecatedPackageVersionsProvider,
         VersionParser $versionParser,
         private readonly EventDispatcherInterface $eventDispatcher,
         PackageIgnoreRuleProvider $packageIgnoreRuleProvider,
@@ -72,7 +75,7 @@ final class FindDeprecatedPackages implements PackageFinder
                 );
             }
         });
-        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($unsupportedPackageVersionsProvider, $versionParser);
+        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($deprecatedPackageVersionsProvider, $versionParser, self::CATEGORY);
     }
 
     public function __invoke(array $packageConstraintMap): array
@@ -93,7 +96,8 @@ final class FindDeprecatedPackages implements PackageFinder
                     foreach ($this->optimizedIgnoreRules[$package_name] as $rule) {
                         if ($rule->evaluate($package_name, $packageConstraintMap[$package_name])) {
                             $this->eventDispatcher->dispatch(
-                                new DeprecatedPackageWasIgnored(
+                                new AdvisoryWasIgnored(
+                                    self::CATEGORY,
                                     $package_name,
                                     $rule,
                                     $result[$package_name])

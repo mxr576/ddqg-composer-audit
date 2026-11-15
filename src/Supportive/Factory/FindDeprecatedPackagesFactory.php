@@ -20,11 +20,12 @@ use Composer\Semver\VersionParser;
 use Composer\Util\HttpDownloader;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindDeprecatedPackages;
 use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\DeprecatedPackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageFinderConfigurationProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageIgnoreRulesFromConfiguration;
-use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DeprecatedPackageVersionsFromLatestDdqgBuild;
-use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DeprecatedPackageVersionsFromSnapshotForTesting;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DdqgBranch;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromLatestDdqgBuild;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromSnapshotForTesting;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\Psr14EventDispatcherAdapterForComposer;
 use mxr576\ddqgComposerAudit\Supportive\Util\Environment;
 
@@ -44,7 +45,7 @@ final class FindDeprecatedPackagesFactory
     public function create(PackageMetadataLookup $packageMetadataLookup): FindDeprecatedPackages
     {
         return new FindDeprecatedPackages(
-            $this->getDeprecatedPackageVersionsSource(),
+            $this->getPackageVersionsSource(),
             $this->versionParser,
             new Psr14EventDispatcherAdapterForComposer($this->eventDispatcher),
             new DeprecatedPackageIgnoreRulesFromConfiguration(new DeprecatedPackageFinderConfigurationProvider($this->project, $this->versionParser)),
@@ -52,9 +53,9 @@ final class FindDeprecatedPackagesFactory
         );
     }
 
-    private function getDeprecatedPackageVersionsSource(): DeprecatedPackageVersionsProvider
+    private function getPackageVersionsSource(): ProblematicPackageVersionsProvider
     {
         // @todo Find a better place for this logic.
-        return Environment::isTestEnvironment() ? new DeprecatedPackageVersionsFromSnapshotForTesting() : new DeprecatedPackageVersionsFromLatestDdqgBuild($this->httpDownloader);
+        return Environment::isTestEnvironment() ? new PackageVersionsFromSnapshotForTesting(DdqgBranch::Deprecated) : new PackageVersionsFromLatestDdqgBuild(DdqgBranch::Deprecated, $this->httpDownloader);
     }
 }

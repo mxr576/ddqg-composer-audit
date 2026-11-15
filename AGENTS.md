@@ -50,7 +50,7 @@ tests/fixtures/e2e/test.php "$(DDQG_COMPOSER_AUDIT_CHECK_D10_COMPATIBILITY=false
 
 `tests/fixtures/composer_home` holds a mirrored copy of this plugin, and `composer install` leaves an existing copy as it is. Run the `reinstall` line after every `src/` change, or the e2e test runs stale plugin code.
 
-`DDQG_COMPOSER_AUDIT_TEST_ENV=1` swaps the live DDQG fetch for the `*FromSnapshotForTesting` providers in `src/Infrastructure/Ddqg/`. A behaviour change that should show up in audit output needs those snapshots, the fixture's `composer.json`, and the assertions in `test.php` updated together.
+`DDQG_COMPOSER_AUDIT_TEST_ENV=1` swaps the live DDQG fetch for the `PackageVersionsFromSnapshotForTesting` provider in `src/Infrastructure/Ddqg/`. A behaviour change that should show up in audit output needs those snapshots, the fixture's `composer.json`, and the assertions in `test.php` updated together.
 
 ## Feature lifecycle
 

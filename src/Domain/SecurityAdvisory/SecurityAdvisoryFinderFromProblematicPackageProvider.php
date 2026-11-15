@@ -15,19 +15,16 @@ declare(strict_types=1);
 namespace mxr576\ddqgComposerAudit\Domain\SecurityAdvisory;
 
 use Composer\Semver\VersionParser;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\DeprecatedPackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\Exception\PackageVersionsCouldNotBeFetched;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\InsecurePackageVersionsProvider;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\NonDrupal10CompatiblePackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVersionsProvider;
 
 /**
  * @internal
  */
 final class SecurityAdvisoryFinderFromProblematicPackageProvider implements SecurityAdvisoryFinder
 {
-    public function __construct(private readonly ProblematicPackageVersionsProvider $provider, private readonly VersionParser $versionParser)
+    public function __construct(private readonly ProblematicPackageVersionsProvider $provider, private readonly VersionParser $versionParser, private readonly DdqgCategory $category)
     {
     }
 
@@ -47,16 +44,7 @@ final class SecurityAdvisoryFinderFromProblematicPackageProvider implements Secu
                     // representation).
                     $installed_version = $this->versionParser->normalize($packageConstraintMap[$package_name]->getLowerBound()
                       ->getVersion());
-                    $advisory = new SecurityAdvisoryBuilder($package_name, $installed_version, $package_version_constraint);
-                    if ($this->provider instanceof UnsupportedPackageVersionsProvider) {
-                        $advisory->becauseUnsupported();
-                    } elseif ($this->provider instanceof DeprecatedPackageVersionsProvider) {
-                        $advisory->becauseDeprecated();
-                    } elseif ($this->provider instanceof InsecurePackageVersionsProvider) {
-                        $advisory->becauseInsecure();
-                    } elseif ($this->provider instanceof NonDrupal10CompatiblePackageVersionsProvider) {
-                        $advisory->becauseNotCompatibleWithDrupal10();
-                    }
+                    $advisory = new SecurityAdvisoryBuilder($this->category, $package_name, $installed_version, $package_version_constraint);
 
                     $advisories[$package_name] = [
                         $advisory->build(),

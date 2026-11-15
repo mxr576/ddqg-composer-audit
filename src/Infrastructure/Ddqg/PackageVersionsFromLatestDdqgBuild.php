@@ -21,15 +21,25 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\Exception\PackageVer
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 
 /**
+ * Serves the problematic package versions of a DDQG branch from its latest
+ * build.
+ *
  * @internal
  */
-abstract class PackageVersionsFromRemoteComposerJsonRepository implements ProblematicPackageVersionsProvider
+final class PackageVersionsFromLatestDdqgBuild implements ProblematicPackageVersionsProvider
 {
-    public function __construct(private readonly string $url, private readonly HttpDownloader $httpDownloader)
+    private readonly string $url;
+
+    public function __construct(DdqgBranch $branch, private readonly HttpDownloader $httpDownloader)
     {
+        $this->url = match ($branch) {
+            DdqgBranch::Insecure => 'https://raw.githubusercontent.com/mxr576/ddqg/no-insecure-versions/composer.json',
+            DdqgBranch::Unsupported => 'https://raw.githubusercontent.com/mxr576/ddqg/no-unsupported-versions/composer.json',
+            DdqgBranch::Deprecated => 'https://raw.githubusercontent.com/mxr576/ddqg/no-deprecated-versions/composer.json',
+        };
     }
 
-    final public function findByPackages(array $packageConstraintMap): array
+    public function findByPackages(array $packageConstraintMap): array
     {
         // Streaming the response would be good, but using native Composer tools
         // is better instead of depending on new 3rd party packages that may

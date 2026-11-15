@@ -15,6 +15,7 @@ declare(strict_types=1);
 use Arkitect\ClassSet;
 use Arkitect\CLI\Config;
 use Arkitect\Expression\ForClasses\IsFinal;
+use Arkitect\Expression\ForClasses\IsNotEnum;
 use Arkitect\Expression\ForClasses\IsNotInterface;
 use Arkitect\Expression\ForClasses\IsNotTrait;
 use Arkitect\Expression\ForClasses\NotDependsOnTheseNamespaces;
@@ -47,6 +48,7 @@ return static function (Config $config): void {
     $rules[] = Rule::allClasses()
       ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Domain'))
       ->andThat(new IsNotInterface())
+      ->andThat(new IsNotEnum())
       ->andThat(new IsNotTrait())
       ->should(new IsFinal())
       ->because('We want to protect our Domain');

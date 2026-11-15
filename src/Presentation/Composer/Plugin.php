@@ -21,8 +21,7 @@ use Composer\IO\NullIO;
 use Composer\Package\Version\VersionParser;
 use Composer\Plugin\PluginInterface;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\ComposerAuditRepository;
-use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\DeprecatedPackageWasIgnoredAdapter;
-use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\UnsupportedPackageWasIgnoredAdapter;
+use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\AdvisoryWasIgnoredAdapter;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindDeprecatedPackagesFactory;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindInsecurePackagesFactoryFromComposerRuntimeDependencies;
 use mxr576\ddqgComposerAudit\Supportive\Factory\FindNonDrupal10CompatiblePackagesFactory;
@@ -99,21 +98,15 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
     }
 
-    public function warnAboutIgnoredUnsupportedPackage(UnsupportedPackageWasIgnoredAdapter $event): void
+    public function warnAboutIgnoredAdvisory(AdvisoryWasIgnoredAdapter $event): void
     {
-        $this->displayConsoleMessages($this->io, sprintf('<comment>An advisory about the unsupported "%s" package was ignored by configuration.</comment>', $event->packageName));
-    }
-
-    public function warnAboutIgnoredDeprecatedPackage(DeprecatedPackageWasIgnoredAdapter $event): void
-    {
-        $this->displayConsoleMessages($this->io, sprintf('<comment>An advisory about the deprecated "%s" package was ignored by configuration.</comment>', $event->packageName));
+        $this->displayConsoleMessages($this->io, sprintf('<comment>An advisory about the %s "%s" package was ignored by configuration.</comment>', $event->category, $event->packageName));
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            UnsupportedPackageWasIgnoredAdapter::class => 'warnAboutIgnoredUnsupportedPackage',
-            DeprecatedPackageWasIgnoredAdapter::class => 'warnAboutIgnoredDeprecatedPackage',
+            AdvisoryWasIgnoredAdapter::class => 'warnAboutIgnoredAdvisory',
         ];
     }
 

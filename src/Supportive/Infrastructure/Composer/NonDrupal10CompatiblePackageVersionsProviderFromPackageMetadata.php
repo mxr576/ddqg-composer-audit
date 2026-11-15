@@ -20,12 +20,12 @@ use Composer\Semver\Constraint\ConstraintInterface;
 use Composer\Semver\Constraint\MultiConstraint;
 use Composer\Semver\VersionParser;
 use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\NonDrupal10CompatiblePackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 
 /**
  * @internal
  */
-final class NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata implements NonDrupal10CompatiblePackageVersionsProvider
+final class NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata implements ProblematicPackageVersionsProvider
 {
     private const DRUPAL_PACKAGE_TYPES = [
         'drupal-module',

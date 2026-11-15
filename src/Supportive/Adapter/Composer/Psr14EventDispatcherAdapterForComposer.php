@@ -16,8 +16,7 @@ namespace mxr576\ddqgComposerAudit\Supportive\Adapter\Composer;
 
 use Composer\EventDispatcher\Event as ComposerEvent;
 use Composer\EventDispatcher\EventDispatcher as ComposerEventDispatcher;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\DeprecatedPackageWasIgnored;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\UnsupportedPackageWasIgnored;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\AdvisoryWasIgnored;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
 
@@ -32,10 +31,8 @@ final class Psr14EventDispatcherAdapterForComposer implements EventDispatcherInt
 
     public function dispatch(object $event): object
     {
-        if ($event instanceof UnsupportedPackageWasIgnored) {
-            $composer_event = UnsupportedPackageWasIgnoredAdapter::createFromWrapped($event);
-        } elseif ($event instanceof DeprecatedPackageWasIgnored) {
-            $composer_event = DeprecatedPackageWasIgnoredAdapter::createFromWrapped($event);
+        if ($event instanceof AdvisoryWasIgnored) {
+            $composer_event = AdvisoryWasIgnoredAdapter::createFromWrapped($event);
         } else {
             $composer_event = new ComposerEvent($event::class);
         }

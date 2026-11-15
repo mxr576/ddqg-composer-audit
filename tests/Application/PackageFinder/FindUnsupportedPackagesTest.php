@@ -17,10 +17,11 @@ namespace mxr576\ddqgComposerAudit\Tests\Application\PackageFinder;
 use Composer\Package\RootPackage;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindUnsupportedPackages;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageFinder;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageFinderConfigurationProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageIgnoreRulesFromConfiguration;
-use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\UnsupportedPackageVersionsFromSnapshotForTesting;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DdqgBranch;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromSnapshotForTesting;
 
 final class FindUnsupportedPackagesTest extends PackageFinderTestCase
 {
@@ -41,17 +42,17 @@ final class FindUnsupportedPackagesTest extends PackageFinderTestCase
 
     protected function createSnapshotFinder(): PackageFinder
     {
-        return $this->build(new UnsupportedPackageVersionsFromSnapshotForTesting());
+        return $this->build(new PackageVersionsFromSnapshotForTesting(DdqgBranch::Unsupported));
     }
 
     protected function createFinderWithRanges(array $ranges, bool $fetchFails = false): PackageFinder
     {
-        return $this->build(new class($ranges, $fetchFails) implements UnsupportedPackageVersionsProvider {
+        return $this->build(new class($ranges, $fetchFails) implements ProblematicPackageVersionsProvider {
             use RangesProviderStub;
         });
     }
 
-    private function build(UnsupportedPackageVersionsProvider $provider): FindUnsupportedPackages
+    private function build(ProblematicPackageVersionsProvider $provider): FindUnsupportedPackages
     {
         return new FindUnsupportedPackages(
             $provider,

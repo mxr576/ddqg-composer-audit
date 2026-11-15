@@ -22,7 +22,7 @@ use Composer\Repository\LockArrayRepository;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindNonDrupal10CompatiblePackages;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageFinder;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\NonDrupal10CompatiblePackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\PackageMetadataLookupFromComposerRepositories;
 use mxr576\ddqgComposerAudit\Supportive\Infrastructure\Composer\NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata;
 
@@ -106,7 +106,7 @@ final class FindNonDrupal10CompatiblePackagesTest extends PackageFinderTestCase
 
     protected function createFinderWithRanges(array $ranges, bool $fetchFails = false): PackageFinder
     {
-        return $this->build(new class($ranges, $fetchFails) implements NonDrupal10CompatiblePackageVersionsProvider {
+        return $this->build(new class($ranges, $fetchFails) implements ProblematicPackageVersionsProvider {
             use RangesProviderStub;
         });
     }
@@ -130,7 +130,7 @@ final class FindNonDrupal10CompatiblePackagesTest extends PackageFinderTestCase
         );
     }
 
-    private function build(NonDrupal10CompatiblePackageVersionsProvider $provider): FindNonDrupal10CompatiblePackages
+    private function build(ProblematicPackageVersionsProvider $provider): FindNonDrupal10CompatiblePackages
     {
         return new FindNonDrupal10CompatiblePackages(
             $provider,

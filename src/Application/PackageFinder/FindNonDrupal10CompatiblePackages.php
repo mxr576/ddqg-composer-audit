@@ -16,7 +16,8 @@ namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
 
 use Composer\Semver\VersionParser;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\NonDrupal10CompatiblePackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinder;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinderFromProblematicPackageProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\UnexpectedSecurityAdvisoryFinderException;
@@ -32,10 +33,10 @@ final class FindNonDrupal10CompatiblePackages implements PackageFinder
      * Constructs a new object.
      */
     public function __construct(
-        NonDrupal10CompatiblePackageVersionsProvider $nonDrupal10CompatiblePackageVersionsProvider,
+        ProblematicPackageVersionsProvider $nonDrupal10CompatiblePackageVersionsProvider,
         VersionParser $versionParser,
     ) {
-        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($nonDrupal10CompatiblePackageVersionsProvider, $versionParser);
+        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($nonDrupal10CompatiblePackageVersionsProvider, $versionParser, DdqgCategory::D10Incompatible);
     }
 
     public function __invoke(array $packageConstraintMap): array

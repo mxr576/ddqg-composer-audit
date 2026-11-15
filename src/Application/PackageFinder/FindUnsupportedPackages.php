@@ -15,10 +15,11 @@ declare(strict_types=1);
 namespace mxr576\ddqgComposerAudit\Application\PackageFinder;
 
 use Composer\Semver\VersionParser;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\UnsupportedPackageWasIgnored;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\AdvisoryWasIgnored;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
+use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleOptimizer;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\UnsupportedPackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinder;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryFinderFromProblematicPackageProvider;
 use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\UnexpectedSecurityAdvisoryFinderException;
@@ -34,6 +35,8 @@ final class FindUnsupportedPackages implements PackageFinder
 {
     use PackageIgnoreRuleOptimizer;
 
+    private const CATEGORY = DdqgCategory::Unsupported;
+
     /**
      * @var array<string,array<\mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule>>
      */
@@ -42,12 +45,12 @@ final class FindUnsupportedPackages implements PackageFinder
     private readonly SecurityAdvisoryFinder $securityAdvisoryFinder;
 
     public function __construct(
-        UnsupportedPackageVersionsProvider $unsupportedPackageVersionsProvider,
+        ProblematicPackageVersionsProvider $unsupportedPackageVersionsProvider,
         VersionParser $versionParser,
         private readonly EventDispatcherInterface $eventDispatcher,
         private readonly UnsupportedPackageIgnoreRulesFromConfiguration $packageIgnoreRuleProvider,
     ) {
-        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($unsupportedPackageVersionsProvider, $versionParser);
+        $this->securityAdvisoryFinder = new SecurityAdvisoryFinderFromProblematicPackageProvider($unsupportedPackageVersionsProvider, $versionParser, self::CATEGORY);
     }
 
     public function __invoke(array $packageConstraintMap): array
@@ -67,7 +70,8 @@ final class FindUnsupportedPackages implements PackageFinder
                     foreach ($this->optimizedIgnoreRules[$package_name] as $rule) {
                         if ($rule->evaluate($package_name, $packageConstraintMap[$package_name])) {
                             $this->eventDispatcher->dispatch(
-                                new UnsupportedPackageWasIgnored(
+                                new AdvisoryWasIgnored(
+                                    self::CATEGORY,
                                     $package_name,
                                     $rule,
                                     $result[$package_name])

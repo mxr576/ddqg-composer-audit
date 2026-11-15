@@ -23,9 +23,10 @@ use mxr576\ddqgComposerAudit\Application\PackageFinder\FindDeprecatedPackages;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageFinder;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\DeprecatedPackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\PackageMetadataLookupFromComposerRepositories;
-use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DeprecatedPackageVersionsFromSnapshotForTesting;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DdqgBranch;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromSnapshotForTesting;
 
 final class FindDeprecatedPackagesTest extends PackageFinderTestCase
 {
@@ -84,12 +85,12 @@ final class FindDeprecatedPackagesTest extends PackageFinderTestCase
 
     protected function createSnapshotFinder(): PackageFinder
     {
-        return $this->build(new DeprecatedPackageVersionsFromSnapshotForTesting());
+        return $this->build(new PackageVersionsFromSnapshotForTesting(DdqgBranch::Deprecated));
     }
 
     protected function createFinderWithRanges(array $ranges, bool $fetchFails = false): PackageFinder
     {
-        return $this->build(new class($ranges, $fetchFails) implements DeprecatedPackageVersionsProvider {
+        return $this->build(new class($ranges, $fetchFails) implements ProblematicPackageVersionsProvider {
             use RangesProviderStub;
         });
     }
@@ -101,12 +102,12 @@ final class FindDeprecatedPackagesTest extends PackageFinderTestCase
 
     private function variationcacheFinder(InstalledArrayRepository $installed, ?LockArrayRepository $locked): FindDeprecatedPackages
     {
-        return $this->build(new class(['drupal/variationcache' => '*']) implements DeprecatedPackageVersionsProvider {
+        return $this->build(new class(['drupal/variationcache' => '*']) implements ProblematicPackageVersionsProvider {
             use RangesProviderStub;
         }, new PackageMetadataLookupFromComposerRepositories($installed, static fn (): ?LockArrayRepository => $locked));
     }
 
-    private function build(DeprecatedPackageVersionsProvider $provider, ?PackageMetadataLookup $lookup = null): FindDeprecatedPackages
+    private function build(ProblematicPackageVersionsProvider $provider, ?PackageMetadataLookup $lookup = null): FindDeprecatedPackages
     {
         return new FindDeprecatedPackages(
             $provider,

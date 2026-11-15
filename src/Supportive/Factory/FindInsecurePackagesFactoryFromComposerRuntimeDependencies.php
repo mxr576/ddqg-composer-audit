@@ -17,8 +17,9 @@ namespace mxr576\ddqgComposerAudit\Supportive\Factory;
 use Composer\Semver\VersionParser;
 use Composer\Util\HttpDownloader;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindInsecurePackages;
-use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\InsecurePackageVersionsFromLatestDdqgBuild;
-use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\InsecurePackageVersionsFromSnapshotForTesting;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DdqgBranch;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromLatestDdqgBuild;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromSnapshotForTesting;
 use mxr576\ddqgComposerAudit\Supportive\Util\Environment;
 
 /**
@@ -36,6 +37,6 @@ final class FindInsecurePackagesFactoryFromComposerRuntimeDependencies
     {
         return new FindInsecurePackages(
             // @todo Find a better place for this logic.
-            Environment::isTestEnvironment() ? new InsecurePackageVersionsFromSnapshotForTesting() : new InsecurePackageVersionsFromLatestDdqgBuild($this->httpDownloader), $this->versionParser);
+            Environment::isTestEnvironment() ? new PackageVersionsFromSnapshotForTesting(DdqgBranch::Insecure) : new PackageVersionsFromLatestDdqgBuild(DdqgBranch::Insecure, $this->httpDownloader), $this->versionParser);
     }
 }

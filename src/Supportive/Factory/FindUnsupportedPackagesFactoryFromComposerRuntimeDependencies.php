@@ -21,8 +21,9 @@ use Composer\Util\HttpDownloader;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindUnsupportedPackages;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageFinderConfigurationProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\UnsupportedPackageIgnoreRulesFromConfiguration;
-use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\UnsupportedPackageVersionsFromLatestDdqgBuild;
-use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\UnsupportedPackageVersionsFromSnapshotForTesting;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DdqgBranch;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromLatestDdqgBuild;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromSnapshotForTesting;
 use mxr576\ddqgComposerAudit\Supportive\Adapter\Composer\Psr14EventDispatcherAdapterForComposer;
 use mxr576\ddqgComposerAudit\Supportive\Util\Environment;
 
@@ -43,7 +44,7 @@ final class FindUnsupportedPackagesFactoryFromComposerRuntimeDependencies
     {
         return new FindUnsupportedPackages(
             // @todo Find a better place for this logic.
-            Environment::isTestEnvironment() ? new UnsupportedPackageVersionsFromSnapshotForTesting() : new UnsupportedPackageVersionsFromLatestDdqgBuild($this->httpDownloader),
+            Environment::isTestEnvironment() ? new PackageVersionsFromSnapshotForTesting(DdqgBranch::Unsupported) : new PackageVersionsFromLatestDdqgBuild(DdqgBranch::Unsupported, $this->httpDownloader),
             $this->versionParser,
             new Psr14EventDispatcherAdapterForComposer($this->eventDispatcher),
             new UnsupportedPackageIgnoreRulesFromConfiguration(new UnsupportedPackageFinderConfigurationProvider($this->project, $this->versionParser))

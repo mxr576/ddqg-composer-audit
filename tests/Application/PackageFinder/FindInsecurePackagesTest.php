@@ -17,8 +17,9 @@ namespace mxr576\ddqgComposerAudit\Tests\Application\PackageFinder;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindInsecurePackages;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageFinder;
-use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\InsecurePackageVersionsProvider;
-use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\InsecurePackageVersionsFromSnapshotForTesting;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\DdqgBranch;
+use mxr576\ddqgComposerAudit\Infrastructure\Ddqg\PackageVersionsFromSnapshotForTesting;
 
 /**
  * Owns the version range matching rules, which all finders share.
@@ -68,12 +69,12 @@ final class FindInsecurePackagesTest extends PackageFinderTestCase
 
     protected function createSnapshotFinder(): PackageFinder
     {
-        return new FindInsecurePackages(new InsecurePackageVersionsFromSnapshotForTesting(), $this->versionParser());
+        return new FindInsecurePackages(new PackageVersionsFromSnapshotForTesting(DdqgBranch::Insecure), $this->versionParser());
     }
 
     protected function createFinderWithRanges(array $ranges, bool $fetchFails = false): PackageFinder
     {
-        return new FindInsecurePackages(new class($ranges, $fetchFails) implements InsecurePackageVersionsProvider {
+        return new FindInsecurePackages(new class($ranges, $fetchFails) implements ProblematicPackageVersionsProvider {
             use RangesProviderStub;
         }, $this->versionParser());
     }
