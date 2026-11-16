@@ -14,6 +14,7 @@ declare(strict_types=1);
 
 namespace mxr576\ddqgComposerAudit\Domain\PackageIgnore;
 
+use Composer\Package\PackageInterface;
 use Composer\Semver\Constraint\ConstraintInterface;
 use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
 
@@ -35,7 +36,7 @@ final readonly class IgnorePackageByPresentVersionOfOtherPackage implements Pack
         if ($packageName === $this->packageName) {
             $other_package = $this->packageMetadataLookup->find($this->otherPackageName, $this->otherPackageRule);
 
-            return null === $other_package;
+            return !$other_package instanceof PackageInterface;
         }
 
         return false;

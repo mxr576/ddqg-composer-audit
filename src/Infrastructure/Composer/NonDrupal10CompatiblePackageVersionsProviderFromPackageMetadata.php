@@ -58,7 +58,7 @@ final readonly class NonDrupal10CompatiblePackageVersionsProviderFromPackageMeta
             $offending_versions = [];
             foreach ($this->candidateVersions($constraint) as $candidate) {
                 $package = $this->packageMetadataLookup->find($package_name, $candidate);
-                if (null !== $package && $this->isNotDrupal10Compatible($package)) {
+                if ($package instanceof PackageInterface && $this->isNotDrupal10Compatible($package)) {
                     $offending_versions[] = $package->getPrettyVersion();
                 }
             }

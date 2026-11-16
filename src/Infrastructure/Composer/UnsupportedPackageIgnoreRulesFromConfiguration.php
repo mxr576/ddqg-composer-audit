@@ -57,8 +57,8 @@ final readonly class UnsupportedPackageIgnoreRulesFromConfiguration implements P
         assert(is_array($unsupported_version_ignore_rules));
         // Check if the source was the environment variable and postprocess
         // the result if needed.
-        if (!empty($unsupported_version_ignore_rules) && array_key_exists(0, $unsupported_version_ignore_rules) && str_contains($unsupported_version_ignore_rules[0], ':')) {
-            $unsupported_version_ignore_rules = array_reduce($unsupported_version_ignore_rules, static function (array $carry, string $item) {
+        if ([] !== $unsupported_version_ignore_rules && array_key_exists(0, $unsupported_version_ignore_rules) && str_contains($unsupported_version_ignore_rules[0], ':')) {
+            $unsupported_version_ignore_rules = array_reduce($unsupported_version_ignore_rules, static function (array $carry, string $item): array {
                 [$package, $version] = explode(':', $item);
                 $carry[$package] = $version;
 

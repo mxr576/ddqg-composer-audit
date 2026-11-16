@@ -32,7 +32,7 @@ final class ComposerAuditRepository extends ArrayRepository implements AdvisoryP
         private readonly SecurityAdvisoryFromFinding $toSecurityAdvisory,
         private readonly IOInterface $io,
     ) {
-        parent::__construct([]);
+        parent::__construct();
     }
 
     public function hasSecurityAdvisories(): bool

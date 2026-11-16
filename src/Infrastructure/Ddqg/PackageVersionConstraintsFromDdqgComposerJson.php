@@ -46,7 +46,7 @@ final class PackageVersionConstraintsFromDdqgComposerJson
                   assert(is_array($value));
 
                   return Collection::fromIterable($value)
-                    ->filter(static fn ($value, $key): bool => !([] !== $filter_by_package_names) || in_array($key, $filter_by_package_names, true))
+                    ->filter(static fn ($value, $key): bool => [] === $filter_by_package_names || in_array($key, $filter_by_package_names, true))
                     ->all(false);
               }
           )

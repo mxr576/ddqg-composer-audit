@@ -57,8 +57,8 @@ final readonly class DeprecatedPackageIgnoreRulesFromConfiguration implements Pa
         assert(is_array($deprecated_version_ignore_rules));
         // Check if the source was the environment variable and postprocess
         // the result if needed.
-        if (!empty($deprecated_version_ignore_rules) && array_key_exists(0, $deprecated_version_ignore_rules) && str_contains($deprecated_version_ignore_rules[0], ':')) {
-            $deprecated_version_ignore_rules = array_reduce($deprecated_version_ignore_rules, static function (array $carry, string $item) {
+        if ([] !== $deprecated_version_ignore_rules && array_key_exists(0, $deprecated_version_ignore_rules) && str_contains($deprecated_version_ignore_rules[0], ':')) {
+            $deprecated_version_ignore_rules = array_reduce($deprecated_version_ignore_rules, static function (array $carry, string $item): array {
                 [$package, $version] = explode(':', $item);
                 $carry[$package] = $version;
 
