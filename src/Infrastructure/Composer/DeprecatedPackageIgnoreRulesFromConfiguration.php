@@ -37,7 +37,7 @@ final readonly class DeprecatedPackageIgnoreRulesFromConfiguration implements Pa
         $configReaderJail = new class {
             use ConfigurablePlugin;
 
-            public const CONFIG_KEY_IGNORE_DEPRECATED_VERSIONS = 'ignore-deprecated-versions';
+            public const string CONFIG_KEY_IGNORE_DEPRECATED_VERSIONS = 'ignore-deprecated-versions';
 
             public function __construct()
             {

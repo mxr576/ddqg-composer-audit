@@ -42,19 +42,19 @@ use PHPUnit\Framework\TestCase;
 
 final class FindPackagesByDdqgCategoryTest extends TestCase
 {
-    private const D10_PACKAGE = 'drupal/foo';
+    private const string D10_PACKAGE = 'drupal/foo';
 
     /**
      * Rules shared by every category live in the one finder implementation,
      * so they are tested once, through any category.
      */
-    private const SHARED_RULE_CATEGORY = DdqgCategory::Insecure;
+    private const DdqgCategory SHARED_RULE_CATEGORY = DdqgCategory::Insecure;
 
     /**
      * Shared rules that show in the advisory ID need a category whose ID
      * includes the version.
      */
-    private const VERSIONED_ID_SHARED_RULE_CATEGORY = DdqgCategory::Unsupported;
+    private const DdqgCategory VERSIONED_ID_SHARED_RULE_CATEGORY = DdqgCategory::Unsupported;
 
     /**
      * @return iterable<string,array{DdqgCategory, string, string, string, string}>

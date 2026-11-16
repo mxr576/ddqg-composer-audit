@@ -7,7 +7,7 @@ composer validate --no-check-publish     # fails on a stale content-hash
 composer why-not php <lowest> --locked   # exit 0: every locked package installs on <lowest>
 ```
 
-`<lowest>` is the lowest version the `php` constraint allows (e.g. `8.2.0`). CI installs both locks on it, but Composer resolves against the running PHP, so a lock updated on a newer PHP can hold packages `<lowest>` cannot install. Every lock update below therefore runs under a **platform pin**:
+`<lowest>` is the lowest version the `php` constraint allows (e.g. `8.3.0`). CI installs both locks on it, but Composer resolves against the running PHP, so a lock updated on a newer PHP can hold packages `<lowest>` cannot install. Every lock update below therefore runs under a **platform pin**:
 
 ```shell
 composer config platform.php <lowest>

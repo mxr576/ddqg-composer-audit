@@ -34,7 +34,7 @@ final readonly class D10CompatibilityCheckSetting
         $configReaderJail = new class {
             use ConfigurablePlugin;
 
-            public const CONFIG_KEY_CHECK_D10_COMPATIBILITY = 'check-d10-compatibility';
+            public const string CONFIG_KEY_CHECK_D10_COMPATIBILITY = 'check-d10-compatibility';
 
             public function __construct()
             {

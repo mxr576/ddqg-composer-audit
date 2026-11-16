@@ -37,7 +37,7 @@ final readonly class UnsupportedPackageIgnoreRulesFromConfiguration implements P
         $configReaderJail = new class {
             use ConfigurablePlugin;
 
-            public const CONFIG_KEY_IGNORE_UNSUPPORTED_VERSIONS = 'ignore-unsupported-versions';
+            public const string CONFIG_KEY_IGNORE_UNSUPPORTED_VERSIONS = 'ignore-unsupported-versions';
 
             public function __construct()
             {

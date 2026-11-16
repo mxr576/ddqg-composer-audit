@@ -31,7 +31,7 @@ use mxr576\ddqgComposerAudit\Presentation\Composer\Wiring\PackageMetadataLookupF
  */
 final class Plugin implements PluginInterface, EventSubscriberInterface
 {
-    public const PACKAGE_NAME = 'mxr576/ddqg-composer-audit';
+    public const string PACKAGE_NAME = 'mxr576/ddqg-composer-audit';
 
     private IOInterface $io;
 

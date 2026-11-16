@@ -1045,7 +1045,7 @@
                 "cweagans/composer-configurable-plugin": "^2.0",
                 "halaxa/json-machine": "^1.2",
                 "loophp/collection": "^7.5.2",
-                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
+                "php": "~8.3.0 || ~8.4.0 || ~8.5.0",
                 "psr/event-dispatcher": "^1.0"
             },
             "require-dev": {

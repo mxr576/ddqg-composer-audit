@@ -27,7 +27,7 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVe
  */
 final readonly class NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata implements ProblematicPackageVersionsProvider
 {
-    private const DRUPAL_PACKAGE_TYPES = [
+    private const array DRUPAL_PACKAGE_TYPES = [
         'drupal-module',
         'drupal-theme',
         'drupal-profile',
@@ -36,12 +36,12 @@ final readonly class NonDrupal10CompatiblePackageVersionsProviderFromPackageMeta
         'drupal-custom-profile',
     ];
 
-    private const DRUPAL_CORE_PACKAGE_CANDIDATES_IN_ORDER = [
+    private const array DRUPAL_CORE_PACKAGE_CANDIDATES_IN_ORDER = [
         'drupal/core',
         'drupal/core-recommended',
     ];
 
-    private const DRUPAL_CORE_DEV_PACKAGE_CANDIDATES_IN_ORDER = [
+    private const array DRUPAL_CORE_DEV_PACKAGE_CANDIDATES_IN_ORDER = [
         'drupal/core-dev',
     ];
 

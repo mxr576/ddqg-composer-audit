@@ -32,7 +32,7 @@ final readonly class SecurityAdvisoryFromFinding
      * formatter too, so markup here becomes terminal escape sequences inside
      * the JSON whenever the output is decorated (e.g., `--ansi`).
      */
-    private const ATTRIBUTION = ' (Reported by Drupal Dependency Quality Gate: https://packagist.org/packages/mxr576/ddqg)';
+    private const string ATTRIBUTION = ' (Reported by Drupal Dependency Quality Gate: https://packagist.org/packages/mxr576/ddqg)';
 
     /**
      * @param \DateTimeImmutable $reportedAt
