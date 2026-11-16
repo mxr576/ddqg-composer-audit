@@ -1,0 +1,12 @@
+{
+    "name": "mxr576/ddqg-composer-audit-rector",
+    "description": "Isolated Rector installation for ddqg-composer-audit",
+    "license": "MIT",
+    "type": "project",
+    "require": {
+        "rector/rector": "^2.8"
+    },
+    "config": {
+        "allow-plugins": {}
+    }
+}

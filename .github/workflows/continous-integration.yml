@@ -110,6 +110,12 @@ jobs:
         with:
           dependency-versions: "${{ matrix.dependencies }}"
 
+      - name: "Install Rector"
+        run: "composer install -d tools/rector --no-interaction --no-progress"
+
+      - name: "Check Rector rules"
+        run: "tools/rector/vendor/bin/rector process --dry-run --no-progress-bar"
+
       - name: "Lint & validate composer.json"
         run: "composer validate && composer normalize"
 

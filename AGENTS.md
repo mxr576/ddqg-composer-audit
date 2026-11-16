@@ -34,6 +34,8 @@ A change is done when everything CI runs is green: the e2e test below, plus:
 
 ```shell
 composer validate && composer normalize
+composer install -d tools/rector
+tools/rector/vendor/bin/rector process
 vendor/bin/php-cs-fixer fix
 vendor/bin/phpstan analyse --memory-limit=-1
 vendor/bin/phparkitect check
@@ -42,7 +44,9 @@ vendor/bin/phpunit
 
 When you add or change a check, edit the workflow and this section together. When you change a constraint in `composer.json`, follow `docs/agents/changing-constraints.md`.
 
-`php-cs-fixer` rewrites `LICENSE.md` to the current year and adds the license header to PHP files. Keep those edits. When it refuses to start because the local PHP is newer than it supports, rerun it with `PHP_CS_FIXER_IGNORE_ENV=1`.
+`php-cs-fixer` rewrites `LICENSE.md` to the current year and adds the license header to PHP files. Keep those edits. CI runs it as `php-cs-fixer fix --dry-run --diff`. When it refuses to start because the local PHP is newer than it supports, rerun it with `PHP_CS_FIXER_IGNORE_ENV=1`.
+
+Rector runs from the repo root, with the root `vendor/` installed, and before `php-cs-fixer`, because its raw output is not cs-fixer-clean. CI runs `rector process --dry-run` and fails on any diff.
 
 When you add or change a test, follow `docs/agents/writing-tests.md`.
 

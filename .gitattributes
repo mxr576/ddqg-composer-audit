@@ -9,3 +9,5 @@
 /phpstan-baseline.neon       export-ignore
 /AGENTS.md                export-ignore
 /docs                    export-ignore
+/tools                    export-ignore
+/rector.php               export-ignore

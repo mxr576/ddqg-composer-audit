@@ -31,7 +31,7 @@ $finder = PhpCsFixer\Finder::create()
   ->ignoreDotFiles(false)
   ->ignoreVCS(true)
   ->in(__DIR__)
-  ->exclude(['tests/fixtures/e2e/web', 'tests/fixtures/e2e/vendor']);
+  ->exclude(['tests/fixtures/e2e/web', 'tests/fixtures/e2e/vendor', 'tools/rector/vendor']);
 
 $config = new PhpCsFixer\Config();
 $config->setRiskyAllowed(true)
@@ -44,6 +44,7 @@ $config->setRiskyAllowed(true)
         'declare_strict_types' => true,
         'ordered_class_elements' => true,
         'ordered_imports' => true,
+        'php_unit_test_case_static_method_calls' => ['call_type' => 'self'],
         'phpdoc_align' => false,
         'phpdoc_annotation_without_dot' => false,
         'phpdoc_indent' => false,
