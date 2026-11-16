@@ -114,7 +114,7 @@ jobs:
         run: "composer validate && composer normalize"
 
       - name: "Check coding style"
-        run: "vendor/bin/php-cs-fixer fix"
+        run: "vendor/bin/php-cs-fixer fix --dry-run --diff"
 
       - name: "Check architectural rules"
         run: "vendor/bin/phparkitect check"
