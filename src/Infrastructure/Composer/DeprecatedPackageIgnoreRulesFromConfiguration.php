@@ -25,8 +25,6 @@ use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
  */
 final class DeprecatedPackageIgnoreRulesFromConfiguration implements PackageIgnoreRuleProvider
 {
-    private bool $isConfigured = false;
-
     public function __construct(private readonly RootPackageInterface $rootPackage, private readonly VersionParser $versionParser)
     {
     }
@@ -34,10 +32,8 @@ final class DeprecatedPackageIgnoreRulesFromConfiguration implements PackageIgno
     public function getIgnoreRules(): iterable
     {
         // Public methods from ConfigurablePlugin MUST NOT be exposed as
-        // public APIs of this implementation.
-        // We should only build this object once, but if we do in the
-        // constructor then it is hard to explain PHPStan what are the
-        // available public methods on an anonymous class.
+        // public APIs of this implementation, so an anonymous class jails
+        // them.
         $configReaderJail = new class {
             use ConfigurablePlugin;
 
@@ -54,9 +50,7 @@ final class DeprecatedPackageIgnoreRulesFromConfiguration implements PackageIgno
             }
         };
 
-        if (!$this->isConfigured) {
-            $configReaderJail->configure($this->rootPackage->getExtra(), 'ddqg-composer-audit');
-        }
+        $configReaderJail->configure($this->rootPackage->getExtra(), 'ddqg-composer-audit');
 
         $result = [];
         $deprecated_version_ignore_rules = $configReaderJail->getConfig($configReaderJail::CONFIG_KEY_IGNORE_DEPRECATED_VERSIONS);
