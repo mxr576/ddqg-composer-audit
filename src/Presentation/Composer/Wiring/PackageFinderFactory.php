@@ -19,7 +19,6 @@ use Composer\Package\RootPackageInterface;
 use Composer\Semver\VersionParser;
 use Composer\Util\HttpDownloader;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindPackagesByDdqgCategory;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageFinder;
 use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\CompositePackageIgnoreRuleProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\IgnoreVariationcacheMovedIntoCore;
@@ -60,7 +59,7 @@ final class PackageFinderFactory
      * only when the D10 check is on (from `extra` or the environment). The
      * setting is fixed for the whole Composer run, so it is decided once here.
      *
-     * @return PackageFinder[]
+     * @return FindPackagesByDdqgCategory[]
      *   In the order the repositories are to be prepended. Keep it: it
      *   decides the order of advisories in the audit output.
      */
@@ -78,7 +77,7 @@ final class PackageFinderFactory
         return $finders;
     }
 
-    private function create(DdqgCategory $category, ProblematicPackageVersionsProvider $source): PackageFinder
+    private function create(DdqgCategory $category, ProblematicPackageVersionsProvider $source): FindPackagesByDdqgCategory
     {
         return new FindPackagesByDdqgCategory(
             $category,

@@ -43,7 +43,6 @@ return static function (Config $config): void {
       ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Domain'))
       ->should(new NotHaveDependencyOutsideNamespace('mxr576\ddqgComposerAudit\Domain', [
           'RuntimeException',
-          'LogicException',
           'DateTimeImmutable',
           'Traversable',
           'ArrayObject',
@@ -52,10 +51,8 @@ return static function (Config $config): void {
           'Composer\Package\PackageInterface',
           'Composer\Advisory\SecurityAdvisory',
           'Composer\Semver\VersionParser',
-          'Composer\Semver\Comparator',
           'Composer\Semver\Constraint\ConstraintInterface',
           'Composer\Semver\Constraint\Constraint',
-          'Composer\Semver\Constraint\MultiConstraint',
       ]))
       ->because('We want to protect the Domain');
 

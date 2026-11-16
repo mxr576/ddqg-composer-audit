@@ -22,15 +22,14 @@ use Composer\Repository\LockArrayRepository;
 use Composer\Semver\Constraint\ConstraintInterface;
 use Composer\Semver\VersionParser;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\AdvisoryWasIgnored;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindPackagesByDdqgCategory;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageFinder;
 use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\CompositePackageIgnoreRuleProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\IgnorePackageByVersionConstraintMatch;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\IgnoreVariationcacheMovedIntoCore;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\NoPackageIgnoreRules;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\Exception\PackageVersionsCouldNotBeFetched;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\DeprecatedPackageIgnoreRulesFromConfiguration;
 use mxr576\ddqgComposerAudit\Infrastructure\Composer\NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata;
@@ -82,7 +81,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     /**
      * @param non-empty-string $expectedTitle
      *
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     #[DataProvider('categories')]
     public function testAdvisoryIdAndTitle(DdqgCategory $category, string $package, string $version, string $expectedId, string $expectedTitle): void
@@ -98,7 +97,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     #[DataProvider('categoriesWithIgnoreSetting')]
     public function testPluginIgnoreSettingRemovesAdvisory(DdqgCategory $category): void
@@ -116,7 +115,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     public function testSecondMatchingIgnoreRuleDoesNotCrashAndIgnoresOnce(): void
     {
@@ -144,7 +143,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     public function testExactVersionInsideAndOutsideRange(): void
     {
@@ -155,7 +154,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     public function testOrOfCandidatesMatchesOnlyOffendingCandidates(): void
     {
@@ -170,7 +169,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     public function testOrOfCandidatesNamesLowestOffendingCandidate(): void
     {
@@ -186,11 +185,11 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
-    public function testSourceFailureSurfacesAsFinderException(): void
+    public function testSourceFailurePropagates(): void
     {
-        $this->expectException(UnexpectedPackageFinderException::class);
+        $this->expectException(PackageVersionsCouldNotBeFetched::class);
 
         $this->build(self::SHARED_RULE_CATEGORY, $this->rangesSource([], true))(['drupal/foo' => $this->exact('1.0.0')]);
     }
@@ -199,7 +198,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
      * VariationCache moved into core in 10.2.0, so it is only reported as
      * deprecated for projects that have such a core.
      *
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     public function testVariationcacheIsFlaggedWhileCore102OrNewerIsInstalled(): void
     {
@@ -209,7 +208,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     public function testVariationcacheIsFlaggedWhileCore102OrNewerIsLocked(): void
     {
@@ -219,7 +218,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     public function testVariationcacheIsNotFlaggedWithOlderOrNoCore(): void
     {
@@ -233,7 +232,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     public function testD10VersionCompatibleWithDrupal10IsNotFlagged(): void
     {
@@ -243,7 +242,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     public function testD10VersionWithoutMetadataYieldsNothing(): void
     {
@@ -253,7 +252,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     public function testD10OrOfCandidatesJudgesEachVersionOnItsOwn(): void
     {
@@ -270,7 +269,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     }
 
     /**
-     * @throws UnexpectedPackageFinderException
+     * @throws PackageVersionsCouldNotBeFetched
      */
     public function testD10MetadataIsFoundInLockFileWhenNothingIsInstalled(): void
     {
@@ -281,7 +280,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
         self::assertSame([self::D10_PACKAGE], array_keys($result), 'D10-incompatible: metadata is found in the lock file.');
     }
 
-    private function snapshotFinder(DdqgCategory $category): PackageFinder
+    private function snapshotFinder(DdqgCategory $category): FindPackagesByDdqgCategory
     {
         if (DdqgCategory::D10Incompatible === $category) {
             return $this->d10Finder(new InstalledArrayRepository([$this->module('1.0.0', '^9.4')]), null);
@@ -296,7 +295,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
         return $this->build($category, new PackageVersionsFromSnapshotForTesting($branch));
     }
 
-    private function d10Finder(InstalledArrayRepository $installed, ?LockArrayRepository $locked): PackageFinder
+    private function d10Finder(InstalledArrayRepository $installed, ?LockArrayRepository $locked): FindPackagesByDdqgCategory
     {
         return $this->build(
             DdqgCategory::D10Incompatible,
@@ -307,7 +306,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
         );
     }
 
-    private function variationcacheFinder(InstalledArrayRepository $installed, ?LockArrayRepository $locked): PackageFinder
+    private function variationcacheFinder(InstalledArrayRepository $installed, ?LockArrayRepository $locked): FindPackagesByDdqgCategory
     {
         return $this->build(
             DdqgCategory::Deprecated,
@@ -325,7 +324,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
             : new DeprecatedPackageIgnoreRulesFromConfiguration($root, $parser);
     }
 
-    private function build(DdqgCategory $category, ProblematicPackageVersionsProvider $source, ?PackageIgnoreRuleProvider $ignoreRules = null): PackageFinder
+    private function build(DdqgCategory $category, ProblematicPackageVersionsProvider $source, ?PackageIgnoreRuleProvider $ignoreRules = null): FindPackagesByDdqgCategory
     {
         return new FindPackagesByDdqgCategory($category, $source, $this->parser(), new NullEventDispatcher(), $ignoreRules ?? new NoPackageIgnoreRules());
     }
