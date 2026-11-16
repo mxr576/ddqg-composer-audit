@@ -16,7 +16,7 @@ namespace mxr576\ddqgComposerAudit\Presentation\Composer\Event;
 
 use Composer\EventDispatcher\Event as ComposerEvent;
 use Composer\EventDispatcher\EventDispatcher as ComposerEventDispatcher;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\AdvisoryWasIgnored;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\FindingWasIgnored;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Psr\EventDispatcher\StoppableEventInterface;
 
@@ -38,8 +38,8 @@ final class Psr14EventDispatcherAdapterForComposer implements EventDispatcherInt
             return $event;
         }
 
-        if ($event instanceof AdvisoryWasIgnored) {
-            $composer_event = new AdvisoryWasIgnoredAdapter($event);
+        if ($event instanceof FindingWasIgnored) {
+            $composer_event = new FindingWasIgnoredAdapter($event);
         } else {
             $composer_event = new ComposerEvent($event::class);
         }

@@ -20,8 +20,9 @@ use Composer\IO\IOInterface;
 use Composer\IO\NullIO;
 use Composer\Package\Version\VersionParser;
 use Composer\Plugin\PluginInterface;
-use mxr576\ddqgComposerAudit\Presentation\Composer\Event\AdvisoryWasIgnoredAdapter;
+use mxr576\ddqgComposerAudit\Presentation\Composer\Event\FindingWasIgnoredAdapter;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\ComposerAuditRepository;
+use mxr576\ddqgComposerAudit\Presentation\Composer\Repository\SecurityAdvisoryFromFinding;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Wiring\PackageFinderFactory;
 use mxr576\ddqgComposerAudit\Presentation\Composer\Wiring\PackageMetadataLookupFactory;
 
@@ -55,8 +56,10 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
         // only its category and the others still report. The factory returns
         // the finders in the order they have always been prepended, which
         // keeps the order of advisories in the audit output.
+        // The clock is read once, here: every advisory of the run shares it.
+        $toSecurityAdvisory = new SecurityAdvisoryFromFinding(new \DateTimeImmutable());
         foreach ($finders as $finder) {
-            $composer->getRepositoryManager()->prependRepository(new ComposerAuditRepository($finder, $io));
+            $composer->getRepositoryManager()->prependRepository(new ComposerAuditRepository($finder, $toSecurityAdvisory, $io));
         }
     }
 
@@ -68,15 +71,15 @@ final class Plugin implements PluginInterface, EventSubscriberInterface
     {
     }
 
-    public function warnAboutIgnoredAdvisory(AdvisoryWasIgnoredAdapter $event): void
+    public function warnAboutIgnoredFinding(FindingWasIgnoredAdapter $event): void
     {
-        $this->displayConsoleMessages($this->io, sprintf('<comment>An advisory about the %s "%s" package was ignored by configuration.</comment>', $event->wrapped->category->type(), $event->wrapped->packageName));
+        $this->displayConsoleMessages($this->io, sprintf('<comment>An advisory about the %s "%s" package was ignored by configuration.</comment>', $event->wrapped->finding->category->type(), $event->wrapped->finding->packageName));
     }
 
     public static function getSubscribedEvents(): array
     {
         return [
-            AdvisoryWasIgnoredAdapter::class => 'warnAboutIgnoredAdvisory',
+            FindingWasIgnoredAdapter::class => 'warnAboutIgnoredFinding',
         ];
     }
 

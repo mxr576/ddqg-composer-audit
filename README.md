@@ -24,8 +24,8 @@ $ composer audit
 +-------------------+----------------------------------------------------------------------------------+
 | Package           | drupal/apigee_edge                                                               |
 | CVE               | DDQG-D10-incompatible-drupal-apigee_edge                                         |
-| Title             | The installed "2.0.7.0" version is not compatible with Drupal 10. (Reported by D |
-|                   | rupal Dependency Quality Gate.)                                                  |
+| Title             | The installed "2.0.7.0" version is not compatible with Drupal 10. (Reported by   |
+|                   | Drupal Dependency Quality Gate: https://packagist.org/packages/mxr576/ddqg)      |
 | URL               | https://www.drupal.org/project/apigee_edge                                       |
 | Affected versions | 2.0.7.0                                                                          |
 | Reported at       | 2023-05-07T13:49:57+00:00                                                        |
@@ -33,8 +33,8 @@ $ composer audit
 +-------------------+----------------------------------------------------------------------------------+
 | Package           | drupal/apigee_edge                                                               |
 | CVE               | DDQG-insecure-drupal-apigee_edge                                                 |
-| Title             | The installed "2.0.7.0" version is insecure. (Reported by Drupal Dependency Qual |
-|                   | ity Gate.)                                                                       |
+| Title             | The installed "2.0.7.0" version is insecure. (Reported by Drupal Dependency      |
+|                   | Quality Gate: https://packagist.org/packages/mxr576/ddqg)                        |
 | URL               | https://www.drupal.org/project/apigee_edge                                       |
 | Affected versions | >=1.0.0,<1.27.0|>=2.0.0,<2.0.8                                                   |
 | Reported at       | 2023-05-07T13:49:57+00:00                                                        |
@@ -42,17 +42,17 @@ $ composer audit
 +-------------------+----------------------------------------------------------------------------------+
 | Package           | drupal/core                                                                      |
 | CVE               | DDQG-insecure-drupal-core                                                        |
-| Title             | The installed "9.4.0.0" version is insecure. (Reported by Drupal Dependency Qual |
-|                   | ity Gate.)                                                                       |
-| URL               | https://www.drupal.org/project/core                                              |
+| Title             | The installed "9.4.0.0" version is insecure. (Reported by Drupal Dependency      |
+|                   | Quality Gate: https://packagist.org/packages/mxr576/ddqg)                        |
+| URL               | https://www.drupal.org/project/drupal                                            |
 | Affected versions | >=9.4.0,<9.4.14|>=9.5.0,<9.5.8|>=10.0.0,<10.0.8                                  |
 | Reported at       | 2023-05-07T13:49:57+00:00                                                        |
 +-------------------+----------------------------------------------------------------------------------+
 +-------------------+----------------------------------------------------------------------------------+
 | Package           | drupal/feeds                                                                     |
 | CVE               | DDQG-unsupported-drupal-feeds-3.0.0.0-beta3                                      |
-| Title             | The installed "3.0.0.0-beta3" version is unsupported. (Reported by Drupal Depend |
-|                   | ency Quality Gate.)                                                              |
+| Title             | The installed "3.0.0.0-beta3" version is unsupported. (Reported by Drupal        |
+|                   | Dependency Quality Gate: https://packagist.org/packages/mxr576/ddqg)             |
 | URL               | https://www.drupal.org/project/feeds                                             |
 | Affected versions | 2.x-dev|3.0.0-alpha1|3.0.0-alpha2|3.0.0-alpha3|3.0.0-alpha4|3.0.0-alpha5|3.0.0-a |
 |                   | lpha6|3.0.0-alpha7|3.0.0-alpha8|3.0.0-alpha9|3.0.0-alpha10|3.0.0-alpha11|3.0.0-b |
@@ -62,8 +62,8 @@ $ composer audit
 +-------------------+----------------------------------------------------------------------------------+
 | Package           | drupal/variationcache                                                            |
 | CVE               | DDQG-deprecated-drupal-variationcache-1.2.0.0                                    |
-| Title             | The installed "1.2.0.0" version is deprecated. (Reported by Drupal Dependency Qu |
-|                   | ality Gate.)                                                                     |
+| Title             | The installed "1.2.0.0" version is deprecated. (Reported by Drupal Dependency    |
+|                   | Quality Gate: https://packagist.org/packages/mxr576/ddqg)                        |
 | URL               | https://www.drupal.org/project/variationcache                                    |
 | Affected versions | *                                                                                |
 | Reported at       | 2024-01-08T12:15:20+00:00                                                        |

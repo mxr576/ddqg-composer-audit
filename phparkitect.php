@@ -43,13 +43,11 @@ return static function (Config $config): void {
       ->that(new ResideInOneOfTheseNamespaces('mxr576\ddqgComposerAudit\Domain'))
       ->should(new NotHaveDependencyOutsideNamespace('mxr576\ddqgComposerAudit\Domain', [
           'RuntimeException',
-          'DateTimeImmutable',
           'Traversable',
           'ArrayObject',
           // We have to handle some Composer stuff as part of our domain, we do not
           // want to redevelop them in the scope of a Composer plugin.
           'Composer\Package\PackageInterface',
-          'Composer\Advisory\SecurityAdvisory',
           'Composer\Semver\VersionParser',
           'Composer\Semver\Constraint\ConstraintInterface',
           'Composer\Semver\Constraint\Constraint',

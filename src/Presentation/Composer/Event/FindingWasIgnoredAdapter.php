@@ -15,14 +15,14 @@ declare(strict_types=1);
 namespace mxr576\ddqgComposerAudit\Presentation\Composer\Event;
 
 use Composer\EventDispatcher\Event;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\AdvisoryWasIgnored;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\FindingWasIgnored;
 
 /**
  * @internal
  */
-final class AdvisoryWasIgnoredAdapter extends Event
+final class FindingWasIgnoredAdapter extends Event
 {
-    public function __construct(public readonly AdvisoryWasIgnored $wrapped)
+    public function __construct(public readonly FindingWasIgnored $wrapped)
     {
         parent::__construct(self::class);
     }

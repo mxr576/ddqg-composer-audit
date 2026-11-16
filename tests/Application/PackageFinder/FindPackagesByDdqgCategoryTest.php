@@ -21,7 +21,7 @@ use Composer\Repository\InstalledArrayRepository;
 use Composer\Repository\LockArrayRepository;
 use Composer\Semver\Constraint\ConstraintInterface;
 use Composer\Semver\VersionParser;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\AdvisoryWasIgnored;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\FindingWasIgnored;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindPackagesByDdqgCategory;
 use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\CompositePackageIgnoreRuleProvider;
@@ -88,12 +88,11 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     {
         $result = $this->snapshotFinder($category)([$package => $this->exact($version)]);
 
-        $message = $category->value . ' advisory';
+        $message = $category->value . ' finding';
         self::assertSame([$package], array_keys($result), $message . ' is reported for the snapshot package.');
-        self::assertCount(1, $result[$package], $message . ' is a single advisory.');
-        self::assertSame($package, $result[$package][0]->packageName, $message . ' names the package.');
-        self::assertSame($expectedId, $result[$package][0]->advisoryId, $message . ' has the expected ID.');
-        self::assertStringStartsWith($expectedTitle, $result[$package][0]->title, $message . ' has the expected title.');
+        self::assertSame($package, $result[$package]->packageName, $message . ' names the package.');
+        self::assertSame($expectedId, $result[$package]->id(), $message . ' has the expected ID.');
+        self::assertSame($expectedTitle, $result[$package]->title(), $message . ' has the expected plain-text title.');
     }
 
     /**
@@ -135,10 +134,10 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
         $result = $finder(['drupal/variationcache' => $this->exact('1.0.0'), 'drupal/foo' => $this->exact('1.0.0')]);
 
         self::assertSame(['drupal/foo'], array_keys($result), 'deprecated: only the non-ignored package is reported.');
-        self::assertCount(1, $dispatcher->events, 'deprecated: one ignored advisory yields one event.');
+        self::assertCount(1, $dispatcher->events, 'deprecated: one ignored finding yields one event.');
         $event = $dispatcher->events[0];
-        self::assertInstanceOf(AdvisoryWasIgnored::class, $event, 'deprecated: the event is an AdvisoryWasIgnored.');
-        self::assertSame('drupal/variationcache', $event->packageName, 'deprecated: the event names the ignored package.');
+        self::assertInstanceOf(FindingWasIgnored::class, $event, 'deprecated: the event is an FindingWasIgnored.');
+        self::assertSame('drupal/variationcache', $event->finding->packageName, 'deprecated: the event names the ignored package.');
         self::assertInstanceOf(IgnorePackageByVersionConstraintMatch::class, $event->ignoreRule, 'deprecated: the first matching rule, the configured one, is carried.');
     }
 
@@ -162,8 +161,8 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
 
         $result = $finder(['drupal/foo' => $this->parser()->parseConstraints('=1.5.0 || =2.5.0')]);
 
-        self::assertCount(1, $result['drupal/foo'] ?? [], 'One advisory for the offending candidate.');
-        $affected = $result['drupal/foo'][0]->affectedVersions;
+        self::assertSame(['drupal/foo'], array_keys($result), 'One finding for the offending candidate.');
+        $affected = $result['drupal/foo']->affectedVersions;
         self::assertTrue($affected->matches($this->exact('1.5.0')), 'Offending candidate 1.5.0 is affected.');
         self::assertFalse($affected->matches($this->exact('2.5.0')), 'Non-offending candidate 2.5.0 is not affected.');
     }
@@ -178,10 +177,10 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
 
         $result = $finder(['drupal/foo' => $this->parser()->parseConstraints('=1.5.0 || =2.7.0 || =2.5.0 || =3.5.0')]);
 
-        $message = $category->value . ' advisory for candidates 1.5.0, 2.7.0, 2.5.0 and 3.5.0 in range >=2.0.0,<3.0.0';
-        self::assertCount(1, $result['drupal/foo'] ?? [], $message . ' is a single advisory.');
-        self::assertSame('DDQG-' . $category->type() . '-drupal-foo-2.5.0.0', $result['drupal/foo'][0]->advisoryId, $message . ' has an ID naming the lowest offending candidate 2.5.0.');
-        self::assertStringStartsWith('The installed "2.5.0.0" version ', $result['drupal/foo'][0]->title, $message . ' has a title naming the lowest offending candidate 2.5.0.');
+        $message = $category->value . ' finding for candidates 1.5.0, 2.7.0, 2.5.0 and 3.5.0 in range >=2.0.0,<3.0.0';
+        self::assertSame(['drupal/foo'], array_keys($result), $message . ' is a single finding.');
+        self::assertSame('DDQG-' . $category->type() . '-drupal-foo-2.5.0.0', $result['drupal/foo']->id(), $message . ' has an ID naming the lowest offending candidate 2.5.0.');
+        self::assertStringStartsWith('The installed "2.5.0.0" version ', $result['drupal/foo']->title(), $message . ' has a title naming the lowest offending candidate 2.5.0.');
     }
 
     /**
@@ -248,7 +247,7 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     {
         $installed = new InstalledArrayRepository([$this->module('1.0.0', '^9.4')]);
 
-        self::assertSame([], $this->d10Finder($installed, null)([self::D10_PACKAGE => $this->exact('2.0.0')]), 'D10-incompatible: no metadata, no advisory.');
+        self::assertSame([], $this->d10Finder($installed, null)([self::D10_PACKAGE => $this->exact('2.0.0')]), 'D10-incompatible: no metadata, no finding.');
     }
 
     /**
@@ -262,8 +261,8 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
 
         $result = $this->d10Finder($installed, $locked)([self::D10_PACKAGE => $this->parser()->parseConstraints('=1.0.0 || =2.0.0')]);
 
-        self::assertCount(1, $result[self::D10_PACKAGE] ?? [], 'D10-incompatible: the incompatible candidate 2.0.0 yields an advisory.');
-        $affected = $result[self::D10_PACKAGE][0]->affectedVersions;
+        self::assertSame([self::D10_PACKAGE], array_keys($result), 'D10-incompatible: the incompatible candidate 2.0.0 yields a finding.');
+        $affected = $result[self::D10_PACKAGE]->affectedVersions;
         self::assertTrue($affected->matches($this->exact('2.0.0')), 'D10-incompatible: incompatible candidate 2.0.0 is affected.');
         self::assertFalse($affected->matches($this->exact('1.0.0')), 'D10-incompatible: compatible candidate 1.0.0 is not affected.');
     }

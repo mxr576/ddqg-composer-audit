@@ -18,13 +18,13 @@ use Composer\Semver\Comparator;
 use Composer\Semver\Constraint\ConstraintInterface;
 use Composer\Semver\Constraint\MultiConstraint;
 use Composer\Semver\VersionParser;
-use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\AdvisoryWasIgnored;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\FindingWasIgnored;
 use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
+use mxr576\ddqgComposerAudit\Domain\Finding\DdqgFinding;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\Exception\PackageVersionsCouldNotBeFetched;
 use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVersionsProvider;
-use mxr576\ddqgComposerAudit\Domain\SecurityAdvisory\SecurityAdvisoryBuilder;
 use Psr\EventDispatcher\EventDispatcherInterface;
 
 /**
@@ -54,9 +54,8 @@ final class FindPackagesByDdqgCategory
      *
      * @throws PackageVersionsCouldNotBeFetched
      *
-     * @return array<string,\Composer\Advisory\SecurityAdvisory[]>
-     *   An associative array where keys are package names (e.g, foo/bar) and
-     *   values are security advisories for the given package.
+     * @return array<string,DdqgFinding>
+     *   Package name (e.g., foo/bar) to the finding about it.
      */
     public function __invoke(array $packageConstraintMap): array
     {
@@ -74,7 +73,7 @@ final class FindPackagesByDdqgCategory
             foreach ($this->ignoreRulesByPackage[$package_name] ?? [] as $rule) {
                 if ($rule->evaluate($package_name, $packageConstraintMap[$package_name])) {
                     $this->eventDispatcher->dispatch(
-                        new AdvisoryWasIgnored($this->category, $package_name, $rule, $result[$package_name])
+                        new FindingWasIgnored($result[$package_name], $rule)
                     );
                     unset($result[$package_name]);
 
@@ -91,23 +90,21 @@ final class FindPackagesByDdqgCategory
      *
      * @throws PackageVersionsCouldNotBeFetched
      *
-     * @return array<string,\Composer\Advisory\SecurityAdvisory[]>
+     * @return array<string,DdqgFinding>
      */
     private function find(array $packageConstraintMap): array
     {
-        $advisories = [];
+        $findings = [];
         foreach ($this->source->findByPackages($packageConstraintMap) as $package_name => $version_range) {
             $package_version_constraint = $this->versionParser->parseConstraints($version_range);
             $audited = $packageConstraintMap[$package_name];
             if ($package_version_constraint->matches($audited)) {
                 $offending_version = $this->offendingVersion($audited, $package_version_constraint);
-                $advisories[$package_name] = [
-                    (new SecurityAdvisoryBuilder($this->category, $package_name, $offending_version, $package_version_constraint))->build(),
-                ];
+                $findings[$package_name] = new DdqgFinding($this->category, $package_name, $offending_version, $package_version_constraint);
             }
         }
 
-        return $advisories;
+        return $findings;
     }
 
     /**
