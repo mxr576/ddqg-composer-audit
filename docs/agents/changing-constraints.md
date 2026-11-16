@@ -12,7 +12,7 @@ composer why-not php <lowest> --locked   # exit 0: every locked package installs
 ```shell
 composer config platform.php <lowest>
 composer update <packages>
-composer config --unset platform.php
+composer config --unset platform
 composer update --lock   # the content-hash covers config.platform, so unsetting the pin makes it stale
 ```
 

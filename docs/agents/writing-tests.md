@@ -7,7 +7,7 @@ Apply every rule below to each test you add or change.
 The suite has three seams. Test each rule once, at the lowest seam that owns it:
 
 - **Package finder** (`FindPackagesByDdqgCategory`, one class for every DDQG category), covered by PHPUnit. Call the finder with the map Composer would pass (package name to an exact version, or an OR of exact versions) and assert on the findings it returns. Matching, naming the offending candidate, the finding's ID and title, ignore rules and the package metadata lookup are covered through it.
-- **Advisory repository** (`ComposerAuditRepository`), covered by PHPUnit. Call `getSecurityAdvisories()` and assert on the Composer advisories it returns. Delivery details live here: the title attribution, the project link and the report time.
+- **Advisory repository** (`ComposerAuditRepository`), covered by PHPUnit. Call `getSecurityAdvisories()` and assert on the Composer advisories it returns. Delivery details live here: the title attribution, the project link and the report time. Assert exact field values at this seam: Composer renders `--format=json` through its console formatter, which strips or decorates console markup such as `<href=...>`, so the e2e test cannot see it.
 - **Composer to plugin**, covered by the e2e test (see `AGENTS.md`). It is the acceptance test for Composer integration.
 
 A rule shared by all categories (for example range matching) lives in the one finder implementation, so it gets one test, through any category. Per-category behaviour (finding ID, title) gets a test per DDQG category, and ignore rules get one for each category that has them: `FindPackagesByDdqgCategoryTest` uses a data provider with one row per category, so covering a new category means adding one row.
@@ -22,9 +22,9 @@ Assert on returned values, state transitions and user-visible outcomes. In loops
 
 ## Test doubles
 
-Doubles are handmade: in-memory fakes, or anonymous classes implementing the interface (`RangesProviderStub` serves fixed DDQG ranges or a fetch failure). Handmade doubles are refactor-safe and checked by PHPStan. Where Composer ships an in-memory implementation (for example `InstalledArrayRepository`, `LockArrayRepository`, `RootPackage`), use it.
+Doubles are handmade: in-memory fakes, or anonymous classes implementing the interface (`RangesProviderStub` serves fixed DDQG ranges or a fetch failure). Handmade doubles are refactor-safe and checked by PHPStan. Where Composer ships an in-memory implementation (for example `InstalledArrayRepository`, `LockArrayRepository`, `RootPackage`, `NullIO` to discard output, `BufferIO` to capture it for assertions), use it.
 
-Dynamic mocks (`$this->createMock()`) are reserved for wide Composer/Symfony interfaces with a deep surface (for example `Composer\IO\IOInterface`, `Composer\Composer`, `Composer\Config`, `Composer\Util\HttpDownloader`), when a handmade double would need excessive boilerplate. Domain and Application ports are always handmade.
+Dynamic mocks (`$this->createMock()`) are reserved for wide Composer/Symfony interfaces with a deep surface (for example `Composer\Composer`, `Composer\Config`, `Composer\Util\HttpDownloader`), when a handmade double would need excessive boilerplate. Domain and Application ports are always handmade.
 
 ## New test directories
 

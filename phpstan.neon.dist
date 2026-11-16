@@ -19,6 +19,7 @@ parameters:
       - 'PHPUnit\Framework\ExpectationFailedException'
       - 'PHPUnit\Framework\Exception'
       - 'PHPUnit\Framework\SkippedWithMessageException'
+      - 'PHPUnit\Event\NoPreviousThrowableException'
     checkedExceptionClasses:
       - 'RuntimeException'
   paths:
