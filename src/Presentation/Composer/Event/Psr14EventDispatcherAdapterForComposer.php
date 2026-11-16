@@ -31,15 +31,19 @@ final class Psr14EventDispatcherAdapterForComposer implements EventDispatcherInt
 
     public function dispatch(object $event): object
     {
+        // PSR-14: an already stopped event must not reach any listener. Composer only checks its stop
+        // flag after a listener ran, so copying the flag across would still call the first listener.
+        // Stopping by a listener is not reflected back on the PSR event.
+        if ($event instanceof StoppableEventInterface && $event->isPropagationStopped()) {
+            return $event;
+        }
+
         if ($event instanceof AdvisoryWasIgnored) {
             $composer_event = new AdvisoryWasIgnoredAdapter($event);
         } else {
             $composer_event = new ComposerEvent($event::class);
         }
 
-        if ($event instanceof StoppableEventInterface) {
-            $composer_event->stopPropagation();
-        }
         $this->dispatcher->dispatch($event::class, $composer_event);
 
         return $event;
