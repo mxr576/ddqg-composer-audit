@@ -41,14 +41,14 @@ use mxr576\ddqgComposerAudit\Presentation\Composer\Event\Psr14EventDispatcherAda
  *
  * @internal
  */
-final class PackageFinderFactory
+final readonly class PackageFinderFactory
 {
     public function __construct(
-        private readonly RootPackageInterface $project,
-        private readonly HttpDownloader $httpDownloader,
-        private readonly EventDispatcher $eventDispatcher,
-        private readonly VersionParser $versionParser,
-        private readonly PackageMetadataLookup $packageMetadataLookup,
+        private RootPackageInterface $project,
+        private HttpDownloader $httpDownloader,
+        private EventDispatcher $eventDispatcher,
+        private VersionParser $versionParser,
+        private PackageMetadataLookup $packageMetadataLookup,
     ) {
     }
 

@@ -20,13 +20,13 @@ use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
 /**
  * @internal
  */
-final class IgnorePackageByPresentVersionOfOtherPackage implements PackageIgnoreRule
+final readonly class IgnorePackageByPresentVersionOfOtherPackage implements PackageIgnoreRule
 {
     public function __construct(
-        private readonly PackageMetadataLookup $packageMetadataLookup,
-        private readonly string $packageName,
-        private readonly string $otherPackageName,
-        private readonly ConstraintInterface $otherPackageRule,
+        private PackageMetadataLookup $packageMetadataLookup,
+        private string $packageName,
+        private string $otherPackageName,
+        private ConstraintInterface $otherPackageRule,
     ) {
     }
 

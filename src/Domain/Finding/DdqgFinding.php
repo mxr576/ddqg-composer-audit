@@ -25,7 +25,7 @@ use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
  *
  * @internal
  */
-final class DdqgFinding
+final readonly class DdqgFinding
 {
     /**
      * @param string $offendingVersion
@@ -34,10 +34,10 @@ final class DdqgFinding
      *   The problematic range of the category's source.
      */
     public function __construct(
-        public readonly DdqgCategory $category,
-        public readonly string $packageName,
-        public readonly string $offendingVersion,
-        public readonly ConstraintInterface $affectedVersions,
+        public DdqgCategory $category,
+        public string $packageName,
+        public string $offendingVersion,
+        public ConstraintInterface $affectedVersions,
     ) {
     }
 

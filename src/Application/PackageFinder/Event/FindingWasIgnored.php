@@ -17,11 +17,11 @@ namespace mxr576\ddqgComposerAudit\Application\PackageFinder\Event;
 use mxr576\ddqgComposerAudit\Domain\Finding\DdqgFinding;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRule;
 
-final class FindingWasIgnored
+final readonly class FindingWasIgnored
 {
     public function __construct(
-        public readonly DdqgFinding $finding,
-        public readonly PackageIgnoreRule $ignoreRule,
+        public DdqgFinding $finding,
+        public PackageIgnoreRule $ignoreRule,
     ) {
     }
 }

@@ -20,9 +20,9 @@ use cweagans\Composer\ConfigurablePlugin;
 /**
  * @internal
  */
-final class D10CompatibilityCheckSetting
+final readonly class D10CompatibilityCheckSetting
 {
-    public function __construct(private readonly RootPackageInterface $rootPackage)
+    public function __construct(private RootPackageInterface $rootPackage)
     {
     }
 

@@ -27,9 +27,9 @@ use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
  *
  * @internal
  */
-final class IgnoreVariationcacheMovedIntoCore implements PackageIgnoreRuleProvider
+final readonly class IgnoreVariationcacheMovedIntoCore implements PackageIgnoreRuleProvider
 {
-    public function __construct(private readonly PackageMetadataLookup $packageMetadataLookup)
+    public function __construct(private PackageMetadataLookup $packageMetadataLookup)
     {
     }
 

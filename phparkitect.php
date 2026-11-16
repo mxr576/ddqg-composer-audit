@@ -47,10 +47,10 @@ return static function (Config $config): void {
           'ArrayObject',
           // We have to handle some Composer stuff as part of our domain, we do not
           // want to redevelop them in the scope of a Composer plugin.
-          'Composer\Package\PackageInterface',
-          'Composer\Semver\VersionParser',
-          'Composer\Semver\Constraint\ConstraintInterface',
-          'Composer\Semver\Constraint\Constraint',
+          Composer\Package\PackageInterface::class,
+          Composer\Semver\VersionParser::class,
+          Composer\Semver\Constraint\ConstraintInterface::class,
+          Composer\Semver\Constraint\Constraint::class,
       ]))
       ->because('We want to protect the Domain');
 

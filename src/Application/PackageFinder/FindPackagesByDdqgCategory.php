@@ -65,9 +65,7 @@ final class FindPackagesByDdqgCategory
             return $result;
         }
 
-        if (null === $this->ignoreRulesByPackage) {
-            $this->ignoreRulesByPackage = $this->groupIgnoreRulesByPackage();
-        }
+        $this->ignoreRulesByPackage ??= $this->groupIgnoreRulesByPackage();
 
         foreach (array_keys($result) as $package_name) {
             foreach ($this->ignoreRulesByPackage[$package_name] ?? [] as $rule) {

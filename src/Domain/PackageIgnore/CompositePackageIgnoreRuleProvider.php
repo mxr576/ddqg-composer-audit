@@ -17,12 +17,12 @@ namespace mxr576\ddqgComposerAudit\Domain\PackageIgnore;
 /**
  * @internal
  */
-final class CompositePackageIgnoreRuleProvider implements PackageIgnoreRuleProvider
+final readonly class CompositePackageIgnoreRuleProvider implements PackageIgnoreRuleProvider
 {
     /**
      * @var PackageIgnoreRuleProvider[]
      */
-    private readonly array $providers;
+    private array $providers;
 
     public function __construct(PackageIgnoreRuleProvider ...$providers)
     {

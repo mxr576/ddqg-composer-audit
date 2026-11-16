@@ -23,9 +23,9 @@ use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
 /**
  * @internal
  */
-final class UnsupportedPackageIgnoreRulesFromConfiguration implements PackageIgnoreRuleProvider
+final readonly class UnsupportedPackageIgnoreRulesFromConfiguration implements PackageIgnoreRuleProvider
 {
-    public function __construct(private readonly RootPackageInterface $rootPackage, private readonly VersionParser $versionParser)
+    public function __construct(private RootPackageInterface $rootPackage, private VersionParser $versionParser)
     {
     }
 

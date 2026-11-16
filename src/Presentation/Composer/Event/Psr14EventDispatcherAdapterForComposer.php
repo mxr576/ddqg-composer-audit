@@ -23,9 +23,9 @@ use Psr\EventDispatcher\StoppableEventInterface;
 /**
  * @internal
  */
-final class Psr14EventDispatcherAdapterForComposer implements EventDispatcherInterface
+final readonly class Psr14EventDispatcherAdapterForComposer implements EventDispatcherInterface
 {
-    public function __construct(private readonly ComposerEventDispatcher $dispatcher)
+    public function __construct(private ComposerEventDispatcher $dispatcher)
     {
     }
 

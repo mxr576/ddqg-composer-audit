@@ -21,15 +21,15 @@ use Composer\Semver\VersionParser;
 /**
  * @internal
  */
-final class IgnorePackageByVersionConstraintMatch implements PackageIgnoreRule
+final readonly class IgnorePackageByVersionConstraintMatch implements PackageIgnoreRule
 {
-    public function __construct(private readonly string $packageName, private readonly ConstraintInterface $rule)
+    public function __construct(private string $packageName, private ConstraintInterface $rule)
     {
     }
 
     public static function fromUserInput(string $packageName, string $version, ?VersionParser $parser = null): self
     {
-        $parser = $parser ?? new VersionParser();
+        $parser ??= new VersionParser();
 
         return new self($packageName, new Constraint(Constraint::STR_OP_EQ, $parser->normalize($version)));
     }

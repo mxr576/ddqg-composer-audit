@@ -26,11 +26,11 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVe
  *
  * @internal
  */
-final class PackageVersionsFromLatestDdqgBuild implements ProblematicPackageVersionsProvider
+final readonly class PackageVersionsFromLatestDdqgBuild implements ProblematicPackageVersionsProvider
 {
-    private readonly string $url;
+    private string $url;
 
-    public function __construct(DdqgBranch $branch, private readonly HttpDownloader $httpDownloader)
+    public function __construct(DdqgBranch $branch, private HttpDownloader $httpDownloader)
     {
         $this->url = match ($branch) {
             DdqgBranch::Insecure => 'https://raw.githubusercontent.com/mxr576/ddqg/no-insecure-versions/composer.json',

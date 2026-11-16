@@ -29,11 +29,6 @@ use mxr576\ddqgComposerAudit\Domain\PackageMetadata\PackageMetadataLookup;
  */
 final class PackageMetadataLookupFromComposerRepositories implements PackageMetadataLookup
 {
-    /**
-     * @var \Closure(): ?LockArrayRepository
-     */
-    private readonly \Closure $lockedRepositoryProvider;
-
     private bool $lockedRepositoryLoaded = false;
 
     private ?LockArrayRepository $lockedRepository = null;
@@ -46,9 +41,8 @@ final class PackageMetadataLookupFromComposerRepositories implements PackageMeta
      */
     public function __construct(
         private readonly RepositoryInterface $installedRepository,
-        \Closure $lockedRepositoryProvider,
+        private readonly \Closure $lockedRepositoryProvider,
     ) {
-        $this->lockedRepositoryProvider = $lockedRepositoryProvider;
     }
 
     public static function fromInstalledRepositoryAndLocker(RepositoryInterface $installedRepository, Locker $locker): self

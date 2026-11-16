@@ -25,7 +25,7 @@ use mxr576\ddqgComposerAudit\Domain\Finding\DdqgFinding;
  *
  * @internal
  */
-final class SecurityAdvisoryFromFinding
+final readonly class SecurityAdvisoryFromFinding
 {
     /**
      * Plain text: Composer renders the JSON format through its console
@@ -39,7 +39,7 @@ final class SecurityAdvisoryFromFinding
      *   When the plugin judged the audited set, the same for every advisory
      *   of a Composer run.
      */
-    public function __construct(private readonly \DateTimeImmutable $reportedAt)
+    public function __construct(private \DateTimeImmutable $reportedAt)
     {
     }
 

@@ -25,7 +25,7 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVe
 /**
  * @internal
  */
-final class NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata implements ProblematicPackageVersionsProvider
+final readonly class NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata implements ProblematicPackageVersionsProvider
 {
     private const DRUPAL_PACKAGE_TYPES = [
         'drupal-module',
@@ -45,7 +45,7 @@ final class NonDrupal10CompatiblePackageVersionsProviderFromPackageMetadata impl
         'drupal/core-dev',
     ];
 
-    public function __construct(private readonly PackageMetadataLookup $packageMetadataLookup, private readonly VersionParser $versionParser)
+    public function __construct(private PackageMetadataLookup $packageMetadataLookup, private VersionParser $versionParser)
     {
     }
 

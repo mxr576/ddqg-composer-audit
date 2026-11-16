@@ -23,9 +23,9 @@ use mxr576\ddqgComposerAudit\Domain\PackageVersionsProvider\ProblematicPackageVe
  *
  * @internal
  */
-final class PackageVersionsFromSnapshotForTesting implements ProblematicPackageVersionsProvider
+final readonly class PackageVersionsFromSnapshotForTesting implements ProblematicPackageVersionsProvider
 {
-    private readonly string $file;
+    private string $file;
 
     public function __construct(DdqgBranch $branch)
     {

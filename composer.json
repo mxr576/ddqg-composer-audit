@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "php": "~8.1.0 || ~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
+        "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
         "composer-plugin-api": "^2.3",
         "composer/composer": "^2.11.2",
         "cweagans/composer-configurable-plugin": "^2.0",

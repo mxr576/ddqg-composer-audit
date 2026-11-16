@@ -28,7 +28,7 @@ use mxr576\ddqgComposerAudit\Presentation\Composer\Plugin;
 final class ComposerAuditRepository extends ArrayRepository implements AdvisoryProviderInterface
 {
     public function __construct(
-        private FindPackagesByDdqgCategory $packageFinder,
+        private readonly FindPackagesByDdqgCategory $packageFinder,
         private readonly SecurityAdvisoryFromFinding $toSecurityAdvisory,
         private readonly IOInterface $io,
     ) {
