@@ -2,7 +2,6 @@ includes:
     - phpstan-baseline.neon
     - %rootDir%/../../composer/composer/phpstan/rules.neon
     - %rootDir%/../../phpstan/phpstan-deprecation-rules/rules.neon
-    - %rootDir%/../../phpstan/phpstan-webmozart-assert/extension.neon
 
 parameters:
   level: max
