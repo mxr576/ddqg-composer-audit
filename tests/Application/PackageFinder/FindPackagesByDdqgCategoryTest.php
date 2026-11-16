@@ -52,6 +52,12 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
     private const SHARED_RULE_CATEGORY = DdqgCategory::Insecure;
 
     /**
+     * Shared rules that show in the advisory ID need a category whose ID
+     * includes the version.
+     */
+    private const VERSIONED_ID_SHARED_RULE_CATEGORY = DdqgCategory::Unsupported;
+
+    /**
      * @return iterable<string,array{DdqgCategory, string, string, string, string}>
      *   Category, snapshot package, offending version, expected advisory ID
      *   and expected title.
@@ -161,6 +167,22 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
         $affected = $result['drupal/foo'][0]->affectedVersions;
         self::assertTrue($affected->matches($this->exact('1.5.0')), 'Offending candidate 1.5.0 is affected.');
         self::assertFalse($affected->matches($this->exact('2.5.0')), 'Non-offending candidate 2.5.0 is not affected.');
+    }
+
+    /**
+     * @throws UnexpectedPackageFinderException
+     */
+    public function testOrOfCandidatesNamesLowestOffendingCandidate(): void
+    {
+        $category = self::VERSIONED_ID_SHARED_RULE_CATEGORY;
+        $finder = $this->build($category, $this->rangesSource(['drupal/foo' => '>=2.0.0,<3.0.0']));
+
+        $result = $finder(['drupal/foo' => $this->parser()->parseConstraints('=1.5.0 || =2.7.0 || =2.5.0 || =3.5.0')]);
+
+        $message = $category->value . ' advisory for candidates 1.5.0, 2.7.0, 2.5.0 and 3.5.0 in range >=2.0.0,<3.0.0';
+        self::assertCount(1, $result['drupal/foo'] ?? [], $message . ' is a single advisory.');
+        self::assertSame('DDQG-' . $category->type() . '-drupal-foo-2.5.0.0', $result['drupal/foo'][0]->advisoryId, $message . ' has an ID naming the lowest offending candidate 2.5.0.');
+        self::assertStringStartsWith('The installed "2.5.0.0" version ', $result['drupal/foo'][0]->title, $message . ' has a title naming the lowest offending candidate 2.5.0.');
     }
 
     /**
