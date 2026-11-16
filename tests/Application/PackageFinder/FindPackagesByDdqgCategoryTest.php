@@ -21,10 +21,13 @@ use Composer\Repository\InstalledArrayRepository;
 use Composer\Repository\LockArrayRepository;
 use Composer\Semver\Constraint\ConstraintInterface;
 use Composer\Semver\VersionParser;
+use mxr576\ddqgComposerAudit\Application\PackageFinder\Event\AdvisoryWasIgnored;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\Exception\UnexpectedPackageFinderException;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\FindPackagesByDdqgCategory;
 use mxr576\ddqgComposerAudit\Application\PackageFinder\PackageFinder;
 use mxr576\ddqgComposerAudit\Domain\DdqgCategory;
+use mxr576\ddqgComposerAudit\Domain\PackageIgnore\CompositePackageIgnoreRuleProvider;
+use mxr576\ddqgComposerAudit\Domain\PackageIgnore\IgnorePackageByVersionConstraintMatch;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\IgnoreVariationcacheMovedIntoCore;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\NoPackageIgnoreRules;
 use mxr576\ddqgComposerAudit\Domain\PackageIgnore\PackageIgnoreRuleProvider;
@@ -104,6 +107,34 @@ final class FindPackagesByDdqgCategoryTest extends TestCase
 
         self::assertSame([], $ignored, $category->value . ': the version named by the ignore setting is not reported.');
         self::assertSame(['drupal/foo'], array_keys($other), $category->value . ': another version is still reported.');
+    }
+
+    /**
+     * @throws UnexpectedPackageFinderException
+     */
+    public function testSecondMatchingIgnoreRuleDoesNotCrashAndIgnoresOnce(): void
+    {
+        $root = new RootPackage('test/root', '1.0.0.0', '1.0.0');
+        $root->setExtra(['ddqg-composer-audit' => ['ignore-deprecated-versions' => ['drupal/variationcache' => '1.0.0']]]);
+        $configuredRule = new DeprecatedPackageIgnoreRulesFromConfiguration($root, $this->parser());
+        $builtInRule = new IgnoreVariationcacheMovedIntoCore(new PackageMetadataLookupFromComposerRepositories(new InstalledArrayRepository([$this->package('drupal/core', '10.1.0')]), static fn (): ?LockArrayRepository => null));
+        $dispatcher = new RecordingEventDispatcher();
+        $finder = new FindPackagesByDdqgCategory(
+            DdqgCategory::Deprecated,
+            $this->rangesSource(['drupal/variationcache' => '*', 'drupal/foo' => '*']),
+            $this->parser(),
+            $dispatcher,
+            new CompositePackageIgnoreRuleProvider($configuredRule, $builtInRule),
+        );
+
+        $result = $finder(['drupal/variationcache' => $this->exact('1.0.0'), 'drupal/foo' => $this->exact('1.0.0')]);
+
+        self::assertSame(['drupal/foo'], array_keys($result), 'deprecated: only the non-ignored package is reported.');
+        self::assertCount(1, $dispatcher->events, 'deprecated: one ignored advisory yields one event.');
+        $event = $dispatcher->events[0];
+        self::assertInstanceOf(AdvisoryWasIgnored::class, $event, 'deprecated: the event is an AdvisoryWasIgnored.');
+        self::assertSame('drupal/variationcache', $event->packageName, 'deprecated: the event names the ignored package.');
+        self::assertInstanceOf(IgnorePackageByVersionConstraintMatch::class, $event->ignoreRule, 'deprecated: the first matching rule, the configured one, is carried.');
     }
 
     /**

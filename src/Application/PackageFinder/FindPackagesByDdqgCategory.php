@@ -76,6 +76,8 @@ final class FindPackagesByDdqgCategory implements PackageFinder
                         new AdvisoryWasIgnored($this->category, $package_name, $rule, $result[$package_name])
                     );
                     unset($result[$package_name]);
+
+                    break;
                 }
             }
         }
